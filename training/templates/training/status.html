@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}
+{{ training.training_identifier }} Status
+{% endblock %}
+
+{% block content %}
+<h2>Overview: {{ training.training_identifier }}</h2>
+<div class="row">
+	<div class="col-md-3 col-sm-12">
+		<h3>About</h3>
+		<p>
+		This page gives you a brief overview of the current status of the trainees. Please note the following:
+		</p>
+		<ul>
+			<li>Only jobs created in the last 3 hours are shown</li>
+			<li>This includes jobs they run outside of the context of the course (as we cannot tell which are which.)</li>
+			<li>The username is essentially random but will be consistent within a one day period</li>
+		</ul>
+		Refresh:
+		<a href="?refresh">Auto</a> |
+		<a href="?">Off</a>
+		</br>
+		Last:
+		<a href="?hours=1">1 hour</a> |
+		<a href="?hours=3">3 hours</a> |
+		<a href="?hours=6">6 hours</a>
+		<h3>State Overview</h3>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>State</th>
+					<th>Count</th>
+				</tr>
+			</thead>
+			{% for state, count  in state.items %}
+				{% if state != '__total__' %}
+				<tr>
+					<td>{{ state }}</td>
+					<td style="background: rgba(128, 128, 128, {{ count_percent }});">{{ count }}</td>
+				</tr>
+				{% endif %}
+			{% endfor %}
+		</table>
+	</div>
+	<div class="col-md-9 col-sm-12">
+		<h3>Students</h3>
+		<div>
+		{{ users | length }} Registered
+		</div>
+		<div style="padding-top: 1em;padding-bottom: 1em">
+		{% for user in users %}
+			<span style="background: #{{ user }};padding: 0.3em">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
+		{% endfor %}
+		</div>
+
+		<h3>Overview by Tool</h3>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Tool</th>
+					<th>New</th>
+					<th>Queued</th>
+					<th>Running</th>
+					<th>Ok</th>
+					<th>Error</th>
+				</tr>
+			</thead>
+			{% for tool, states in jobs_overview.items %}
+				<tr>
+					<td>{{ tool }}</td>
+					<td style="background: rgba(128, 128, 128, {{ states.new_percent }});">{{ states.new }}</td>
+					<td style="background: rgba(128, 128, 128, {{ states.queued_percent }});">{{ states.queued }}</td>
+					<td style="background: rgba(128, 128, 128, {{ states.running_percent }});">{{ states.running }}</td>
+					<td style="background: rgba(128, 128, 128, {{ states.ok_percent }});">{{ states.ok }}</td>
+					<td style="background: rgba(128, 128, 128, {{ states.error_percent }});">{{ states.error }}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
+
+<h2>Queue</h2>
+<table class="table">
+	<thead>
+		<tr>
+			<th>User</th>
+			<th>Created</th>
+			<th>Tool</th>
+			<th>State</th>
+			<th>Job Runner ID</th>
+		</tr>
+	</thead>
+	{% for row in jobs %}
+		<tr>
+			<td class="dataset" style="background: #{{ row.user_id }}">{{ row.user_id }}</td>
+			<td class="dataset state-{{row.state}}">{{ row.create_time | naturaltime }}</td>
+			<td class="dataset state-{{row.state}}">{{ row.tool_id }}</td>
+			<td class="dataset state-{{row.state}}">{{ row.state }}</td>
+			<td class="dataset state-{{row.state}}">{{ row.job_runner_external_id}}</td>
+		</tr>
+	{% endfor %}
+</table>
+
+{% endblock %}

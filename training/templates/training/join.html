@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="donemessage">
+	Congratulations: you are successfully registered in <b>{{ training.training_identifier }}</b><br/>
+	<a href="https://{{ host }}">Return to Galaxy</a>
+</div>
+
+<h2>How It Works</h2>
+<p>
+We have deployed a dedicated compute node just for your training session to
+use. No one outside of your training has access to this machine. Completely
+transparently to you, all of the jobs that you run in Galaxy, during the
+period of the training event, will "prefer" to run on this machine. If there is
+no room on that machine, they will run on any other machine in our cluster with
+resources.
+</p>
+
+{% endblock %}
