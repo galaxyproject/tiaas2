@@ -26,9 +26,9 @@ form {
 <form action="{% url 'register' %}" method="post" class="form">
   {% csrf_token %}
 
-<h1>UseGalaxy.eu for Training</h1>
+  <h1>{{ settings.TIAAS_OWNER }}'s Training Infrastructure as a Service</h1>
 <p>
-We want to help you conduct your training seminars. Where you provide the training, we can provide you training infrastructure as a service (TIaaS). Some of the benefits of using our UseGalaxy.EU infrastructure:
+We want to help you conduct your training seminars. Where you provide the training, we can provide you training infrastructure as a service (TIaaS). Some of the benefits of using our {{ settings.TIAAS_OWNER }} infrastructure:
 </p>
 
 <ul>
@@ -43,7 +43,7 @@ Please note that we do provide this service for free to everyone, so we ask you 
 </p>
 
 <p>
-This service is free for you. For us, we need to care for funding to continue this service. To do this, we are happy to show the usefulness of our service for you und we would kindly to ask you to write a small blogpost for our homepage about your training course given with Galaxy. Some examples you can find on https://galaxyproject.eu. Please submit your blogpost to contact@usegalaxy.eu. Thanks a lot!
+This service is free for you. For us, we need to care for funding to continue this service. To do this, we are happy to show the usefulness of our service for you und we would kindly to ask you to write a small blogpost for our homepage about your training course given with Galaxy. Some examples you can find on {{ settings.TIAAS_OWNER_SITE }}. Please submit your blogpost to {{ settings.TIAAS_EMAIL }}. Thanks a lot!
 </p>
 
 <p>
@@ -68,7 +68,7 @@ Location:
 We will use the country in which the training is held in our reporting on that status of the project. The aggregate information will be made public, but it will not be connected to your training.
 </p>
 
-You can contact us at <a href="mailto:galaxy@informatik.uni-freiburg.de">galaxy@informatik.uni-freiburg.de</a>
+You can contact us at <a href="mailto:{{ settings.TIAAS_EMAIL }}">{{ settings.TIAAS_EMAIL }}</a>
 
 <div class="editable">
 {% bootstrap_field form.name %}
@@ -88,10 +88,10 @@ You can contact us at <a href="mailto:galaxy@informatik.uni-freiburg.de">galaxy@
 
 <h2>Estimating Resource Usage</h2>
 <p>
-This is an EXTREMELY IMPORTANT section for us and for you, the more detailed you can be, the better we can be in granting you the correct resources. If we only grant resources that are too small, then you will be stuck waiting in the normal queue because the jobs cannot be scheduled on the VMs we have allocated for you.
+This is an <b>EXTREMELY IMPORTANT</b> section for us and for you, the more detailed you can be, the better we can be in granting you the correct resources. If we only grant resources that are too small, then you will be stuck waiting in the normal queue because the jobs cannot be scheduled on the VMs we have allocated for you.
 </p>
 <p>
-Tool resource usage can be very surprising. We schedule tools based on their WORST CASE MEMORY USAGE. We do not have many high-memory machines. These two facts combined mean that sometimes a tool can use an expected amount of memory when running on EU infrastructure.
+Tool resource usage can be very surprising. We schedule tools based on their WORST CASE MEMORY USAGE. We do not have many high-memory machines. These two facts combined mean that sometimes a tool can use an expected amount of memory when running on our infrastructure.
 </p>
 <p>
 If you can provide the precise workflows you will run, that is optimal. We can extract the list of tools and compare that against our job configuration, then we can allocate a VM with enough resources for your participants to run that tool (on a small dataset) in a reasonable amount of time.
@@ -106,7 +106,7 @@ If you can provide the precise workflows you will run, that is optimal. We can e
 
 <h2>Training Identifier</h2>
 <p>
-We need a short keyword to name your training. It should be a single word, and can contain numbers and letters. Once the infrastructure is setup, you'll receive a URL like https://usegalaxy.eu/join-training/your-keyword
+We need a short keyword to name your training. It should be a single word, and can contain numbers and letters. Once the infrastructure is setup, you'll receive a URL like {{ settings.TIAAS_DOMAIN }}/join-training/your-keyword
 </p>
 
 <p>
@@ -119,7 +119,7 @@ On the day of your training (or before), you'll tell your attendees to go to thi
 
 <h2>Advertising</h2>
 <p>
-We offer this service for free so we would love to be able to show the positive impacts providing it has had in both our European and worldwide communities.
+We offer this service for free so we would love to be able to show the positive impacts providing it has had in the worldwide Galaxy community.
 </p>
 
 <div class="editable">

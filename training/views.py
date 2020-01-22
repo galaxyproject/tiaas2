@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseForbidden
 from django.http import HttpResponseRedirect
 from django.http import Http404
+from django.conf import settings
 from .models import Training
 from django.urls import reverse
 from .galaxy import get_roles, create_role, get_groups, create_group, add_group_user, get_jobs, get_users, authenticate
@@ -22,7 +23,7 @@ def register(request):
     else:
         form = TrainingForm()
 
-    return render(request, "training/register.html", {"form": form})
+    return render(request, "training/register.html", {"form": form, 'settings': settings})
 
 def thanks(request):
     return render(request, "training/thanks.html")

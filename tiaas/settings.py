@@ -132,3 +132,7 @@ USE_TZ = True
 STATIC_URL = '/tiaas/static/'
 
 GALAXY_SECRET = "USING THE DEFAULT IS NOT SECURE!"
+TIAAS_OWNER = 'UseGalaxy.eu'
+TIAAS_EMAIL = 'galaxy@informatik.uni-freiburg.de'
+TIAAS_OWNER_SITE = 'https://galaxyproject.eu'
+TIAAS_DOMAIN = 'https://usegalaxy.eu'
