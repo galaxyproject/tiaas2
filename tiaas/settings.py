@@ -130,9 +130,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/tiaas/static/'
+STATIC_ROOT = './static'
 
 GALAXY_SECRET = "USING THE DEFAULT IS NOT SECURE!"
 TIAAS_OWNER = 'UseGalaxy.eu'
 TIAAS_EMAIL = 'galaxy@informatik.uni-freiburg.de'
 TIAAS_OWNER_SITE = 'https://galaxyproject.eu'
 TIAAS_DOMAIN = 'https://usegalaxy.eu'
+
+
+try:
+    from config.local_settings import *
+except Exception as e:
+    print(e)
