@@ -37,4 +37,4 @@ Admins can now manage TIaaS courses completely in the one service.
 
 ## License
 
-GPL-3.0
+AGPL-3.0
