@@ -36,15 +36,15 @@ def join(request, training_id):
     try:
         training = Training.objects.get(training_identifier=training_id.lower())
     except Training.DoesNotExist:
-        raise Http404("Training does not exist")
+        return render(request, "training/error.html", {'message': 'Training does not exist', "host": request.META.get("HTTP_HOST", None)})
 
     user = authenticate(request)
     if not user:
-        raise HttpResponseForbidden()
+        return render(request, "training/error.html", {'message': 'Please login to Galaxy first!', "host": request.META.get("HTTP_HOST", None)})
 
     # If we don't know this training, reject
     if training.processed != 'AP':
-        raise Http404("Training is not active")
+        return render(request, "training/error.html", {'message': 'Training is not active', "host": request.META.get("HTTP_HOST", None)})
 
     training_role_name = "training-%s" % training_id
     # Otherwise, training is OK + they are a valid user.
@@ -89,7 +89,7 @@ def status(request, training_id):
     try:
         training = Training.objects.get(training_identifier=training_id)
     except Training.DoesNotExist:
-        raise Http404("Training does not exist")
+        return render(request, "training/error.html", {'message': 'Training does not exist', "host": request.META.get("HTTP_HOST", None)})
 
     # hours param
     hours = int(request.GET.get('hours', 3))
