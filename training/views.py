@@ -1,50 +1,100 @@
 from django.shortcuts import render
-from django.http import HttpResponseForbidden
+import re
+from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
-from django.http import Http404
 from django.conf import settings
 from .models import Training
 from django.urls import reverse
-from .galaxy import get_roles, create_role, get_groups, create_group, add_group_user, get_jobs, get_users, authenticate
+from .galaxy import (
+    get_roles,
+    create_role,
+    get_groups,
+    create_group,
+    add_group_user,
+    get_jobs,
+    get_users,
+    authenticate,
+)
 from .forms import TrainingForm
 
+
 def register(request):
+    host = request.META.get("HTTP_HOST", "localhost")
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
         form = TrainingForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
-            form.cleaned_data['training_identifier'] = form.cleaned_data['training_identifier'].lower()
+            safe_id = form.cleaned_data["training_identifier"].lower()
+            safe_id = re.sub(r"[^a-z0-9_-]*", "", safe_id)
+
+            form.cleaned_data["training_identifier"] = safe_id
             form.save()
-            return HttpResponseRedirect(reverse('thanks'))
+
+            if settings.TIAAS_SEND_EMAIL_TO:
+                send_mail(
+                    "New TIaaS Request (%s)" % safe_id,
+                    'We received a new tiaas request. View it in the <a href="https://%s/tiaas/admin/training/training/?processed__exact=UN">admin dashboard</a>'
+                    % host,
+                    "tiaas-noreply@usegalaxy.eu",
+                    [settings.TIAAS_SEND_EMAIL],
+                    fail_silently=True,  # on the fence about this one.
+                )
+            return HttpResponseRedirect(reverse("thanks"))
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = TrainingForm()
 
-    return render(request, "training/register.html", {"form": form, 'settings': settings})
+    return render(
+        request, "training/register.html", {"form": form, "settings": settings}
+    )
+
 
 def thanks(request):
     return render(request, "training/thanks.html")
 
+
 def stats(request):
     trainings = Training.objects.all()
-    return render(request, "training/stats.html", {'trainings': trainings})
+    return render(request, "training/stats.html", {"trainings": trainings})
+
 
 def join(request, training_id):
     try:
         training = Training.objects.get(training_identifier=training_id.lower())
     except Training.DoesNotExist:
-        return render(request, "training/error.html", {'message': 'Training does not exist', "host": request.META.get("HTTP_HOST", None)})
+        return render(
+            request,
+            "training/error.html",
+            {
+                "message": "Training does not exist",
+                "host": request.META.get("HTTP_HOST", None),
+            },
+        )
 
     user = authenticate(request)
     if not user:
-        return render(request, "training/error.html", {'message': 'Please login to Galaxy first!', "host": request.META.get("HTTP_HOST", None)})
+        return render(
+            request,
+            "training/error.html",
+            {
+                "message": "Please login to Galaxy first!",
+                "host": request.META.get("HTTP_HOST", None),
+            },
+        )
 
     # If we don't know this training, reject
-    if training.processed != 'AP':
-        return render(request, "training/error.html", {'message': 'Training is not active', "host": request.META.get("HTTP_HOST", None)})
+    if training.processed != "AP":
+        return render(
+            request,
+            "training/error.html",
+            {
+                "message": "Training is not active",
+                "host": request.META.get("HTTP_HOST", None),
+            },
+        )
 
     training_role_name = "training-%s" % training_id
     # Otherwise, training is OK + they are a valid user.
@@ -89,10 +139,17 @@ def status(request, training_id):
     try:
         training = Training.objects.get(training_identifier=training_id)
     except Training.DoesNotExist:
-        return render(request, "training/error.html", {'message': 'Training does not exist', "host": request.META.get("HTTP_HOST", None)})
+        return render(
+            request,
+            "training/error.html",
+            {
+                "message": "Training does not exist",
+                "host": request.META.get("HTTP_HOST", None),
+            },
+        )
 
     # hours param
-    hours = int(request.GET.get('hours', 3))
+    hours = int(request.GET.get("hours", 3))
     if hours > 64:
         hours = 64
     elif hours < 1:
@@ -129,10 +186,20 @@ def status(request, training_id):
         state_summary["__total__"] += 1
 
     for job, data in jobs_overview.items():
-        data['ok_percent'] = data['ok'] / len(jobs)
-        data['new_percent'] = data['new'] / len(jobs)
-        data['error_percent'] = data['error'] / len(jobs)
-        data['queued_percent'] = data['queued'] / len(jobs)
-        data['running_percent'] = data['running'] / len(jobs)
+        data["ok_percent"] = data["ok"] / len(jobs)
+        data["new_percent"] = data["new"] / len(jobs)
+        data["error_percent"] = data["error"] / len(jobs)
+        data["queued_percent"] = data["queued"] / len(jobs)
+        data["running_percent"] = data["running"] / len(jobs)
 
-    return render(request, "training/status.html", {"training": training, 'jobs': jobs, 'jobs_overview': jobs_overview, 'users': users, 'state': state_summary})
+    return render(
+        request,
+        "training/status.html",
+        {
+            "training": training,
+            "jobs": jobs,
+            "jobs_overview": jobs_overview,
+            "users": users,
+            "state": state_summary,
+        },
+    )

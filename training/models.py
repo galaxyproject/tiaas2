@@ -14,18 +14,14 @@ class Training(models.Model):
     website = models.URLField(blank=True)
     location = CountryField(multiple=True, blank_label="(select country)")
     use_gtn = models.CharField(
-        max_length=1,
-        choices=(('Y', 'Yes'), ('N', 'No')),
-        default='N'
+        max_length=1, choices=(("Y", "Yes"), ("N", "No")), default="N"
     )
     gtn_links = models.TextField(blank=True)
     non_gtn_links = models.TextField(blank=True)
     attendance = models.TextField()
     training_identifier = models.CharField(max_length=12)
     advertise_eu = models.CharField(
-        max_length=1,
-        choices=(('Y', 'Yes'), ('N', 'No')),
-        default='N'
+        max_length=1, choices=(("Y", "Yes"), ("N", "No")), default="N"
     )
 
     other_requests = models.TextField(blank=True)

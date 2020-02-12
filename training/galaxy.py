@@ -61,8 +61,8 @@ WHERE
 """
 
 
-
 # Create your views here.
+
 
 def get_roles():
     roles = fetch_all(
@@ -110,9 +110,7 @@ def create_group(training_id, role_id):
         % training_id
     )
     # get the role back
-    groups = fetch_all(
-        "select id from galaxy_group where name = '%s'" % training_id
-    )
+    groups = fetch_all("select id from galaxy_group where name = '%s'" % training_id)
     group_id = -1
     for group in groups:
         group_id = group[0]

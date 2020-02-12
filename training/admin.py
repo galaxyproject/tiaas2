@@ -14,11 +14,9 @@ class TrainingAdmin(admin.ModelAdmin):
         "processed",
     )
 
-    readonly_fields = (
-        'received',
-    )
+    readonly_fields = ("received",)
 
-    list_filter = ('processed', )
+    list_filter = ("processed",)
 
 
 admin.site.register(Training, TrainingAdmin)
