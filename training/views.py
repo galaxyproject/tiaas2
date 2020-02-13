@@ -62,9 +62,11 @@ def stats(request):
 
 
 def join(request, training_id):
-    try:
-        training = Training.objects.get(training_identifier=training_id.lower())
-    except Training.DoesNotExist:
+    trainings = Training.objects.all().filter(training_identifier=training_id.lower())
+    any_approved = any([t.processed == 'AP' for t in trainings])
+
+    # If we don't know this training, reject
+    if len(trainings) == 0 or not any_approved:
         return render(
             request,
             "training/error.html",
@@ -81,17 +83,6 @@ def join(request, training_id):
             "training/error.html",
             {
                 "message": "Please login to Galaxy first!",
-                "host": request.META.get("HTTP_HOST", None),
-            },
-        )
-
-    # If we don't know this training, reject
-    if training.processed != "AP":
-        return render(
-            request,
-            "training/error.html",
-            {
-                "message": "Training is not active",
                 "host": request.META.get("HTTP_HOST", None),
             },
         )
@@ -131,14 +122,15 @@ def join(request, training_id):
     return render(
         request,
         "training/join.html",
-        {"training": training, "host": request.META.get("HTTP_HOST", None)},
+        {"training": trainings[0], "host": request.META.get("HTTP_HOST", None)},
     )
 
 
 def status(request, training_id):
-    try:
-        training = Training.objects.get(training_identifier=training_id.lower())
-    except Training.DoesNotExist:
+    trainings = Training.objects.all().filter(training_identifier=training_id.lower())
+    any_approved = any([t.processed == 'AP' for t in trainings])
+
+    if len(trainings) == 0 or not any_approved:
         return render(
             request,
             "training/error.html",
@@ -147,6 +139,7 @@ def status(request, training_id):
                 "host": request.META.get("HTTP_HOST", None),
             },
         )
+
 
     # hours param
     hours = int(request.GET.get("hours", 3))
@@ -196,7 +189,7 @@ def status(request, training_id):
         request,
         "training/status.html",
         {
-            "training": training,
+            "training": trainings[0],
             "jobs": jobs,
             "jobs_overview": jobs_overview,
             "users": users,
