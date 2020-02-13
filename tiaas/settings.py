@@ -78,18 +78,18 @@ WSGI_APPLICATION = "tiaas.wsgi.application"
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 # DATABASES = {
-    # "default": {
-        # "ENGINE": "django.db.backends.sqlite3",
-        # "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-    # },
-    # "galaxy": {
-        # "ENGINE": "django.db.backends.postgresql_psycopg2",
-        # "NAME": "postgres",
-        # "USER": "postgres",
-        # "PASSWORD": "postgres",
-        # "HOST": "localhost",
-        # "PORT": "5432",
-    # },
+# "default": {
+# "ENGINE": "django.db.backends.sqlite3",
+# "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+# },
+# "galaxy": {
+# "ENGINE": "django.db.backends.postgresql_psycopg2",
+# "NAME": "postgres",
+# "USER": "postgres",
+# "PASSWORD": "postgres",
+# "HOST": "localhost",
+# "PORT": "5432",
+# },
 # }
 
 
@@ -142,7 +142,7 @@ TIAAS_SEND_EMAIL_FROM = "tiaas+noreply@example.org"
 # EMAIL_USE_TLS
 # EMAIL_USE_SSL
 
-TIAAS_GDPR_RETAIN_EXTRA = 12 # months
+TIAAS_GDPR_RETAIN_EXTRA = 12  # months
 
 
 try:

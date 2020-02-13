@@ -30,7 +30,8 @@ class TrainingForm(forms.ModelForm):
         labels = {
             "title": "Training title",
             "email": "Contact email",
-            "retain_contact": "Permission to retain your contact information for %s months" % settings.TIAAS_GDPR_RETAIN_EXTRA,
+            "retain_contact": "Permission to retain your contact information for %s months"
+            % settings.TIAAS_GDPR_RETAIN_EXTRA,
             "description": "Brief overview of the Training Course",
             "start": "Start of your course",
             "end": "End of your course",

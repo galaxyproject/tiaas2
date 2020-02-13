@@ -37,7 +37,8 @@ class Training(models.Model):
 
     def days_until(self):
         return (self.start - date.today()).days
-    days_until.admin_order_field = '-start'
+
+    days_until.admin_order_field = "-start"
 
     @property
     def days_since_received(self):
