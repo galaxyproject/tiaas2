@@ -50,7 +50,7 @@ class Training(models.Model):
             self.name = "GDPR Redacted"
             self.email = "<gdpr-redacted>"
             self.save()
-            return f"gdpr-removed+{self.id}@localhost"
+            return f""
         else:
             return self.email
 
