@@ -137,7 +137,7 @@ def join(request, training_id):
 
 def status(request, training_id):
     try:
-        training = Training.objects.get(training_identifier=training_id)
+        training = Training.objects.get(training_identifier=training_id.lower())
     except Training.DoesNotExist:
         return render(
             request,
