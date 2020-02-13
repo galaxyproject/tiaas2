@@ -1,4 +1,5 @@
 from django_countries.widgets import CountrySelectWidget
+from django.conf import settings
 from django import forms
 from . import models
 
@@ -9,12 +10,14 @@ class TrainingForm(forms.ModelForm):
         fields = (
             "name",
             "email",
+            "retain_contact",
             "title",
             "description",
             "start",
             "end",
             "website",
             "location",
+            "blogpost",
             "use_gtn",
             "gtn_links",
             "non_gtn_links",
@@ -27,6 +30,7 @@ class TrainingForm(forms.ModelForm):
         labels = {
             "title": "Training title",
             "email": "Contact email",
+            "retain_contact": "Permission to retain your contact information for %s months" % settings.TIAAS_GDPR_RETAIN_EXTRA,
             "description": "Brief overview of the Training Course",
             "start": "Start of your course",
             "end": "End of your course",
@@ -38,6 +42,7 @@ class TrainingForm(forms.ModelForm):
             "attendance": "Approximately how many people do you expect to attend?",
             "advertise_eu": "Would you like us to advertise this on useGalaxy.eu?",
             "other_requests": "Anything else?",
+            "blogpost": "Write us a blogpost?",
         }
         help_texts = {
             "description": "Just tell us briefly about the training, what topics you'll cover, etc.",
@@ -47,6 +52,8 @@ class TrainingForm(forms.ModelForm):
             "gtn_links": "If you are using official training materials: which ones? Please provide the topic + material name, or URLs so we can find it.",
             "non_gtn_links": "If not using official training materials, can you provide URLs to your workflows, or just simply a list of all tool IDs that you will run. We need the internal Galaxy tool IDs (if you right click a tool in the Galaxy  UI + copy link location, this will provide the tool ID in the URL)",
             "name": "First name is fine, however you wish to be addressed in emails",
+            "retain_contact": "If you consent we will retain your information for a longer period of time. We will use this to contact you regarding letters of support for our continued funding, and similar matters.",
+            "blogpost": "Would you be willing to write a blogpost after your event, summarising your experience with TIaaS and how it helped you?",
         }
 
         widgets = {

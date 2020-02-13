@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import date
 from django_countries.fields import CountryField
+from django.conf import settings
 
 
 class Training(models.Model):
@@ -23,6 +24,8 @@ class Training(models.Model):
     advertise_eu = models.CharField(
         max_length=1, choices=(("Y", "Yes"), ("N", "No")), default="N"
     )
+    retain_contact = models.BooleanField(default=False)
+    blogpost = models.BooleanField(default=False)
 
     other_requests = models.TextField(blank=True)
     # Internal
@@ -42,7 +45,11 @@ class Training(models.Model):
 
     @property
     def gdpr_clean(self):
-        return (date.today() - self.end).days > 60
+        days = 60
+        if self.retain_contact:
+            days = settings.TIAAS_GDPR_RETAIN_EXTRA * 30
+
+        return (date.today() - self.end).days > days
 
     @property
     def safe_email(self):

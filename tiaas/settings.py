@@ -142,6 +142,8 @@ TIAAS_SEND_EMAIL_FROM = "tiaas+noreply@example.org"
 # EMAIL_USE_TLS
 # EMAIL_USE_SSL
 
+TIAAS_GDPR_RETAIN_EXTRA = 12 # months
+
 
 try:
     from config.local_settings import *

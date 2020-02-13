@@ -39,7 +39,7 @@ We want to help you conduct your training seminars. Where you provide the traini
 </ul>
 
 <p>
-Please note that we do provide this service for free to everyone, so we ask you kindly likewise ensure that no one is restricted in their participation (e.g. due to sex/age/race/too high course fees/etc.).
+Please note that we do provide this service for free to everyone, so we ask you kindly likewise ensure that no one is restricted in their participation (e.g. due to sex/age/race/too high course fees/etc.). You can read more about TIaaS on <a href="https://galaxyproject.eu/tiaas">Galaxy Europe's info page</a>.
 </p>
 
 <p>
@@ -57,11 +57,11 @@ Simply fill out this form and we'll get back to you with any further details we 
 <h2>Data Privacy</h2>
 <p>
 Email:
-Your email address is requested for when we need to contact you, it will be redacted 2 months after your training finishes
+Your email address is requested for when we need to contact you, it will be redacted (by default) 2 months after your training finishes
 </p>
 <p>
 Name:
-This is only used for addressing you by your name in emails, and will likewise be redacted after 2 months.
+This is only used for addressing you by your name in emails, and will likewise be redacted (by default) after 2 months.
 </p>
 <p>
 Location:
@@ -73,6 +73,7 @@ You can contact us at <a href="mailto:{{ settings.TIAAS_EMAIL }}">{{ settings.TI
 <div class="editable">
 {% bootstrap_field form.name %}
 {% bootstrap_field form.email %}
+{% bootstrap_field form.retain_contact %}
 </div>
 
 <h2>About the Course</h2>
@@ -124,6 +125,7 @@ We offer this service for free so we would love to be able to show the positive 
 
 <div class="editable">
 {% bootstrap_field form.advertise_eu %}
+{% bootstrap_field form.blogpost %}
 </div>
 
 <h2>Anything else?</h2>
