@@ -19,7 +19,7 @@ class Training(models.Model):
     gtn_links = models.TextField(blank=True)
     non_gtn_links = models.TextField(blank=True)
     attendance = models.TextField()
-    training_identifier = models.CharField(max_length=12)
+    training_identifier = models.CharField(max_length=20)
     advertise_eu = models.CharField(
         max_length=1, choices=(("Y", "Yes"), ("N", "No")), default="N"
     )
