@@ -37,8 +37,8 @@ def register(request):
                     "New TIaaS Request (%s)" % safe_id,
                     'We received a new tiaas request. View it in the <a href="https://%s/tiaas/admin/training/training/?processed__exact=UN">admin dashboard</a>'
                     % host,
-                    "tiaas-noreply@usegalaxy.eu",
-                    [settings.TIAAS_SEND_EMAIL],
+                    settings.TIAAS_SEND_EMAIL_FROM,
+                    [settings.TIAAS_SEND_EMAIL_TO],
                     fail_silently=True,  # on the fence about this one.
                 )
             return HttpResponseRedirect(reverse("thanks"))
