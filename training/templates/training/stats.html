@@ -17,7 +17,7 @@
     <div class="card">
       <div class="card-body">
 		  <h1 class="card-title">{{ students }} Students</h1>
-		  <p class="card-text"></p>
+		  <p class="card-text">taught over the lifetime of the TIaaS service</p>
       </div>
     </div>
   </div>
@@ -25,10 +25,83 @@
     <div class="card">
       <div class="card-body">
 		  <h1 class="card-title">{{ days }} Days</h1>
-		  <p class="card-text"></p>
+		  <p class="card-text">Total number of days for which we have provided VMs to various training events.</p>
       </div>
     </div>
   </div>
 </div>
+
+
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+<svg id="my_dataviz" width="1000" height="600"></svg>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Country</th>
+			<th>Training events</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for k, v in locations.items  %}
+		<tr>
+			<td>{{ k }}</td>
+			<td>{{ v}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+
+<script>
+
+// The svg
+var svg = d3.select("svg"),
+  width = +svg.attr("width"),
+  height = +svg.attr("height");
+
+// Map and projection
+var path = d3.geoPath();
+var projection = d3.geoMercator()
+  .scale(170)
+  .center([0,0])
+  .translate([width / 2, height / 2]);
+
+// Data and color scale
+var data = d3.map();
+
+// Load external data and boot
+d3.queue()
+  .defer(d3.json, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson")
+  .defer(d3.csv, "{% url 'stats_csv' %}", function(d) { data.set(d.code, +d.pop); })
+  .await(ready);
+
+function ready(error, topo) {
+
+	var colorScale = d3.scaleLinear()
+	.domain([0, d3.max(data.values())])
+	.range(["#eee", "#003399"])
+	console.log(d3.max(data));
+
+  // Draw the map
+  svg.append("g")
+    .selectAll("path")
+    .data(topo.features)
+    .enter()
+    .append("path")
+      // draw each country
+      .attr("d", d3.geoPath()
+        .projection(projection)
+      )
+      // set the color of each country
+      .attr("fill", function (d) {
+        d.total = data.get(d.id) || 0;
+        return colorScale(d.total);
+      });
+    }
+
+</script>
 
 {% endblock %}

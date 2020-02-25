@@ -1,7 +1,8 @@
 from django.shortcuts import render
+import collections
 import re
 from django.core.mail import send_mail
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from .models import Training
 from django.urls import reverse
@@ -56,6 +57,25 @@ def thanks(request):
     return render(request, "training/thanks.html")
 
 
+def stats_csv(request):
+    data = 'name,code,pop\n'
+
+    trainings = Training.objects.all()
+    locations = collections.Counter()
+    codes = {}
+
+    for t in trainings:
+        for loc in t.location:
+            locations[loc.alpha3] += 1
+            codes[loc.alpha3] = loc.name
+
+    for k, v in locations.items():
+        data += '%s,%s,%s\n' % (codes[k], k, v)
+
+    return HttpResponse(data, content_type='text/plain')
+
+
+
 def stats(request):
     trainings = Training.objects.all()
     approved = len([x for x in trainings if x.processed == 'AP'])
@@ -63,7 +83,12 @@ def stats(request):
     days = sum([(x.end - x.start).days for x in trainings])
     students = sum([x.attendance for x in trainings])
 
-    return render(request, "training/stats.html", {"trainings": trainings, 'waiting': waiting, 'approved': approved, 'days': days, 'students': students})
+    locations = collections.Counter()
+    for t in trainings:
+        for loc in t.location:
+            locations[loc.name] += 1
+
+    return render(request, "training/stats.html", {"trainings": trainings, 'waiting': waiting, 'approved': approved, 'days': days, 'students': students, 'locations': dict(locations.items())})
 
 
 def join(request, training_id):
