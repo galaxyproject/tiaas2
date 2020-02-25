@@ -2,6 +2,7 @@ from django.db import models
 from datetime import date
 from django_countries.fields import CountryField
 from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Training(models.Model):
@@ -19,7 +20,9 @@ class Training(models.Model):
     )
     gtn_links = models.TextField(blank=True)
     non_gtn_links = models.TextField(blank=True)
-    attendance = models.TextField()
+    attendance = models.IntegerField(
+        validators=[MinValueValidator(1)]
+    )
     training_identifier = models.CharField(max_length=20)
     advertise_eu = models.CharField(
         max_length=1, choices=(("Y", "Yes"), ("N", "No")), default="N"

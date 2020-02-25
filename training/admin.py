@@ -9,6 +9,7 @@ class TrainingAdmin(admin.ModelAdmin):
     list_display = (
         "training_identifier",
         "safe_email",
+        "attendance",
         "days_since_received",
         "days_until",
         "processed",

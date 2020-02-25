@@ -63,5 +63,5 @@ class TrainingForm(forms.ModelForm):
             "end": forms.SelectDateWidget(),
             "title": forms.TextInput(),
             "description": forms.TextInput(),
-            "attendance": forms.TextInput(),
+            "attendance": forms.NumberInput(attrs={'min': 1}),
         }

@@ -4,4 +4,31 @@
 {% block content %}
 <h2>Overview</h2>
 
+<div class="row">
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+		  <h1 class="card-title">{{ approved }} Events</h1>
+		  <p class="card-text">With {{ waiting }} new training requests waiting</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+		  <h1 class="card-title">{{ students }} Students</h1>
+		  <p class="card-text"></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+		  <h1 class="card-title">{{ days }} Days</h1>
+		  <p class="card-text"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

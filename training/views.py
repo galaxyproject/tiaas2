@@ -58,7 +58,12 @@ def thanks(request):
 
 def stats(request):
     trainings = Training.objects.all()
-    return render(request, "training/stats.html", {"trainings": trainings})
+    approved = len([x for x in trainings if x.processed == 'AP'])
+    waiting = len([x for x in trainings if x.processed == 'UN'])
+    days = sum([(x.end - x.start).days for x in trainings])
+    students = sum([x.attendance for x in trainings])
+
+    return render(request, "training/stats.html", {"trainings": trainings, 'waiting': waiting, 'approved': approved, 'days': days, 'students': students})
 
 
 def join(request, training_id):
