@@ -48,7 +48,7 @@ class Training(models.Model):
     def gdpr_clean(self):
         days = 60
         if self.retain_contact:
-            days = settings.TIAAS_GDPR_RETAIN_EXTRA * 30
+            days = int(settings.TIAAS_GDPR_RETAIN_EXTRA) * 30
 
         return (date.today() - self.end).days > days
 
