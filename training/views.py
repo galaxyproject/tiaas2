@@ -84,6 +84,7 @@ def stats(request):
     students = sum([x.attendance for x in trainings])
 
     current_trainings = len([x for x in trainings if x.start <= date.today() <= x.end])
+    earliest = min([x.start for x in trainings])
 
     locations = collections.Counter()
     for t in trainings:
@@ -101,6 +102,7 @@ def stats(request):
             "students": students,
             "locations": dict(locations.items()),
             "current_trainings": current_trainings,
+            "earliest": earliest,
         },
     )
 
