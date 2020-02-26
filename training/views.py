@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import collections
+from datetime import date
 import re
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect, HttpResponse
@@ -58,7 +59,7 @@ def thanks(request):
 
 
 def stats_csv(request):
-    data = 'name,code,pop\n'
+    data = "name,code,pop\n"
 
     trainings = Training.objects.all()
     locations = collections.Counter()
@@ -70,30 +71,43 @@ def stats_csv(request):
             codes[loc.alpha3] = loc.name
 
     for k, v in locations.items():
-        data += '%s,%s,%s\n' % (codes[k], k, v)
+        data += "%s,%s,%s\n" % (codes[k], k, v)
 
-    return HttpResponse(data, content_type='text/plain')
-
+    return HttpResponse(data, content_type="text/plain")
 
 
 def stats(request):
     trainings = Training.objects.all()
-    approved = len([x for x in trainings if x.processed == 'AP'])
-    waiting = len([x for x in trainings if x.processed == 'UN'])
+    approved = len([x for x in trainings if x.processed == "AP"])
+    waiting = len([x for x in trainings if x.processed == "UN"])
     days = sum([(x.end - x.start).days for x in trainings])
     students = sum([x.attendance for x in trainings])
+
+    current_trainings = len([x for x in trainings if x.start <= date.today() <= x.end])
 
     locations = collections.Counter()
     for t in trainings:
         for loc in t.location:
             locations[loc.name] += 1
 
-    return render(request, "training/stats.html", {"trainings": trainings, 'waiting': waiting, 'approved': approved, 'days': days, 'students': students, 'locations': dict(locations.items())})
+    return render(
+        request,
+        "training/stats.html",
+        {
+            "trainings": trainings,
+            "waiting": waiting,
+            "approved": approved,
+            "days": days,
+            "students": students,
+            "locations": dict(locations.items()),
+            "current_trainings": current_trainings,
+        },
+    )
 
 
 def join(request, training_id):
     trainings = Training.objects.all().filter(training_identifier=training_id.lower())
-    any_approved = any([t.processed == 'AP' for t in trainings])
+    any_approved = any([t.processed == "AP" for t in trainings])
 
     # If we don't know this training, reject
     if len(trainings) == 0 or not any_approved:
@@ -158,7 +172,7 @@ def join(request, training_id):
 
 def status(request, training_id):
     trainings = Training.objects.all().filter(training_identifier=training_id.lower())
-    any_approved = any([t.processed == 'AP' for t in trainings])
+    any_approved = any([t.processed == "AP" for t in trainings])
 
     if len(trainings) == 0 or not any_approved:
         return render(
@@ -169,7 +183,6 @@ def status(request, training_id):
                 "host": request.META.get("HTTP_HOST", None),
             },
         )
-
 
     # hours param
     hours = int(request.GET.get("hours", 3))
