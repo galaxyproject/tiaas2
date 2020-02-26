@@ -89,7 +89,8 @@ def trainings_for(trainings, year, month, day):
 
 def calendar_view(request):
     trainings = Training.objects.all()
-    approved = len([x for x in trainings if x.processed == "AP"])
+    approved_trainings = [x for x in trainings if x.processed == "AP"]
+    approved = len(approved_trainings)
     start = min([x.start for x in trainings])
     end = max([x.end for x in trainings])
     years = list(range(start.year, end.year + 1))
@@ -110,7 +111,7 @@ def calendar_view(request):
             days_fix = []
             for row in days_au:
                 new_row = [
-                    (x, trainings_for(trainings, year, idx + 1, x))
+                    (x, trainings_for(approved_trainings, year, idx + 1, x))
                     for x in row
                 ]
                 m = max([x[1] for x in new_row])
