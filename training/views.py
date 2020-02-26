@@ -93,7 +93,7 @@ def calendar_view(request):
     approved = len(approved_trainings)
     start = min([x.start for x in trainings])
     end = max([x.end for x in trainings])
-    years = list(range(start.year, end.year + 1))
+    years = list(range(start.year, end.year + 1))[::-1]
     months = [ 'January', 'February', 'March', 'April', 'May', 'June',
                 'Juli', 'August', 'September', 'October', 'November',
                 'December'
