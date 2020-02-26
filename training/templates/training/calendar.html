@@ -45,7 +45,7 @@ Data is cumulative since {{ earliest }}
 				{% else %}
 
 				{% widthratio d.1 max_value 83 as width%}
-				<div class="col-sm-1" style="background-color:hsla(220, 100%, 30%, 0.{{ width|stringformat:"02d"  }}); padding: 0.3em;">
+				<div class="col-sm-1" style="background-color:hsla(220, 100%, 30%, 0.{{ width|add:"0"|stringformat:"02d"  }}); padding: 0.3em;">
 					{{ d.1 }}
 				</div>
 				{% endif %}
