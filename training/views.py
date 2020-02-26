@@ -1,4 +1,5 @@
 from django.shortcuts import render
+import calendar
 import collections
 from datetime import date
 import re
@@ -74,6 +75,64 @@ def stats_csv(request):
         data += "%s,%s,%s\n" % (codes[k], k, v)
 
     return HttpResponse(data, content_type="text/plain")
+
+
+def trainings_for(trainings, year, month, day):
+    # find trainings including this given day.
+    if day == 0:
+        return 0
+    if year == 2020 and month == 1:
+        print(day, [x for x in trainings if x.start <= date(year, month, day) <= x.end])
+
+    return len([x for x in trainings if x.start <= date(year, month, day) <= x.end])
+
+
+def calendar_view(request):
+    trainings = Training.objects.all()
+    approved = len([x for x in trainings if x.processed == "AP"])
+    start = min([x.start for x in trainings])
+    end = max([x.end for x in trainings])
+    years = list(range(start.year, end.year + 1))
+    months = [ 'January', 'February', 'March', 'April', 'May', 'June',
+                'Juli', 'August', 'September', 'October', 'November',
+                'December'
+            ]
+
+    max_value = 0
+
+    days = {}
+    for year in years:
+        for idx, month in enumerate(months):
+            if year not in days:
+                days[year] = {}
+
+            days_au = calendar.monthcalendar(year, idx + 1)
+            days_fix = []
+            for row in days_au:
+                new_row = [
+                    (x, trainings_for(trainings, year, idx + 1, x))
+                    for x in row
+                ]
+                m = max([x[1] for x in new_row])
+                if m > max_value:
+                    max_value = m
+                days_fix.append(new_row)
+
+            days[year][month] = days_fix
+
+    return render(
+        request,
+        "training/calendar.html",
+        {
+            "trainings": approved,
+            "start": start,
+            "end": end,
+            "years": years,
+            "months": months,
+            "days": days,
+            "max_value": max_value,
+        },
+    )
 
 
 def stats(request):
