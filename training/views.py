@@ -168,7 +168,9 @@ def stats(request):
 
 
 def join(request, training_id):
-    trainings = Training.objects.all().filter(training_identifier__iexact=training_id.lower())
+    training_id = training_id.lower()
+
+    trainings = Training.objects.all().filter(training_identifier__iexact=training_id)
     any_approved = any([t.processed == "AP" for t in trainings])
 
     # If we don't know this training, reject
@@ -233,7 +235,9 @@ def join(request, training_id):
 
 
 def status(request, training_id):
-    trainings = Training.objects.all().filter(training_identifier__iexact=training_id.lower())
+    training_id = training_id.lower()
+
+    trainings = Training.objects.all().filter(training_identifier__iexact=training_id)
     any_approved = any([t.processed == "AP" for t in trainings])
 
     if len(trainings) == 0 or not any_approved:
