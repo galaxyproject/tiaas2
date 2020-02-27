@@ -32,7 +32,7 @@ WHERE
                                 FROM
                                         galaxy_user, user_group_association, galaxy_group
                                 WHERE
-                                        galaxy_group.name = 'training-%s'
+                                        galaxy_group.name ilike 'training-%s'
                                         AND galaxy_group.id = user_group_association.group_id
                                         AND user_group_association.user_id = galaxy_user.id
                         )
@@ -54,7 +54,7 @@ WHERE
                                 FROM
                                         galaxy_user, user_group_association, galaxy_group
                                 WHERE
-                                        galaxy_group.name = 'training-%s'
+                                        galaxy_group.name ilike 'training-%s'
                                         AND galaxy_group.id = user_group_association.group_id
                                         AND user_group_association.user_id = galaxy_user.id
                         )
