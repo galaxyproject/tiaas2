@@ -85,13 +85,13 @@ def create_role(training_id):
 
 
 def get_jobs(training_id, hours):
-    jobs = fetch_all(TRAINING_QUEUE_QUERY % (hours, training_id))
+    jobs = fetch_all(TRAINING_QUEUE_QUERY % (hours, training_id.lower()))
     for job in jobs:
         yield dict(zip(TRAINING_QUEUE_HEADERS, job))
 
 
 def get_users(training_id):
-    users = fetch_all(TRAINING_USERS_QUERY % training_id)
+    users = fetch_all(TRAINING_USERS_QUERY % training_id.lower())
     for user in users:
         yield user[0]
 
