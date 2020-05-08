@@ -88,11 +88,11 @@ def trainings_for(trainings, year, month, day):
 
 
 def calendar_view(request):
-    trainings = Training.objects.all()
+    trainings = Training.objects.all().exclude(training_identifier="test") # Exclude the 'test' group from showing up in calendar
     approved_trainings = [x for x in trainings if x.processed == "AP"]
     approved = len(approved_trainings)
-    start = min([x.start for x in trainings])
-    end = max([x.end for x in trainings])
+    start = min([x.start for x in approved_trainings])
+    end = max([x.end for x in approved_trainings])
     years = list(range(start.year, end.year + 1))[::-1]
     months = [ 'January', 'February', 'March', 'April', 'May', 'June',
                 'Juli', 'August', 'September', 'October', 'November',
@@ -137,7 +137,7 @@ def calendar_view(request):
 
 
 def stats(request):
-    trainings = Training.objects.all()
+    trainings = Training.objects.all().exclude(training_identifier="test") # Exclude the 'test' group from showing up in calendar
     approved = len([x for x in trainings if x.processed == "AP"])
     waiting = len([x for x in trainings if x.processed == "UN"])
     days = sum([(x.end - x.start).days for x in trainings])
