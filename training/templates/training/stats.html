@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load humanize %}
+{% load static %}
 
 {% block content %}
 <h2>Overview</h2>
@@ -41,9 +42,10 @@ Data is cumulative since {{ earliest }}
 </div>
 
 
-<script src="https://d3js.org/d3.v4.js"></script>
-<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+
+<script src="{% static "training/d3.v4.js" %}"></script>
+<script src="{% static "training/d3-scale-chromatic.v1.min.js" %}"></script>
+<script src="{% static "training/d3-geo-projection.v2.min.js" %}"></script>
 <div class="text-center">
 <svg id="my_dataviz" width="1000" height="600"></svg>
 </div>
@@ -85,7 +87,7 @@ var data = d3.map();
 
 // Load external data and boot
 d3.queue()
-  .defer(d3.json, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson")
+  .defer(d3.json, "{% static "training/world.geojson" %}")
   .defer(d3.csv, "{% url 'stats_csv' %}", function(d) { data.set(d.code, +d.pop); })
   .await(ready);
 
