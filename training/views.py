@@ -55,6 +55,9 @@ def register(request):
     )
 
 
+def about(request):
+    return render(request, "training/about.html")
+
 def thanks(request):
     return render(request, "training/thanks.html")
 
