@@ -78,7 +78,7 @@ def stats_csv(request):
     for k, v in locations.items():
         data += "%s,%s,%s\n" % (codes[k], k, v)
 
-    return HttpResponse(data, content_type="text/plain")
+    return HttpResponse(data, content_type="text/csv")
 
 
 def numbers_csv(request):
@@ -89,8 +89,8 @@ def numbers_csv(request):
         if t.processed == "AP":
             data += "{},{},{},{},{}\n".format(t.training_identifier, t.start, t.location, t.use_gtn, t.attendance)
 
-    return HttpResponse(data, content_type="text/plain")
-    
+    return HttpResponse(data, content_type="text/csv")
+
 
 def trainings_for(trainings, year, month, day):
     # find trainings including this given day.
