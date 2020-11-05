@@ -16,10 +16,10 @@ path prefix of Galaxy and so having access to the Galaxy session cookie. This
 is decoded into a user id + the part after `/join-training/` decoded into a
 group name, and this change is made.
 
-## Status Page
+## New! Status Page
 
 For teachers giving trainings, we now offer a "status" page where they can see
-the training queue of their class.
+the training queue of their class, both jobs and workflows.
 
 ![](images/queue.png)
 
