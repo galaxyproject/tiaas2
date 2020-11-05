@@ -81,7 +81,7 @@
 	</div>
 </div>
 
-<h2>Queue</h2>
+<h2>Job Queue</h2>
 <table class="table">
 	<thead>
 		<tr>
@@ -99,6 +99,28 @@
 			<td class="dataset state-{{row.state}}">{{ row.tool_id }}</td>
 			<td class="dataset state-{{row.state}}">{{ row.state }}</td>
 			<td class="dataset state-{{row.state}}">{{ row.job_runner_external_id}}</td>
+		</tr>
+	{% endfor %}
+</table>
+
+<h2>Workflow Invocation Queue</h2>
+<table class="table">
+	<thead>
+		<tr>
+			<th>User</th>
+			<th>Created</th>
+			<th>Tool</th>
+			<th>State</th>
+			<th>Invocation ID</th>
+		</tr>
+	</thead>
+	{% for row in wfs %}
+		<tr>
+			<td class="dataset" style="background: #{{ row.user_id }}">{{ row.user_id }}</td>
+			<td class="dataset state-{% if row.state == "scheduled" %}ok{% endif %}">{{ row.create_time | naturaltime }}</td>
+			<td class="dataset state-{% if row.state == "scheduled" %}ok{% endif %}">{{ row.workflow_name }}</td>
+			<td class="dataset state-{% if row.state == "scheduled" %}ok{% endif %}">{{ row.state }}</td>
+			<td class="dataset state-{% if row.state == "scheduled" %}ok{% endif %}">{{ row.id }}</td>
 		</tr>
 	{% endfor %}
 </table>

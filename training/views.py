@@ -15,6 +15,7 @@ from .galaxy import (
     create_group,
     add_group_user,
     get_jobs,
+    get_workflow_invocations,
     get_users,
     authenticate,
 )
@@ -253,6 +254,7 @@ def status(request, training_id):
             },
         )
 
+    refresh = request.GET.get("refresh", False) != False
     # hours param
     hours = int(request.GET.get("hours", 3))
     if hours > 64:
@@ -261,6 +263,7 @@ def status(request, training_id):
         hours = 1
 
     jobs = list(get_jobs(training_id, hours))
+    wfs = list(get_workflow_invocations(training_id, hours))
     users = list(get_users(training_id))
     jobs_overview = {}
     state_summary = {}
@@ -303,8 +306,10 @@ def status(request, training_id):
         {
             "training": trainings[0],
             "jobs": jobs,
+            "wfs": wfs,
             "jobs_overview": jobs_overview,
             "users": users,
             "state": state_summary,
+            "refresh": refresh,
         },
     )

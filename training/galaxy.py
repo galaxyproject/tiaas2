@@ -61,6 +61,44 @@ WHERE
 """
 
 
+TRAINING_WF_QUEUE_HEADERS = [
+    "user_id",
+    "create_time",
+    "workflow_name",
+    "state",
+    "id",
+]
+TRAINING_WF_QUEUE_QUERY = """
+
+SELECT
+    substring(md5(COALESCE(galaxy_user.username, 'Anonymous') || now()::date), 0, 7),
+    date_trunc('second', workflow.create_time) AS created,
+    workflow.name,
+    workflow_invocation.state,
+    workflow_invocation.id
+FROM
+    workflow_invocation
+    left join workflow on workflow_invocation.workflow_id = workflow.id
+    left join history on workflow_invocation.history_id = history.id
+    left join galaxy_user on history.user_id = galaxy_user.id
+WHERE
+    workflow_invocation.create_time > (now() AT TIME ZONE 'UTC' - '%s hours'::interval)
+    AND galaxy_user.id
+    IN (
+        SELECT
+            galaxy_user.id
+        FROM
+            galaxy_user, user_group_association, galaxy_group
+        WHERE
+            galaxy_group.name ilike 'training-%s'
+            AND galaxy_group.id = user_group_association.group_id
+            AND user_group_association.user_id = galaxy_user.id
+    )
+ORDER BY
+        workflow.create_time DESC
+LIMIT 300
+"""
+
 # Create your views here.
 
 
@@ -88,6 +126,12 @@ def get_jobs(training_id, hours):
     jobs = fetch_all(TRAINING_QUEUE_QUERY % (hours, training_id.lower()))
     for job in jobs:
         yield dict(zip(TRAINING_QUEUE_HEADERS, job))
+
+
+def get_workflow_invocations(training_id, hours):
+    jobs = fetch_all(TRAINING_WF_QUEUE_QUERY % (hours, training_id.lower()))
+    for job in jobs:
+        yield dict(zip(TRAINING_WF_QUEUE_HEADERS, job))
 
 
 def get_users(training_id):
