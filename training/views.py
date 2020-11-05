@@ -80,6 +80,17 @@ def stats_csv(request):
     return HttpResponse(data, content_type="text/plain")
 
 
+def numbers_csv(request):
+    data = "name,start,location,use_gtn,attendance\n"
+
+    trainings = Training.objects.all().exclude(training_identifier="test")
+    for t in trainings:
+        if t.processed == "AP":
+            data += "{},{},{},{},{}\n".format(t.training_identifier, t.start, t.location, t.use_gtn, t.attendance)
+
+    return HttpResponse(data, content_type="text/plain")
+    
+
 def trainings_for(trainings, year, month, day):
     # find trainings including this given day.
     if day == 0:
