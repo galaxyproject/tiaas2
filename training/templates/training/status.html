@@ -30,11 +30,27 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th>State</th>
+					<th>Job State</th>
 					<th>Count</th>
 				</tr>
 			</thead>
 			{% for state, count  in state.items %}
+				{% if state != '__total__' %}
+				<tr>
+					<td>{{ state }}</td>
+					<td style="background: rgba(128, 128, 128, {{ count_percent }});">{{ count }}</td>
+				</tr>
+				{% endif %}
+			{% endfor %}
+		</table>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Workflow State</th>
+					<th>Count</th>
+				</tr>
+			</thead>
+			{% for state, count  in wf_state.items %}
 				{% if state != '__total__' %}
 				<tr>
 					<td>{{ state }}</td>

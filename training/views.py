@@ -238,6 +238,20 @@ def join(request, training_id):
     )
 
 
+def _summarize(d):
+    state_summary = {}
+    for item in d:
+        if item["state"] not in state_summary:
+            state_summary[item["state"]] = 0
+        if "__total__" not in state_summary:
+            # div 0
+            state_summary["__total__"] = 1
+
+        state_summary[item["state"]] += 1
+        state_summary["__total__"] += 1
+    return state_summary
+
+
 def status(request, training_id):
     training_id = training_id.lower()
 
@@ -266,7 +280,6 @@ def status(request, training_id):
     wfs = list(get_workflow_invocations(training_id, hours))
     users = list(get_users(training_id))
     jobs_overview = {}
-    state_summary = {}
     for job in jobs:
         tool_id = job["tool_id"]
         if tool_id not in jobs_overview:
@@ -284,14 +297,8 @@ def status(request, training_id):
             jobs_overview[tool_id][job["state"]] += 1
             jobs_overview[tool_id]["__total__"] += 1
 
-        if job["state"] not in state_summary:
-            state_summary[job["state"]] = 0
-        if "__total__" not in state_summary:
-            # div 0
-            state_summary["__total__"] = 1
-
-        state_summary[job["state"]] += 1
-        state_summary["__total__"] += 1
+    state_summary = _summarize(jobs)
+    wf_state_summary = _summarize(wfs)
 
     for job, data in jobs_overview.items():
         data["ok_percent"] = data["ok"] / len(jobs)
@@ -310,6 +317,7 @@ def status(request, training_id):
             "jobs_overview": jobs_overview,
             "users": users,
             "state": state_summary,
+            "wf_state": wf_state_summary,
             "refresh": refresh,
         },
     )
