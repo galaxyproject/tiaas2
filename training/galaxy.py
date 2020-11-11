@@ -137,7 +137,7 @@ def get_workflow_invocations(training_id, hours):
 
 
 def get_users(training_id):
-    users = fetch_all(TRAINING_USERS_QUERY, training_id.lower())
+    users = fetch_all(TRAINING_USERS_QUERY, (training_id.lower(),))
     for user in users:
         yield user[0]
 
