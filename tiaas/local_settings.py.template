@@ -1,0 +1,43 @@
+"""
+This is a sample of site-specific settings for the TIaaS project.
+All settings are required, unless stated otherwise.
+The values are provided as examples.
+"""
+
+# Django settings
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = "change this"
+
+# You need to specify both "default" and "galaxy" databases.
+# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+    },
+    "galaxy": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "your-galaxy-database",
+        "USER": "your-galaxy-database-user",
+        "PASSWORD": "password",
+        "HOST": "database-host",
+        "PORT": "database-port",
+    },
+}
+
+
+# TIaaS settings
+
+# SECURITY WARNING: keep the GALAXY_SECRET key used in production secret!
+# This setting should have the same value as Galaxy's "id_secret" configuration option.
+GALAXY_SECRET = "change this"
+
+# The following values are displayed as text
+TIAAS_OWNER = "change this"  # Example: "UseGalaxy.org"
+TIAAS_EMAIL = "change this"  # Contact email
+TIAAS_OWNER_SITE = "change this"  # Example: "https://galaxyproject.org"
+TIAAS_DOMAIN = "change this"  # Example: "https://usegalaxy.org"
+
+# Recipient address for automated email notifications
+TIAAS_SEND_EMAIL_TO = "change this"
