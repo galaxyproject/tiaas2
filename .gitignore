@@ -1,0 +1,22 @@
+# Django stuff:
+*.log
+local_settings.py
+
+# Python virtualenv
+.venv
+.venv3
+
+# Python build artifacts
+build
+dist
+lib/galaxy.egg-info
+.eggs
+
+# Python bytecode
+*.py[cod]
+
+# sqlite
+*.sqlite
+*.sqlite3
+
+# TODO as needed: static, documentation build files, etc.
