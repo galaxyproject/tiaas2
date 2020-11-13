@@ -1,15 +1,12 @@
 """
 Django settings for the TIaaS project.
 
-For more information on this file, see
-https://docs.djangoproject.com/en/3.1/topics/settings/
-
-For the full list of Django settings and their values, see
-https://docs.djangoproject.com/en/3.1/ref/settings/
-
 Site-specifig options must be set in `config/local_settings.py`
 (see `local_settings.py.template`). If you use a different location,
 you need to edit the import statement at the end of this file.
+
+For the full list of Django settings and their values, see
+https://docs.djangoproject.com/en/3.1/ref/settings/
 
 Production deployment checklist
 https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -69,7 +66,6 @@ TEMPLATES = [
 WSGI_APPLICATION = "tiaas.wsgi.application"
 
 # Password validation
-# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -78,7 +74,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
@@ -86,7 +81,6 @@ USE_L10N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
 STATIC_URL = "/tiaas/static/"
 STATIC_ROOT = "./static"
 
