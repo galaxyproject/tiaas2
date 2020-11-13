@@ -89,8 +89,8 @@ TIAAS_GDPR_RETAIN_EXTRA = 12
 # Default "from" address for automated email
 TIAAS_SEND_EMAIL_FROM = "tiaas+noreply@example.org"
 
-# These settings may be overwritten in config/local_settings.py
 try:
     from config.local_settings import *
 except Exception as e:
-    print('Local settings file not found: %s' % e)
+    import sys
+    sys.exit('Local settings file not found: %s' % e)
