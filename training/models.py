@@ -1,8 +1,9 @@
-from django.db import models
 from datetime import date
-from django_countries.fields import CountryField
+
 from django.conf import settings
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MinValueValidator
+from django.db import models
+from django_countries.fields import CountryField
 
 
 class Training(models.Model):
@@ -59,7 +60,7 @@ class Training(models.Model):
             self.name = "GDPR Redacted"
             self.email = "<gdpr-redacted>"
             self.save()
-            return f""
+            return ""
         else:
             return self.email
 
@@ -69,7 +70,7 @@ class Training(models.Model):
             self.name = "GDPR Redacted"
             self.email = "<gdpr-redacted>"
             self.save()
-            return f"Redacted"
+            return "Redacted"
         else:
             return self.name
 

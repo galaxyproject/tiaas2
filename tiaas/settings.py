@@ -90,7 +90,7 @@ TIAAS_GDPR_RETAIN_EXTRA = 12
 TIAAS_SEND_EMAIL_FROM = "tiaas+noreply@example.org"
 
 try:
-    from config.local_settings import *
+    from config.local_settings import *  # noqa: F401,F403  ignore these flake8 errors
 except Exception as e:
     import sys
     sys.exit('Local settings file not found: %s' % e)

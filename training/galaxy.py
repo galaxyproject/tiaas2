@@ -1,7 +1,8 @@
-from django.db import connections
 import codecs
+
 from Crypto.Cipher import Blowfish
 from django.conf import settings
+from django.db import connections
 
 cipher = Blowfish.new(settings.GALAXY_SECRET)
 

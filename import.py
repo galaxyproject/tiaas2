@@ -31,10 +31,10 @@ for idx, line in enumerate(x):
     line = line.split('\t')
     line = line[0:len(headers)]
     d = dict(zip(headers, line))
-    #del  d['days_until']
-    #del  d['gdpr']
-    #del  d['days_since']
-    del  d['blogpost']
+    # del  d['days_until']
+    # del  d['gdpr']
+    # del  d['days_since']
+    del d['blogpost']
 
     d['received'] = dateparser.parse(d['received']).date()
     d['start'] = dateparser.parse(d['start']).date()
