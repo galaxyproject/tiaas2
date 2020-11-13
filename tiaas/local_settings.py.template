@@ -18,11 +18,11 @@ DATABASES = {
     },
     "galaxy": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "your-galaxy-database",
-        "USER": "your-galaxy-database-user",
-        "PASSWORD": "password",
-        "HOST": "database-host",
-        "PORT": "database-port",
+        "NAME": "postgres",
+        "USER": "postgres",
+        "PASSWORD": "postgres",
+        "HOST": "localhost",
+        "PORT": "5432",
     },
 }
 
@@ -31,13 +31,13 @@ DATABASES = {
 
 # SECURITY WARNING: keep the GALAXY_SECRET key used in production secret!
 # This setting should have the same value as Galaxy's "id_secret" configuration option.
-GALAXY_SECRET = "change this"
+GALAXY_SECRET = "USING THE DEFAULT IS NOT SECURE!"
 
-# The following values are displayed as text
-TIAAS_OWNER = "change this"  # Example: "UseGalaxy.org"
-TIAAS_EMAIL = "change this"  # Contact email
-TIAAS_OWNER_SITE = "change this"  # Example: "https://galaxyproject.org"
-TIAAS_DOMAIN = "change this"  # Example: "https://usegalaxy.org"
+# The following values are displayed as text (values are examples)
+TIAAS_OWNER = "UseGalaxy.eu"
+TIAAS_EMAIL = "contact@example.com"
+TIAAS_OWNER_SITE = "https://galaxyproject.eu"
+TIAAS_DOMAIN = "https://usegalaxy.eu"
 
 # Recipient address for automated email notifications
-TIAAS_SEND_EMAIL_TO = "change this"
+TIAAS_SEND_EMAIL_TO = "root@localhost"
