@@ -19,4 +19,7 @@ lib/galaxy.egg-info
 *.sqlite
 *.sqlite3
 
+# misc.
+.tox
+
 # TODO as needed: static, documentation build files, etc.
