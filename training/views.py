@@ -41,7 +41,8 @@ def register(request):
             if settings.TIAAS_SEND_EMAIL_TO:
                 send_mail(
                     "New TIaaS Request (%s)" % safe_id,
-                    'We received a new tiaas request. View it in the <a href="https://%s/tiaas/admin/training/training/?processed__exact=UN">admin dashboard</a>'
+                    "We received a new tiaas request. View it in the"
+                    '<a href="https://%s/tiaas/admin/training/training/?processed__exact=UN">admin dashboard</a>'  # noqa: E501
                     % host,
                     settings.TIAAS_SEND_EMAIL_FROM,
                     [settings.TIAAS_SEND_EMAIL_TO],
@@ -90,7 +91,9 @@ def numbers_csv(request):
     trainings = Training.objects.all().exclude(training_identifier="test")
     for t in trainings:
         if t.processed == "AP":
-            data += "{},{},{},{},{}\n".format(t.training_identifier, t.start, t.location, t.use_gtn, t.attendance)
+            data += "{},{},{},{},{}\n".format(
+                t.training_identifier, t.start, t.location, t.use_gtn, t.attendance
+            )
 
     return HttpResponse(data, content_type="text/csv")
 
@@ -106,7 +109,8 @@ def trainings_for(trainings, year, month, day):
 
 
 def calendar_view(request):
-    trainings = Training.objects.all().exclude(training_identifier="test")  # Exclude the 'test' group from showing up in calendar
+    # Exclude the 'test' group from showing up in calendar
+    trainings = Training.objects.all().exclude(training_identifier="test")
     approved_trainings = [x for x in trainings if x.processed == "AP"]
     approved = len(approved_trainings)
     start = min([x.start for x in approved_trainings])
@@ -154,7 +158,8 @@ def calendar_view(request):
 
 
 def stats(request):
-    trainings = Training.objects.all().exclude(training_identifier="test")  # Exclude the 'test' group from showing up in calendar
+    # Exclude the 'test' group from showing up in calendar
+    trainings = Training.objects.all().exclude(training_identifier="test")
     approved = len([x for x in trainings if x.processed == "AP"])
     waiting = len([x for x in trainings if x.processed == "UN"])
     days = sum([(x.end - x.start).days for x in trainings])
