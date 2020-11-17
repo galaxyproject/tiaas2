@@ -3,27 +3,7 @@
 
 {% block content %}
 
-<style type="text/css" media="all">
-form {
-	font-size: 16px;
-}
-.editable {
-	border-left: 4px solid gold;
-	padding-left: 1em;
-	margin-top: 1em;
-	margin-bottom: 1em;
-}
-
-  .row.bootstrap3-multi-input {
-	  margin-left: 0px;
-  }
-
-  .control-label{
-	  font-weight: 900;
-		  font-size: 115%
-  }
-</style>
-<form action="{% url 'register' %}" method="post" class="form">
+<form action="{% url 'register' %}" method="post" class="form register">
   {% csrf_token %}
 
   <h1>{{ settings.TIAAS_OWNER }}'s Training Infrastructure as a Service</h1>
