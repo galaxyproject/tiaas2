@@ -7,52 +7,36 @@
 {% for year, months in days.items %}
 <h3>{{ year }}</h3>
 <div class="row">
-	{% for month, days in months.items %}
-	<div class="col-sm-3 text-center calendar">
-		{{ month }}
-
-		<div class="row">
-                <div class="col-sm-1 date">
-					M
-				</div>
-                <div class="col-sm-1 date">
-					T
-				</div>
-                <div class="col-sm-1 date">
-					W
-				</div>
-                <div class="col-sm-1 date">
-					R
-				</div>
-                <div class="col-sm-1 date">
-					F
-				</div>
-				<div class="col-sm-1 date">
-					S
-				</div>
-				<div class="col-sm-1 date">
-					S
-				</div>
-		</div>
-
-		{% for row in days %}
-		<div class="row">
-			{% for d in row %}
-				{% if d.0 == 0 %}
-                <div class="col-sm-1 date">
-				</div>
-				{% else %}
-
-				{% widthratio d.1 max_value 83 as width%}
-				<div class="col-sm-1 date" style="background-color:hsla(220, 100%, 30%, 0.{{ width|add:"0"|stringformat:"02d" }});">
-					{{ d.1 }}
-				</div>
-				{% endif %}
-			{% endfor %}
-		</div>
-		{% endfor %}
-	</div>
-	{% endfor %}
+    {% for month, days in months.items %}
+    <div class="col-sm-3 text-center calendar">
+        {{ month }}
+        
+        <div class="row">
+            <div class="col-sm-1 date">M</div>
+            <div class="col-sm-1 date">T</div>
+            <div class="col-sm-1 date">W</div>
+            <div class="col-sm-1 date">R</div>
+            <div class="col-sm-1 date">F</div>
+            <div class="col-sm-1 date">S</div>
+            <div class="col-sm-1 date">S</div>
+        </div>
+        
+        {% for row in days %}
+        <div class="row">
+            {% for d in row %}
+                {% if d.0 == 0 %}
+                <div class="col-sm-1 date"></div>
+                {% else %}
+                {% widthratio d.1 max_value 83 as width%}
+                <div class="col-sm-1 date" style="background-color:hsla(220, 100%, 30%, 0.{{ width|add:"0"|stringformat:"02d" }});">
+                    {{ d.1 }}
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
 </div>
 {% endfor %}
 
