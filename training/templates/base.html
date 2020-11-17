@@ -28,10 +28,13 @@
 			<div id="center" class="inbound" style="padding-top: 3em; overflow-y: scroll!important">
 				{% block content %}
 				{% endblock %}
+
+				<div class="text-center" style="margin: 3em 0;border-top: 1px solid gray;padding: 1em;">
+					<b>Training Infrastructure as a Service (TIaaS)</b> licensed under the AGPLv3, running commit <a href="https://github.com/usegalaxy-eu/tiaas2/commit/{{ settings.GIT_COMMIT_ID }}" target="_blank">{{ settings.GIT_COMMIT_ID }}</a>
+				</div>
 			</div><!--end center-->
 		</div><!--end columns-->
 	</div><!--end everything-->
-	<div id="dd-helper" style="display: none;"></div>
 </body>
 </html>
 
