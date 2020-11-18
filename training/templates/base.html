@@ -1,40 +1,34 @@
+{% load static %}
 <!DOCTYPE HTML>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="viewport" content="maximum-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-	<title>Galaxy TIaaS {% block title %}{% endblock %}</title>
-	<link href="{{ config.redirect_location }}/static/style/base.css" media="screen" rel="stylesheet" type="text/css" />
-	<link href="{{ config.redirect_location }}/static/dist/base.css" media="screen" rel="stylesheet" type="text/css" />
-
-	<style type="text/css" media="all">
-		#center{ padding-right: 10em; padding-left: 10em; overflow-y: auto; }
-	</style>
-	{% if refresh %}
-	<meta http-equiv="refresh" content="5">
-	{% endif %}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="maximum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>Galaxy TIaaS {% block title %}{% endblock %}</title>
+    <link  href="{% static 'training/style/galaxy.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link  href="{% static 'training/style/tiaas.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    {% if refresh %}
+    <meta http-equiv="refresh" content="5">
+    {% endif %}
 </head>
-
 <body scroll="no" class="full-content ">
-	<div id="everything" style="overflow-y: scroll!important">
-		<nav id="masthead" class="navbar navbar-expand justify-content-center navbar-dark">
-			<a class="navbar-brand" href="/">
-				<span class="navbar-brand-title">Galaxy Training Infrastructure as a Service</span>
-			</a>
-		</nav>
-
-		<div id="columns">
-			<div id="center" class="inbound" style="padding-top: 3em; overflow-y: scroll!important">
-				{% block content %}
-				{% endblock %}
-
-				<div class="text-center" style="margin: 3em 0;border-top: 1px solid gray;padding: 1em;">
-					<b>Training Infrastructure as a Service (TIaaS)</b> licensed under the AGPLv3, running commit <a href="https://github.com/usegalaxy-eu/tiaas2/commit/{{ settings.GIT_COMMIT_ID }}" target="_blank">{{ settings.GIT_COMMIT_ID }}</a>
-				</div>
-			</div><!--end center-->
-		</div><!--end columns-->
-	</div><!--end everything-->
+    <div id="everything">
+        <nav id="masthead" class="navbar navbar-expand justify-content-center navbar-dark">
+            <a class="navbar-brand" href="/">
+            	<span class="navbar-brand-title">Galaxy Training Infrastructure as a Service</span>
+            </a>
+        </nav>
+        <div id="columns">
+            <div id="center" class="inbound">
+                {% block content %}
+                {% endblock %}
+                <div class="text-center"> 
+                    <b>Training Infrastructure as a Service (TIaaS)</b> licensed under the AGPLv3, running commit
+                    <a href="https://github.com/usegalaxy-eu/tiaas2/commit/{{ settings.GIT_COMMIT_ID }}" target="_blank">{{ settings.GIT_COMMIT_ID }}</a>
+                </div>
+            </div><!--end center-->
+        </div><!--end columns-->
+    </div><!--end everything-->
 </body>
 </html>
-

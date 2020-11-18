@@ -10,38 +10,36 @@ Data is cumulative since {{ earliest }}
   <div class="col-sm-3">
     <div class="card">
       <div class="card-body">
-		  <h1 class="card-title">{{ approved }} Events</h1>
-		  <p class="card-text">With {{ waiting }} new training requests waiting</p>
+        <h1 class="card-title">{{ approved }} Events</h1>
+        <p class="card-text">With {{ waiting }} new training requests waiting</p>
       </div>
     </div>
   </div>
   <div class="col-sm-3">
     <div class="card">
       <div class="card-body">
-		  <h1 class="card-title">{{ current_trainings }} Events Today!</h1>
-		  <p class="card-text">Currently active training events</p>
+        <h1 class="card-title">{{ current_trainings }} Events Today!</h1>
+        <p class="card-text">Currently active training events</p>
       </div>
     </div>
   </div>
   <div class="col-sm-3">
     <div class="card">
       <div class="card-body">
-		  <h1 class="card-title">{{ students }} Students</h1>
-		  <p class="card-text">taught over the lifetime of the TIaaS service</p>
+        <h1 class="card-title">{{ students }} Students</h1>
+        <p class="card-text">taught over the lifetime of the TIaaS service</p>
       </div>
     </div>
   </div>
   <div class="col-sm-3">
     <div class="card">
       <div class="card-body">
-		  <h1 class="card-title">{{ days }} Days</h1>
-		  <p class="card-text">Total number of days for which we have provided VMs to various training events.</p>
+        <h1 class="card-title">{{ days }} Days</h1>
+        <p class="card-text">Total number of days for which we have provided VMs to various training events.</p>
       </div>
     </div>
   </div>
 </div>
-
-
 
 <script src="{% static "training/d3.v4.js" %}"></script>
 <script src="{% static "training/d3-scale-chromatic.v1.min.js" %}"></script>
@@ -51,20 +49,20 @@ Data is cumulative since {{ earliest }}
 </div>
 
 <table class="table table-striped">
-	<thead>
-		<tr>
-			<th>Country</th>
-			<th>Training events</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for k, v in locations.items  %}
-		<tr>
-			<td>{{ k }}</td>
-			<td>{{ v}}</td>
-		</tr>
-		{% endfor %}
-	</tbody>
+    <thead>
+        <tr>
+            <th>Country</th>
+            <th>Training events</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for k, v in locations.items  %}
+        <tr>
+            <td>{{ k }}</td>
+            <td>{{ v}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
 
 
@@ -93,10 +91,10 @@ d3.queue()
 
 function ready(error, topo) {
 
-	var colorScale = d3.scaleLinear()
-	.domain([0, d3.max(data.values())])
-	.range(["#eee", "#003399"])
-	console.log(d3.max(data));
+    var colorScale = d3.scaleLinear()
+    .domain([0, d3.max(data.values())])
+    .range(["#eee", "#003399"])
+    console.log(d3.max(data));
 
   // Draw the map
   svg.append("g")

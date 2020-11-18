@@ -1,6 +1,8 @@
 # Django stuff:
 *.log
 local_settings.py
+# ignore root static directory populated by collectstatic (mind leading '/')
+/static
 
 # Python virtualenv
 .venv
@@ -21,5 +23,8 @@ lib/galaxy.egg-info
 
 # misc.
 .tox
+
+# ignore linked external css file
+training/static/training/style/galaxy.css
 
 # TODO as needed: static, documentation build files, etc.
