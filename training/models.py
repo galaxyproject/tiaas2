@@ -3,8 +3,9 @@ from datetime import date
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.core.exceptions import ValidationError
 from django_countries.fields import CountryField
+
+from .validators import validate_date_precedence
 
 
 class Training(models.Model):
@@ -79,9 +80,4 @@ class Training(models.Model):
         return self.training_identifier
 
     def clean(self):
-        self._validate_start_end_dates()
-
-    def _validate_start_end_dates(self):
-        if self.start and self.end and self.start > self.end:
-            raise ValidationError(
-                {'end': 'End date cannot precede start date'}, code='DATE_PRECEDENCE')
+        validate_date_precedence(self.start, self.end, 'end')
