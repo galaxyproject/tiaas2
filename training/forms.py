@@ -6,6 +6,9 @@ from . import models
 
 
 class TrainingForm(forms.ModelForm):
+
+    error_css_class = 'error'
+
     class Meta:
         model = models.Training
         fields = (
