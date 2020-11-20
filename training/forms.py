@@ -80,6 +80,9 @@ class TrainingForm(forms.ModelForm):
             "blogpost":
                 "Would you be willing to write a blogpost after your event, summarising your "
                 "experience with TIaaS and how it helped you?",
+            "training_identifier":
+                "Training identifier should consist of lowercase letters, numbers, underscores "
+                "or hyphens.",
         }
 
         widgets = {

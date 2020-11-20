@@ -5,7 +5,7 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django_countries.fields import CountryField
 
-from .validators import validate_date_precedence
+from .validators import validate_date_precedence, validate_identifier
 
 
 class Training(models.Model):
@@ -24,7 +24,7 @@ class Training(models.Model):
     gtn_links = models.TextField(blank=True)
     non_gtn_links = models.TextField(blank=True)
     attendance = models.IntegerField(validators=[MinValueValidator(1)])
-    training_identifier = models.CharField(max_length=20)
+    training_identifier = models.CharField(max_length=20, validators=[validate_identifier])
     advertise_eu = models.CharField(
         max_length=1, choices=(("Y", "Yes"), ("N", "No")), default="N"
     )

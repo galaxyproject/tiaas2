@@ -1,6 +1,5 @@
 import calendar
 import collections
-import re
 from datetime import date
 
 from django.conf import settings
@@ -25,34 +24,28 @@ from .models import Training
 
 
 def register(request):
-    host = request.META.get("HTTP_HOST", "localhost")
-    if request.method == "POST":
+    if request.method != "POST":
+        # if a GET (or any other method) we'll create a blank form
+        form = TrainingForm()
+    else:
         # create a form instance and populate it with data from the request:
         form = TrainingForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            # process the data in form.cleaned_data as required
-            safe_id = form.cleaned_data["training_identifier"].lower()
-            safe_id = re.sub(r"[^a-z0-9_-]*", "", safe_id)
-
-            form.cleaned_data["training_identifier"] = safe_id
             form.save()
-
             if settings.TIAAS_SEND_EMAIL_TO:
+                identifier = form.cleaned_data["training_identifier"]
+                host = request.META.get("HTTP_HOST", "localhost")
                 send_mail(
-                    "New TIaaS Request (%s)" % safe_id,
+                    "New TIaaS Request (%s)" % identifier,
                     "We received a new tiaas request. View it in the"
                     '<a href="https://%s/tiaas/admin/training/training/?processed__exact=UN">admin dashboard</a>'  # noqa: E501
                     % host,
                     settings.TIAAS_SEND_EMAIL_FROM,
                     [settings.TIAAS_SEND_EMAIL_TO],
-                    fail_silently=True,  # on the fence about this one.
+                    fail_silently=True,  # on the fence about this one. (Same. TODO)
                 )
             return HttpResponseRedirect(reverse("thanks"))
-
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = TrainingForm()
 
     return render(
         request, "training/register.html", {"form": form, "settings": settings}
@@ -256,7 +249,11 @@ def join(request, training_id):
     return render(
         request,
         "training/join.html",
-        {"training": trainings[0], "host": request.META.get("HTTP_HOST", None), "settings": settings},
+        {
+            "training": trainings[0],
+            "host": request.META.get("HTTP_HOST", None),
+            "settings": settings
+        },
     )
 
 
