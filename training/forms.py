@@ -1,5 +1,8 @@
+from datetime import date
+
 from django import forms
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django_countries.widgets import CountrySelectWidget
 
 from . import models
@@ -8,6 +11,12 @@ from . import models
 class TrainingForm(forms.ModelForm):
 
     error_css_class = 'error'
+
+    def clean_start(self):
+        start = self.cleaned_data['start']
+        if start < date.today():
+            raise ValidationError('Start date has passed', code='START_DATE_IN_THE_PAST')
+        return start
 
     class Meta:
         model = models.Training

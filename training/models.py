@@ -82,6 +82,6 @@ class Training(models.Model):
         self._validate_start_end_dates()
 
     def _validate_start_end_dates(self):
-        if self.start > self.end:
+        if self.start and self.end and self.start > self.end:
             raise ValidationError(
                 {'end': 'End date cannot precede start date'}, code='DATE_PRECEDENCE')
