@@ -4,132 +4,137 @@
 {% block content %}
 
 <form action="{% url 'register' %}" method="post" class="form register">
-    {% csrf_token %}
+{% csrf_token %}
 
-    <h1>{{ settings.TIAAS_OWNER }}'s Training Infrastructure as a Service</h1>
+<h1>{{ settings.TIAAS_OWNER }}'s Training Infrastructure as a Service</h1>
 
-    {% if form.all_error_messages %}
-        <div class="alert alert-danger">Please correct the following errors in the form below:
-            <ul>
-            {% for msg in form.all_error_messages %}
-                <li>{{ msg }}
-            {% endfor%}
-            </ul>
-        </div>
-    {% endif %}
+{% if form.all_error_messages %}
+    <div class="alert alert-danger">Please correct the following errors in the form below:
+        <ul>
+        {% for msg in form.all_error_messages %}
+            <li>{{ msg }}
+        {% endfor%}
+        </ul>
+    </div>
+{% endif %}
 
-<p>
-We want to help you conduct your training seminars. Where you provide the training, we can provide you training infrastructure as a service (TIaaS). Some of the benefits of using our {{ settings.TIAAS_OWNER }} infrastructure:
-</p>
+<p>We want to help you conduct your training seminars. Where you provide the training, we can
+provide you training infrastructure as a service (TIaaS). Some of the benefits of using our 
+{{ settings.TIAAS_OWNER }} infrastructure:
 
 <ul>
-	<li>Private queue, no wait times</li>
-	<li>No Galaxy Maintenance</li>
-	<li>No Galaxy Administration</li>
-	<li>Free</li>
+    <li>Private queue, no wait times</li>
+    <li>No Galaxy Maintenance</li>
+    <li>No Galaxy Administration</li>
+    <li>Free</li>
 </ul>
 
-<p>
-Please note that we do provide this service for free to everyone, so we ask you kindly likewise ensure that no one is restricted in their participation (e.g. due to sex/age/race/too high course fees/etc.). You can read more about TIaaS on <a href="https://galaxyproject.eu/tiaas">Galaxy Europe's info page</a>.
-</p>
+<p>Please note that we do provide this service for free to everyone, so we ask you kindly likewise
+ensure that no one is restricted in their participation (e.g. due to sex/age/race/too high course
+fees/etc.). You can read more about TIaaS on <a href="https://galaxyproject.eu/tiaas">Galaxy
+Europe's info page</a>.
 
-<p>
-This service is free for you. For us, we need to care for funding to continue this service. To do this, we are happy to show the usefulness of our service for you und we would kindly to ask you to write a small blogpost for our homepage about your training course given with Galaxy. Some examples you can find on {{ settings.TIAAS_OWNER_SITE }}. Please submit your blogpost to {{ settings.TIAAS_EMAIL }}. Thanks a lot!
-</p>
+<p>This service is free for you. For us, we need to care for funding to continue this service. To do
+this, we are happy to show the usefulness of our service for you und we would kindly to ask you to
+write a small blogpost for our homepage about your training course given with Galaxy. Some examples
+you can find on {{ settings.TIAAS_OWNER_SITE }}. Please submit your blogpost to 
+{{ settings.TIAAS_EMAIL }}. Thanks a lot!
 
-<p>
-We normally need to know about training for <b>2 weeks in advance</b> to fit it into the calendar and to properly evaluate resources needs.
-</p>
+<p>We normally need to know about training for <b>2 weeks in advance</b> to fit it into the calendar
+and to properly evaluate resources needs.
 
-<p>
-Simply fill out this form and we'll get back to you with any further details we need.
-</p>
+<p>Simply fill out this form and we'll get back to you with any further details we need.
 
 <h2>Data Privacy</h2>
-<p>
-Email:
-Your email address is requested for when we need to contact you, it will be redacted (by default) 2 months after your training finishes
-</p>
-<p>
-Name:
-This is only used for addressing you by your name in emails, and will likewise be redacted (by default) after 2 months.
-</p>
-<p>
-Location:
-We will use the country in which the training is held in our reporting on that status of the project. The aggregate information will be made public, but it will not be connected to your training.
-</p>
+
+<p>Email: Your email address is requested for when we need to contact you, it will be redacted (by
+default) 2 months after your training finishes
+
+<p>Name: This is only used for addressing you by your name in emails, and will likewise be redacted
+(by default) after 2 months.
+
+<p>Location: We will use the country in which the training is held in our reporting on that status
+of the project. The aggregate information will be made public, but it will not be connected to your
+training.
 
 You can contact us at <a href="mailto:{{ settings.TIAAS_EMAIL }}">{{ settings.TIAAS_EMAIL }}</a>
 
 <div class="editable">
-{% bootstrap_field form.name %}
-{% bootstrap_field form.email %}
-{% bootstrap_field form.retain_contact %}
+    {% bootstrap_field form.name %}
+    {% bootstrap_field form.email %}
+    {% bootstrap_field form.retain_contact %}
 </div>
 
 <h2>About the Course</h2>
+
 <div class="editable">
-{% bootstrap_field form.title %}
-{% bootstrap_field form.description %}
-{% bootstrap_field form.start %}
-{% bootstrap_field form.end %}
-{% bootstrap_field form.website %}
-{% bootstrap_field form.location %}
+    {% bootstrap_field form.title %}
+    {% bootstrap_field form.description %}
+    {% bootstrap_field form.start %}
+    {% bootstrap_field form.end %}
+    {% bootstrap_field form.website %}
+    {% bootstrap_field form.location %}
 </div>
 
-
 <h2>Estimating Resource Usage</h2>
-<p>
-This is an <b>EXTREMELY IMPORTANT</b> section for us and for you, the more detailed you can be, the better we can be in granting you the correct resources. If we only grant resources that are too small, then you will be stuck waiting in the normal queue because the jobs cannot be scheduled on the VMs we have allocated for you.
-</p>
-<p>
-Tool resource usage can be very surprising. We schedule tools based on their WORST CASE MEMORY USAGE. We do not have many high-memory machines. These two facts combined mean that sometimes a tool can use an expected amount of memory when running on our infrastructure.
-</p>
-<p>
-If you can provide the precise workflows you will run, that is optimal. We can extract the list of tools and compare that against our job configuration, then we can allocate a VM with enough resources for your participants to run that tool (on a small dataset) in a reasonable amount of time.
-</p>
+
+<p>This is an <b>EXTREMELY IMPORTANT</b> section for us and for you, the more detailed you can be,
+the better we can be in granting you the correct resources. If we only grant resources that are too
+small, then you will be stuck waiting in the normal queue because the jobs cannot be scheduled on
+the VMs we have allocated for you.
+
+<p>Tool resource usage can be very surprising. We schedule tools based on their WORST CASE MEMORY
+USAGE. We do not have many high-memory machines. These two facts combined mean that sometimes a tool
+can use an expected amount of memory when running on our infrastructure.
+
+<p>If you can provide the precise workflows you will run, that is optimal. We can extract the list
+of tools and compare that against our job configuration, then we can allocate a VM with enough
+resources for your participants to run that tool (on a small dataset) in a reasonable amount of
+time.
 
 <div class="editable">
-{% bootstrap_field form.use_gtn %}
-{% bootstrap_field form.gtn_links%}
-{% bootstrap_field form.non_gtn_links%}
-{% bootstrap_field form.attendance %}
+    {% bootstrap_field form.use_gtn %}
+    {% bootstrap_field form.gtn_links%}
+    {% bootstrap_field form.non_gtn_links%}
+    {% bootstrap_field form.attendance %}
 </div>
 
 <h2>Training Identifier</h2>
-<p>
-We need a short keyword to name your training. It should be a single word, and can contain numbers and letters. Once the infrastructure is setup, you'll receive a URL like {{ settings.TIAAS_DOMAIN }}/join-training/your-keyword
-</p>
 
-<p>
-On the day of your training (or before), you'll tell your attendees to go to this URL and it will automatically place them in a group that redirects them to the private resources dedicated for your training
-</p>
+<p>We need a short keyword to name your training. It should be a single word, and can contain
+numbers and letters. Once the infrastructure is setup, you'll receive a URL like 
+{{ settings.TIAAS_DOMAIN }}/join-training/your-keyword
+
+<p>On the day of your training (or before), you'll tell your attendees to go to this URL and it will
+automatically place them in a group that redirects them to the private resources dedicated for your
+training
 
 <div class="editable">
-{% bootstrap_field form.training_identifier %}
+    {% bootstrap_field form.training_identifier %}
 </div>
 
 <h2>Advertising</h2>
-<p>
-We offer this service for free so we would love to be able to show the positive impacts providing it has had in the worldwide Galaxy community.
-</p>
+
+<p>We offer this service for free so we would love to be able to show the positive impacts providing
+it has had in the worldwide Galaxy community.
 
 <div class="editable">
-{% bootstrap_field form.advertise_eu %}
-{% bootstrap_field form.blogpost %}
+    {% bootstrap_field form.advertise_eu %}
+    {% bootstrap_field form.blogpost %}
 </div>
 
 <h2>Anything else?</h2>
 
 <div class="editable">
-{% bootstrap_field form.other_requests %}
+    {% bootstrap_field form.other_requests %}
 </div>
 
-  {% buttons %}
+{% buttons %}
     <button type="submit" class="btn btn-primary">
-      {% bootstrap_icon "star" %} Submit
+        {% bootstrap_icon "star" %} Submit
     </button>
-  {% endbuttons %}
+{% endbuttons %}
+
 </form>
 
 {% endblock %}
