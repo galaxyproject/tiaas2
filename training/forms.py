@@ -10,6 +10,11 @@ class TrainingForm(forms.ModelForm):
 
     error_css_class = 'error'
 
+    @property
+    def all_error_messages(self):
+        # self.errors is a dict-like collection with values as lists; we only need the list items
+        return [e for elist in self.errors.values() for e in elist]
+
     def clean_start(self):
         start = self.cleaned_data['start']
         validate_start_date(start)

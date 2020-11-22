@@ -4,9 +4,20 @@
 {% block content %}
 
 <form action="{% url 'register' %}" method="post" class="form register">
-  {% csrf_token %}
+    {% csrf_token %}
 
-  <h1>{{ settings.TIAAS_OWNER }}'s Training Infrastructure as a Service</h1>
+    <h1>{{ settings.TIAAS_OWNER }}'s Training Infrastructure as a Service</h1>
+
+    {% if form.all_error_messages %}
+        <div class="alert alert-danger">Please correct the following errors in the form below:
+            <ul>
+            {% for msg in form.all_error_messages %}
+                <li>{{ msg }}
+            {% endfor%}
+            </ul>
+        </div>
+    {% endif %}
+
 <p>
 We want to help you conduct your training seminars. Where you provide the training, we can provide you training infrastructure as a service (TIaaS). Some of the benefits of using our {{ settings.TIAAS_OWNER }} infrastructure:
 </p>

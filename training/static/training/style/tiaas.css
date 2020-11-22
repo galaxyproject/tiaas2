@@ -76,3 +76,14 @@ div.error input + div,          /* help text after text input */
 div.error div.row + div {       /* help text after bootstrap row w/select inputs */
   color: red;
 }
+
+div.alert-danger {
+    color:red;
+    background-color: #f8d7da;
+    border-color: red;
+    margin-top: 1em;
+}
+
+div.alert-danger ul {
+  margin-bottom: 0;
+}
