@@ -24,7 +24,8 @@ class Training(models.Model):
     gtn_links = models.TextField(blank=True)
     non_gtn_links = models.TextField(blank=True)
     attendance = models.IntegerField(validators=[MinValueValidator(1)])
-    training_identifier = models.CharField(max_length=20, validators=[validate_identifier])
+    training_identifier = models.CharField(
+        max_length=20, unique=True, validators=[validate_identifier])
     advertise_eu = models.CharField(
         max_length=1, choices=(("Y", "Yes"), ("N", "No")), default="N"
     )
