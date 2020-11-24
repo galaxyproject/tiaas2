@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 
 from training.validators import (
     validate_date_precedence,
+    validate_identifier,
     validate_start_date,
 )
 
@@ -28,3 +29,15 @@ class ValidatorsTestCase(unittest.TestCase):
         start_date = date.today() - timedelta(days=1)
         with self.assertRaises(ValidationError):
             validate_start_date(start_date)
+
+    def test_validate_identifier(self):
+        validate_identifier('foo123')
+
+        with self.assertRaises(ValidationError):
+            validate_identifier('foo 123')  # space
+
+        with self.assertRaises(ValidationError):
+            validate_identifier('foo@123')  # special character
+
+        with self.assertRaises(ValidationError):
+            validate_identifier('Foo123')  # uppercase
