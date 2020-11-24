@@ -3,9 +3,23 @@ from django.conf import settings
 from django_countries.widgets import CountrySelectWidget
 
 from . import models
+from .validators import validate_start_date
 
 
 class TrainingForm(forms.ModelForm):
+
+    error_css_class = 'error'
+
+    @property
+    def all_error_messages(self):
+        # self.errors is a dict-like collection with values as lists; we only need the list items
+        return [e for elist in self.errors.values() for e in elist]
+
+    def clean_start(self):
+        start = self.cleaned_data['start']
+        validate_start_date(start)
+        return start
+
     class Meta:
         model = models.Training
         fields = (
@@ -71,6 +85,9 @@ class TrainingForm(forms.ModelForm):
             "blogpost":
                 "Would you be willing to write a blogpost after your event, summarising your "
                 "experience with TIaaS and how it helped you?",
+            "training_identifier":
+                "Training identifier should consist of lowercase letters, numbers, underscores "
+                "or hyphens.",
         }
 
         widgets = {

@@ -1,6 +1,7 @@
 /* add custom css to overwrite galaxy.css here */
 
-/* base.html */
+/* base.html ********************************************************/
+
 #center {
   padding-right: 10em;
   padding-left: 10em;
@@ -22,7 +23,8 @@
   padding: 1em;
 }
 
-/*  about.html  */
+/* about.html *******************************************************/
+
 .btn_apply {
   font-size: 200%;
   font-weight: 900;
@@ -35,7 +37,8 @@
   width: 22em;
 }
 
-/* register.html */
+/* register.html ****************************************************/
+
 .register {
   font-size: 16px;
 }
@@ -59,4 +62,28 @@
 /* calendar.html */
 .calendar .date {
   padding: 0.3em;
+}
+
+/* form validation **************************************************/
+
+div.error input,
+div.error select {
+  background: #fcfaf0;
+}
+
+div.error label.control-label,  /* field label */
+div.error input + div,          /* help text after text input */
+div.error div.row + div {       /* help text after bootstrap row w/select inputs */
+  color: red;
+}
+
+div.alert-danger {
+    color:red;
+    background-color: #f8d7da;
+    border-color: red;
+    margin-top: 1em;
+}
+
+div.alert-danger ul {
+  margin-bottom: 0;
 }
