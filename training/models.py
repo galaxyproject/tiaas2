@@ -8,6 +8,10 @@ from django_countries.fields import CountryField
 from .validators import validate_date_precedence, validate_identifier
 
 
+REDACTION_CODE = 'redacted'
+REDACTED_EMAIL = REDACTION_CODE + '@example.com'
+
+
 class Training(models.Model):
     received = models.DateField("date received", default=date.today)
     name = models.CharField(max_length=64)
@@ -60,22 +64,19 @@ class Training(models.Model):
     @property
     def safe_email(self):
         if self.gdpr_clean:
-            self.name = "GDPR Redacted"
-            self.email = "<gdpr-redacted>"
-            self.save()
-            return ""
-        else:
-            return self.email
+            self._redact()
+        return self.email
 
     @property
     def safe_name(self):
         if self.gdpr_clean:
-            self.name = "GDPR Redacted"
-            self.email = "<gdpr-redacted>"
-            self.save()
-            return "Redacted"
-        else:
-            return self.name
+            self._redact()
+        return self.name
+
+    def _redact(self):
+        self.name = REDACTION_CODE
+        self.email = REDACTED_EMAIL
+        self.save()
 
     def __str__(self):
         return self.training_identifier
