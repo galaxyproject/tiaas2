@@ -4,7 +4,7 @@
 {% block content %}
 <h1>TIaaS</h1>
 <p><img src="https://galaxyproject.eu/assets/media/tiaas-logo.png" alt="tiaas logo depicting people in queues" width="300em" style="margin: 1em"></p>
-<p><a href="https://usegalaxy.eu">UseGalaxy.eu</a> is proud to provide Training Infrastructure as a Service (TIaaS) for the Galaxy training community. You provide the training, we provide the infrastructure <i>at no cost</i>.</p>
+<p><a href="{{ settings.TIAAS_DOMAIN }}">{{ settings.TIAAS_OWNER }}</a> is proud to provide Training Infrastructure as a Service (TIaaS) for the Galaxy training community. You provide the training, we provide the infrastructure <i>at no cost</i>.</p>
 <h2 id="why-tiaas">Why TIaaS?</h2>
 
 <ul>
@@ -22,7 +22,7 @@
 
 <h2 id="how-tiaas-works">How TIaaS Works</h2>
 
-<p>We have several &quot;pools&quot; of VMs attached to UseGalaxy.eu that run user jobs. For trainings we attach a new pool of VMs that is specially labelled for that training. When normal users run tools on our server, these jobs are instructed to avoid the training pools by default.</p>
+<p>We have several &quot;pools&quot; of VMs attached to {{ settings.TIAAS_OWNER }} that run user jobs. For trainings we attach a new pool of VMs that is specially labelled for that training. When normal users run tools on our server, these jobs are instructed to avoid the training pools by default.</p>
 <p>When users join a training, using a special URL we provide you, they then are placed in a special training group. Their jobs will then preferentially run the jobs on a training machine, and, in the event there is no more capacity, they will run on the main queue. If a spot on a training VM opens up first, they will run there rather than continuing to wait in the main queue.</p>
 
 <h2 id="eligibility">Eligibility</h2>
