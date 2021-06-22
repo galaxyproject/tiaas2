@@ -1,9 +1,12 @@
-from django.db import connections
+from django.db import connections, transaction
 import codecs
 from Crypto.Cipher import Blowfish
 from django.conf import settings
 
 cipher = Blowfish.new(settings.GALAXY_SECRET)
+
+class IntentionalRollback(Exception):
+    pass
 
 
 TRAINING_QUEUE_HEADERS = [
@@ -99,6 +102,22 @@ ORDER BY
 LIMIT 300
 """
 
+DISASSOCIATE_ROLES_QUERY = """
+DELETE FROM
+    group_role_association
+WHERE
+    role_id
+    IN (
+        SELECT
+            id
+        FROM
+            role
+        WHERE
+            type = 'system'
+            AND name = 'training-' || %s
+    )
+"""
+
 # Create your views here.
 
 
@@ -178,12 +197,28 @@ def execute(query, params=None):
         cursor.execute(query, params)
 
 
+def execute_txn(query, params=None, commit=False):
+    with transaction.atomic():  # Outer atomic, start a new transaction
+        try:
+            with transaction.atomic():  # Inner atomic block, create a savepoint
+                with connections["galaxy"].cursor() as cursor:
+                    cursor.execute(query, params)
+                    result = cursor.fetchall()
+                if commit != True:
+                    raise IntentionalRollback()
+                return result
+        except IntentionalRollback:
+            pass
+
 def fetch_all(query, params=None):
     with connections["galaxy"].cursor() as cursor:
         cursor.execute(query, params)
         result = cursor.fetchall()
     return result
 
+
+def disassociate_role(role, commit=False):
+    return execute_txn(DISASSOCIATE_ROLES_QUERY, (role, ), commit=commit)
 
 def authenticate(request):
     auth_token = request.COOKIES.get("galaxysession", None)
