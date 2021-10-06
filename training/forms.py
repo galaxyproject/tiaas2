@@ -1,6 +1,7 @@
-from django_countries.widgets import CountrySelectWidget
-from django.conf import settings
 from django import forms
+from django.conf import settings
+from django_countries.widgets import CountrySelectWidget
+
 from . import models
 
 

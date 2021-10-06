@@ -1,25 +1,19 @@
-from django.shortcuts import render
 import calendar
 import collections
-from datetime import date
 import re
-from django.core.mail import send_mail
-from django.http import HttpResponseRedirect, HttpResponse
+from datetime import date
+
 from django.conf import settings
-from .models import Training
+from django.core.mail import send_mail
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse
-from .galaxy import (
-    get_roles,
-    create_role,
-    get_groups,
-    create_group,
-    add_group_user,
-    get_jobs,
-    get_workflow_invocations,
-    get_users,
-    authenticate,
-)
+
 from .forms import TrainingForm
+from .galaxy import (add_group_user, authenticate, create_group, create_role,
+                     get_groups, get_jobs, get_roles, get_users,
+                     get_workflow_invocations)
+from .models import Training
 
 
 def register(request):
@@ -59,6 +53,7 @@ def register(request):
 def about(request):
     return render(request, "training/about.html", {"settings": settings})
 
+
 def thanks(request):
     return render(request, "training/thanks.html", {"settings": settings})
 
@@ -87,7 +82,9 @@ def numbers_csv(request):
     trainings = Training.objects.all().exclude(training_identifier="test")
     for t in trainings:
         if t.processed == "AP":
-            data += "{},{},{},{},{}\n".format(t.training_identifier, t.start, t.location, t.use_gtn, t.attendance)
+            data += "{},{},{},{},{}\n".format(
+                t.training_identifier, t.start, t.location, t.use_gtn, t.attendance
+            )
 
     return HttpResponse(data, content_type="text/csv")
 
@@ -103,16 +100,28 @@ def trainings_for(trainings, year, month, day):
 
 
 def calendar_view(request):
-    trainings = Training.objects.all().exclude(training_identifier="test") # Exclude the 'test' group from showing up in calendar
+    trainings = Training.objects.all().exclude(
+        training_identifier="test"
+    )  # Exclude the 'test' group from showing up in calendar
     approved_trainings = [x for x in trainings if x.processed == "AP"]
     approved = len(approved_trainings)
     start = min([x.start for x in approved_trainings])
     end = max([x.end for x in approved_trainings])
     years = list(range(start.year, end.year + 1))[::-1]
-    months = [ 'January', 'February', 'March', 'April', 'May', 'June',
-                'Juli', 'August', 'September', 'October', 'November',
-                'December'
-            ]
+    months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "Juli",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ]
 
     max_value = 0
 
@@ -153,7 +162,9 @@ def calendar_view(request):
 
 
 def stats(request):
-    trainings = Training.objects.all().exclude(training_identifier="test") # Exclude the 'test' group from showing up in calendar
+    trainings = Training.objects.all().exclude(
+        training_identifier="test"
+    )  # Exclude the 'test' group from showing up in calendar
     approved = len([x for x in trainings if x.processed == "AP"])
     waiting = len([x for x in trainings if x.processed == "UN"])
     days = sum([(x.end - x.start).days for x in trainings])
@@ -249,7 +260,11 @@ def join(request, training_id):
     return render(
         request,
         "training/join.html",
-        {"training": trainings[0], "host": request.META.get("HTTP_HOST", None), "settings": settings},
+        {
+            "training": trainings[0],
+            "host": request.META.get("HTTP_HOST", None),
+            "settings": settings,
+        },
     )
 
 
