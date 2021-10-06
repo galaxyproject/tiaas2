@@ -82,7 +82,7 @@ def numbers_csv(request):
     trainings = Training.objects.all().exclude(training_identifier="test").filter(processed="AP")
     for t in trainings:
         countries = [x.code for x in t.location]
-        data += f"{t.id},{t.start},{t.end},{'|'.join(countries)},{t.attendance}\n"
+        data += f"{t.id},{t.start},{t.end},{'|'.join(countries)},{t.use_gtn},{t.attendance}\n"
 
     return HttpResponse(data, content_type="text/csv")
 
