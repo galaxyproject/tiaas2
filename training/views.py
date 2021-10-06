@@ -61,7 +61,7 @@ def thanks(request):
 def stats_csv(request):
     data = "name,code,pop\n"
 
-    trainings = Training.objects.all()
+    trainings = Training.objects.all().exclude(training_identifier="test").filter(processed="AP")
     locations = collections.Counter()
     codes = {}
 
@@ -71,20 +71,18 @@ def stats_csv(request):
             codes[loc.alpha3] = loc.name
 
     for k, v in locations.items():
-        data += "%s,%s,%s\n" % (codes[k], k, v)
+        data += f"{codes[k]},{k}{v}\n"
 
     return HttpResponse(data, content_type="text/csv")
 
 
 def numbers_csv(request):
-    data = "name,start,location,use_gtn,attendance\n"
+    data = "id,start,end,location,use_gtn,attendance\n"
 
-    trainings = Training.objects.all().exclude(training_identifier="test")
+    trainings = Training.objects.all().exclude(training_identifier="test").filter(processed="AP")
     for t in trainings:
-        if t.processed == "AP":
-            data += "{},{},{},{},{}\n".format(
-                t.training_identifier, t.start, t.location, t.use_gtn, t.attendance
-            )
+        countries = [x.code for x in t.location]
+        data += f"{t.id},{t.start},{t.end},{'|'.join(countries)},{t.attendance}\n"
 
     return HttpResponse(data, content_type="text/csv")
 
