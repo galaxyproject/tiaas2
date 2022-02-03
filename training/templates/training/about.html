@@ -17,13 +17,13 @@
 </ul>
 
 <figure>
-<img src="https://galaxyproject.eu/assets/media/tiaas-queue.png" alt="tiaas queue visualizer" /><figcaption>tiaas queue visualizer</figcaption>
+<img src="https://galaxyproject.eu/assets/media/tiaas-queue.png" alt="tiaas queue visualizer" /><figcaption>TIaaS queue visualizer</figcaption>
 </figure>
 
 <h2 id="how-tiaas-works">How TIaaS Works</h2>
 
-<p>We have several &quot;pools&quot; of VMs attached to {{ settings.TIAAS_OWNER }} that run user jobs. For trainings we attach a new pool of VMs that is specially labelled for that training. When normal users run tools on our server, these jobs are instructed to avoid the training pools by default.</p>
-<p>When users join a training, using a special URL we provide you, they then are placed in a special training group. Their jobs will then preferentially run the jobs on a training machine, and, in the event there is no more capacity, they will run on the main queue. If a spot on a training VM opens up first, they will run there rather than continuing to wait in the main queue.</p>
+<p>We have several &quot;pools&quot; of resources attached to {{ settings.TIAAS_OWNER }} that run user jobs. For trainings we attach a new pool of resources that is specially labelled for that training. When normal users run tools on our server, these jobs are instructed to avoid the training pools by default.</p>
+<p>When users join a training, using a special URL we provide you, they then are placed in a special training group. Their jobs will then preferentially run the jobs on a training machine, and, in the event there is no more capacity, they will run on the main queue. If a spot on the training specific resources opens up first, they will run there rather than continuing to wait in the main queue.</p>
 
 <h2 id="eligibility">Eligibility</h2>
 
