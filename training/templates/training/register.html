@@ -42,9 +42,11 @@ We want to help you conduct your training seminars. Where you provide the traini
 Please note that we do provide this service for free to everyone, so we ask you kindly likewise ensure that no one is restricted in their participation (e.g. due to sex/age/race/too high course fees/etc.). You can read more about TIaaS on <a href="https://galaxyproject.eu/tiaas">Galaxy Europe's info page</a>.
 </p>
 
+{% if settings.TIAAS_SHOW_ADVERTISING %}
 <p>
-This service is free for you. For us, we need to care for funding to continue this service. To do this, we are happy to show the usefulness of our service for you and we would kindly to ask you to write a small blogpost for our homepage about your training course given with Galaxy. Some examples you can find on {{ settings.TIAAS_OWNER_SITE }}. Please submit your blogpost to {{ settings.TIAAS_EMAIL }}. Thanks a lot!
+This service is free for you. For us, we need to care for funding to continue this service. To do this, we are happy to show the usefulness of our service for you and we would kindly to ask you to write a small blogpost for our homepage about your training course given with Galaxy. Some examples you can find on <a href="{{ settings.TIAAS_OWNER_SITE }}">{{ settings.TIAAS_OWNER_SITE }}</a>. Please submit your blogpost to {{ settings.TIAAS_EMAIL }}. Thanks a lot!
 </p>
+{% endif %}
 
 <p>
 We normally need to know about training for <b>2 weeks in advance</b> to fit it into the calendar and to properly evaluate resources needs.
@@ -89,13 +91,13 @@ You can contact us at <a href="mailto:{{ settings.TIAAS_EMAIL }}">{{ settings.TI
 
 <h2>Estimating Resource Usage</h2>
 <p>
-This is an <b>EXTREMELY IMPORTANT</b> section for us and for you, the more detailed you can be, the better we can be in granting you the correct resources. If we only grant resources that are too small, then you will be stuck waiting in the normal queue because the jobs cannot be scheduled on the VMs we have allocated for you.
+This is an <b>EXTREMELY IMPORTANT</b> section for us and for you, the more detailed you can be, the better we can be in granting you the correct resources. If we only grant resources that are too small, then you will be stuck waiting in the normal queue because the jobs cannot be scheduled on the resources we have allocated for you.
 </p>
 <p>
-Tool resource usage can be very surprising. We schedule tools based on their WORST CASE MEMORY USAGE. We do not have many high-memory machines. These two facts combined mean that sometimes a tool can use an expected amount of memory when running on our infrastructure.
+Tool resource usage can be very surprising. We schedule tools based on their WORST CASE MEMORY USAGE. We do not have many high-memory machines. These two facts combined mean that sometimes a tool can use an expected amount of memory when running on our infrastructure. XXX
 </p>
 <p>
-If you can provide the precise workflows you will run, that is optimal. We can extract the list of tools and compare that against our job configuration, then we can allocate a VM with enough resources for your participants to run that tool (on a small dataset) in a reasonable amount of time.
+If you can provide the precise workflows you will run, that is optimal. We can extract the list of tools and compare that against our job configuration, then we can allocate enough resources for your participants to run that tool (on a small dataset) in a reasonable amount of time.
 </p>
 
 <div class="editable">
@@ -118,6 +120,7 @@ On the day of your training (or before), you'll tell your attendees to go to thi
 {% bootstrap_field form.training_identifier %}
 </div>
 
+{% if settings.TIAAS_SHOW_ADVERTISING %}
 <h2>Advertising</h2>
 <p>
 We offer this service for free so we would love to be able to show the positive impacts providing it has had in the worldwide Galaxy community.
@@ -127,6 +130,10 @@ We offer this service for free so we would love to be able to show the positive 
 {% bootstrap_field form.advertise_eu %}
 {% bootstrap_field form.blogpost %}
 </div>
+{% else %}
+{{ form.advertise_eu.as_hidden }}
+{{ form.blogpost.as_hidden }}
+{% endif %}
 
 <h2>Anything else?</h2>
 
