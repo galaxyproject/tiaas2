@@ -135,6 +135,8 @@ TIAAS_DOMAIN = "https://usegalaxy.eu"
 TIAAS_SEND_EMAIL_TO = "root@localhost"
 TIAAS_SEND_EMAIL_FROM = "tiaas+noreply@example.org"
 
+TIAAS_SHOW_ADVERTISING = True
+
 # EMAIL_HOST
 # EMAIL_PORT
 # EMAIL_HOST_USER

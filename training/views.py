@@ -71,7 +71,7 @@ def stats_csv(request):
             codes[loc.alpha3] = loc.name
 
     for k, v in locations.items():
-        data += f"{codes[k]},{k}{v}\n"
+        data += f"{codes[k]},{k},{v}\n"
 
     return HttpResponse(data, content_type="text/csv")
 
