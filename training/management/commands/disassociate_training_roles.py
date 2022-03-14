@@ -16,6 +16,6 @@ class Command(BaseCommand):
         for event in Training.objects.filter(end__lte=yesterday):
             print(f"Removing users from {event}")
             try:
-                print(disassociate_role(event.training_identifier, commit=commit))
+                print(disassociate_role(event.training_identifier.lower(), commit=commit))
             except ProgrammingError as pe:
                 print(pe)
