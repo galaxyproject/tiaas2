@@ -24,38 +24,64 @@ class TrainingForm(forms.ModelForm):
             "non_gtn_links",
             "attendance",
             "training_identifier",
-            "advertise_eu",
+            "advertise",
             "other_requests",
         )
 
         labels = {
-            "title": "Training title",
+            "name": "Your name",
+            "title": "Title of your training event",
             "email": "Contact email",
-            "retain_contact": "Permission to retain your contact information for %s months"
-            % settings.TIAAS_GDPR_RETAIN_EXTRA,
-            "description": "Brief overview of the Training Course",
+            "retain_contact": (
+                "Permission to retain your contact information for"
+                f" {settings.TIAAS_GDPR_RETAIN_EXTRA} months"
+            ),
+            "description": "Brief overview of your planned workshop content",
             "start": "Start of your course",
             "end": "End of your course",
-            "website": "Training website (if available)",
+            "website": "URL of your training website/materials (if available)",
             "location": "Training Location",
-            "use_gtn": "Will you be using official Galaxy Training materials? ",
+            "use_gtn":
+                "Will you be using official Galaxy Training materials?",
             "gtn_links": "Official Training Material",
             "non_gtn_links": "Other Training Materials",
-            "attendance": "Approximately how many people do you expect to attend?",
-            "advertise_eu": "Would you like us to advertise this on useGalaxy.eu?",
+            "attendance": "Expected number of participants (approximate)",
+            "advertise": (
+                "Would you like us to advertise your workshop on"
+                f" {settings.TIAAS_OWNER}?"),
             "other_requests": "Anything else?",
-            "blogpost": "Write us a blogpost?",
+            "blogpost": "I will consider writing a blog post",
         }
         help_texts = {
-            "description": "Just tell us briefly about the training, what topics you'll cover, etc.",
-            "use_gtn": "Those available on https://training.galaxyproject.org/training-material/",
-            "advertise_eu": 'We can create an "event" and direct users in your region to your training event. E.g https://usegalaxy-eu.github.io/event/2017-11-16-Announcement-Galaxy-course/',
-            "location": "Country where it is hosted, used in aggregate statistics",
-            "gtn_links": "If you are using official training materials: which ones? Please provide the topic + material name, or URLs so we can find it.",
-            "non_gtn_links": "If not using official training materials, can you provide URLs to your workflows, or just simply a list of all tool IDs that you will run. We need the internal Galaxy tool IDs (if you right click a tool in the Galaxy  UI + copy link location, this will provide the tool ID in the URL)",
-            "name": "First name is fine, however you wish to be addressed in emails",
-            "retain_contact": "If you consent we will retain your information for a longer period of time. We will use this to contact you regarding letters of support for our continued funding, and similar matters.",
-            "blogpost": "Would you be willing to write a blogpost after your event, summarising your experience with TIaaS and how it helped you?",
+            "use_gtn": (
+                'Those available on the <a href="'
+                'https://training.galaxyproject.org/training-material/'
+                '" target="_blank"> Galaxy Training Network</a>.'),
+            "advertise": (
+                "We will create an event article that will be visible on"
+                f" {settings.TIAAS_DOMAIN}"),
+            "gtn_links": (
+                "If you are using official training materials: which ones?"
+                " Please provide the topic + material name, or URLs so we can"
+                " find it."),
+            "non_gtn_links": (
+                "If not using official training materials, can you provide"
+                " URLs to your workflows, or just simply a list of all tool"
+                " IDs that you will run. We need the internal Galaxy tool IDs"
+                " (if you right click a tool in the Galaxy  UI + copy link"
+                " location, this will provide the tool ID in the URL)"),
+            "retain_contact": (
+                "If you consent we will retain your information for a longer"
+                " period of time. We will use this to contact you regarding"
+                " letters of support for our continued funding, and similar"
+                " matters."),
+            "blogpost": (
+                "Would you be willing to write a blogpost after your event,"
+                " summarising your experience with TIaaS and how it helped"
+                " you?"),
+            "training_identifier": (
+                "A unique name to help identify your training resources."),
+            "location": "Where the training will be hosted.",
         }
 
         widgets = {
@@ -63,6 +89,8 @@ class TrainingForm(forms.ModelForm):
             "start": forms.SelectDateWidget(),
             "end": forms.SelectDateWidget(),
             "title": forms.TextInput(),
-            "description": forms.TextInput(),
+            "description": forms.Textarea(attrs={'rows': 4}),
             "attendance": forms.NumberInput(attrs={"min": 1}),
+            "location": forms.Select(),
+            "other_requests": forms.Textarea(attrs={'rows': 4}),
         }

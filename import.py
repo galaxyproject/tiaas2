@@ -12,7 +12,7 @@ headers = (
     "location",
     "use_gtn",
     "attendance",
-    "advertise_eu",
+    "advertise",
     "blogpost",
     "website",
     "gtn_links",
@@ -45,10 +45,10 @@ for idx, line in enumerate(x):
     else:
         d["processed"] = "UN"
 
-    if d["advertise_eu"].lower().startswith("y"):
-        d["advertise_eu"] = "Y"
+    if d["advertise"].lower().startswith("y"):
+        d["advertise"] = "Y"
     else:
-        d["advertise_eu"] = "N"
+        d["advertise"] = "N"
 
     if d["use_gtn"].lower().startswith("y"):
         d["use_gtn"] = "Y"

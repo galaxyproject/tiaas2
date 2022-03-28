@@ -15,7 +15,7 @@ class Training(models.Model):
     start = models.DateField()
     end = models.DateField()
     website = models.URLField(blank=True)
-    location = CountryField(multiple=True, blank_label="(select country)")
+    location = CountryField(multiple=False, blank_label="Select country")
     use_gtn = models.CharField(
         max_length=1, choices=(("Y", "Yes"), ("N", "No")), default="N"
     )
@@ -23,7 +23,7 @@ class Training(models.Model):
     non_gtn_links = models.TextField(blank=True)
     attendance = models.IntegerField(validators=[MinValueValidator(1)])
     training_identifier = models.CharField(max_length=20)
-    advertise_eu = models.CharField(
+    advertise = models.CharField(
         max_length=1, choices=(("Y", "Yes"), ("N", "No")), default="N"
     )
     retain_contact = models.BooleanField(default=False)
