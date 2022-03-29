@@ -32,12 +32,17 @@ def register(request):
 
             if settings.TIAAS_SEND_EMAIL_TO:
                 send_mail(
-                    "New TIaaS Request (%s)" % safe_id,
-                    'We received a new tiaas request. View it in the <a href="https://%s/tiaas/admin/training/training/?processed__exact=UN">admin dashboard</a>'
-                    % host,
+                    f"New TIaaS Request ({safe_id})",
+                    (
+                        'We received a new tiaas request. View it in the '
+                        '<a href="'
+                        f'https://{host}/tiaas/admin/training/training/'
+                        '?processed__exact=UN'
+                        '">admin dashboard</a>'
+                    ),
                     settings.TIAAS_SEND_EMAIL_FROM,
                     [settings.TIAAS_SEND_EMAIL_TO],
-                    fail_silently=True,  # on the fence about this one.
+                    fail_silently=True,  # should handle and log appropriately
                 )
             return HttpResponseRedirect(reverse("thanks"))
 
