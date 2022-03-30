@@ -103,62 +103,16 @@ def trainings_for(trainings, year, month, day):
 
 
 def calendar_view(request):
-    trainings = Training.objects.all().exclude(
-        training_identifier="test"
-    )  # Exclude the 'test' group from showing up in calendar
-    approved_trainings = [x for x in trainings if x.processed == "AP"]
-    approved = len(approved_trainings)
-    start = min([x.start for x in approved_trainings])
-    end = max([x.end for x in approved_trainings])
-    years = list(range(start.year, end.year + 1))[::-1]
-    months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "Juli",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    ]
-
-    max_value = 0
-
-    days = {}
-    for year in years:
-        for idx, month in enumerate(months):
-            if year not in days:
-                days[year] = {}
-
-            days_au = calendar.monthcalendar(year, idx + 1)
-            days_fix = []
-            for row in days_au:
-                new_row = [
-                    (x, trainings_for(approved_trainings, year, idx + 1, x))
-                    for x in row
-                ]
-                m = max([x[1] for x in new_row])
-                if m > max_value:
-                    max_value = m
-                days_fix.append(new_row)
-
-            days[year][month] = days_fix
+    approved_trainings = (
+        Training.objects.all()
+        .exclude(training_identifier="test")
+        .filter(processed="AP")
+    )
 
     return render(
         request,
         "training/calendar.html",
         {
-            "trainings": approved,
-            "start": start,
-            "end": end,
-            "years": years,
-            "months": months,
-            "days": days,
-            "max_value": max_value,
             "settings": settings,
         },
     )

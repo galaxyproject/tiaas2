@@ -1,59 +1,191 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load humanize %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'training/css/calendar.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css">
+<link rel="stylesheet" href="https://unpkg.com/@mdi/font@6.x/css/materialdesignicons.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons">
+<!-- <script src="{% static 'training/js/calendar.js' %}"></script> -->
+{% endblock %}
+
 
 {% block content %}
 <h2>Calendar</h2>
 
-{% for year, months in days.items %}
-<h3>{{ year }}</h3>
-<div class="row">
-	{% for month, days in months.items %}
-	<div class="col-sm-3 text-center">
-		{{ month }}
+<noscript>
+  <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+</noscript>
 
-		<div class="row">
-				<div class="col-sm-1" style="padding: 0.3em;">
-					M
-				</div>
-				<div class="col-sm-1" style="padding: 0.3em;">
-					T
-				</div>
-				<div class="col-sm-1" style="padding: 0.3em;">
-					W
-				</div>
-				<div class="col-sm-1" style="padding: 0.3em;">
-					R
-				</div>
-				<div class="col-sm-1" style="padding: 0.3em;">
-					F
-				</div>
-				<div class="col-sm-1" style="padding: 0.3em;">
-					S
-				</div>
-				<div class="col-sm-1" style="padding: 0.3em;">
-					S
-				</div>
-		</div>
+<div id="app">
+  <v-app>
+    <v-row>
+      <v-flex xs8 px-5 class="border-right">
 
-		{% for row in days %}
-		<div class="row">
-			{% for d in row %}
-				{% if d.0 == 0 %}
-				<div class="col-sm-1" style="padding: 0.3em;">
-				</div>
-				{% else %}
+        <!-- Month cycle buttons -->
+        <v-toolbar flat>
+          <v-btn
+            outlined
+            class="mr-4"
+            color="grey darken-2"
+            @click="setToday"
+          >
+            Today
+          </v-btn>
+          <v-btn
+            fab
+            text
+            small
+            color="grey darken-2"
+            @click="prev"
+          >
+            <v-icon small>
+              mdi-chevron-left
+            </v-icon>
+          </v-btn>
+          <v-btn
+            fab
+            text
+            small
+            color="grey darken-2"
+            @click="next"
+          >
+            <v-icon small>
+              mdi-chevron-right
+            </v-icon>
+          </v-btn>
+        </v-toolbar>
 
-				{% widthratio d.1 max_value 83 as width%}
-				<div class="col-sm-1" style="background-color:hsla(220, 100%, 30%, 0.{{ width|add:"0"|stringformat:"02d"  }}); padding: 0.3em;">
-					{{ d.1 }}
-				</div>
-				{% endif %}
-			{% endfor %}
-		</div>
-		{% endfor %}
-	</div>
-	{% endfor %}
+        <v-row>
+          <v-flex sm6>
+            <v-container>
+              <h3 style="text-align: center;">March</h3>
+              <v-calendar
+                ref="calendar1"
+                :v-model="focus"
+                :events="events"
+                :event-height="5"
+               >
+                <template v-slot:event="{event}">
+                  <v-card :height="5" :color="event.color">
+                  </v-card>
+                </template>
+              </v-calendar>
+            </v-container>
+          </v-flex>
+<!--
+          <v-flex sm6>
+            <v-container>
+              <h3 style="text-align: center;">April</h3>
+              <v-calendar
+                ref="calendar2"
+                :now="today"
+                :events="events"
+                :event-height="5"
+                start="2022-04-01"
+               >
+                <template v-slot:event="{event}">
+                  <v-card :height="5" :color="event.color">
+                  </v-card>
+                </template>
+              </v-calendar>
+            </v-container>
+          </v-flex>
+
+          <v-flex sm6>
+            <v-container>
+              <h3 style="text-align: center;">May</h3>
+              <v-calendar
+                ref="calendar3"
+                :now="today"
+                :events="events"
+                :event-height="5"
+                start="2022-05-01"
+               >
+                <template v-slot:event="{event}">
+                  <v-card :height="5" :color="event.color">
+                  </v-card>
+                </template>
+              </v-calendar>
+            </v-container>
+          </v-flex>
+
+          <v-flex sm6>
+            <v-container>
+              <h3 style="text-align: center;">June</h3>
+              <v-calendar
+                ref="calendar4"
+                :now="today"
+                :events="events"
+                :event-height="5"
+                start="2022-06-01"
+               >
+                <template v-slot:event="{event}">
+                  <v-card :height="5" :color="event.color">
+                  </v-card>
+                </template>
+              </v-calendar>
+            </v-container>
+          </v-flex>
+-->
+        </v-row>
+      </v-flex>
+
+      <v-flex xs4>
+        <v-container px-5>
+        <h3>Details</h3>
+
+
+        </v-container>
+      </v-flex>
+    </v-row>
+  </v-app>
 </div>
-{% endfor %}
+
+
+<script src='https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js'></script>
+
+<script>
+  new Vue({
+    el: '#app',
+    vuetify: new Vuetify(),
+    data() {
+      return {
+        today: '2022-03-30',
+        focus: '',
+        events: [
+          {name: 'Training', start: '2022-03-01', end: '2022-03-02', color: 'red'},
+          {name: 'Training', start: '2022-03-11', end: '2022-03-15', color: 'blue'},
+          {name: 'Training', start: '2022-03-11', end: '2022-03-12', color: 'orange'},
+        ],
+      }
+    },
+    mounted () {
+      this.$refs.calendar1.checkChange();
+    },
+    methods: {
+      setToday () {
+        this.focus = '';
+      },
+      prev () {
+        this.$refs.calendar1.prev();
+        console.log("Called calendar.prev() on calendar:");
+        console.log(this.$refs.calendar1);
+      },
+      next () {
+        this.$refs.calendar1.next();
+        console.log("Called calendar.next()");
+      },
+    }
+  });
+</script>
+
+<style scoped>
+  .border-right {
+    border-right: 1px solid #ccc;
+  }
+</style>
 
 {% endblock %}
