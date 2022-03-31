@@ -103,17 +103,13 @@ def trainings_for(trainings, year, month, day):
 
 
 def calendar_view(request):
+    """Display scheduled events in an interactive calendar view."""
     approved_trainings = (
         Training.objects.all()
         .exclude(training_identifier="test")
         .filter(processed="AP")
         .order_by('start')
     )
-
-    print("Events to display:")
-    for event in approved_trainings:
-        print(event.start.strftime('%Y-%m-%d'), event.title)
-
     return render(
         request,
         "training/calendar.html",

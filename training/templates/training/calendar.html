@@ -12,7 +12,7 @@
 
 
 {% block content %}
-<h2>Scheduled TIaaS events</h2>
+<h2>Scheduled events</h2>
 
 <noscript>
   <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
@@ -20,7 +20,7 @@
 
 
 <div id="app">
-  <v-app>
+  <v-app v-cloak>
     <v-row>
       <v-flex sm8 px-5 class="border-right">
         <v-sheet height="64">
@@ -321,6 +321,9 @@
 </script>
 
 <style scoped>
+  [v-cloak] {
+    display: none;
+  }
   .border-right {
     border-right: 1px solid #ccc;
   }
