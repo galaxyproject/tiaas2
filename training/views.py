@@ -107,13 +107,19 @@ def calendar_view(request):
         Training.objects.all()
         .exclude(training_identifier="test")
         .filter(processed="AP")
+        .order_by('start')
     )
+
+    print("Events to display:")
+    for event in approved_trainings:
+        print(event.start.strftime('%Y-%m-%d'), event.title)
 
     return render(
         request,
         "training/calendar.html",
         {
             "settings": settings,
+            "events": approved_trainings,
         },
     )
 

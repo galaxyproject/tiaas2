@@ -12,7 +12,7 @@
 
 
 {% block content %}
-<h2>Calendar</h2>
+<h2>Scheduled TIaaS events</h2>
 
 <noscript>
   <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
@@ -78,6 +78,7 @@
                   :event-color="getEventColor"
                   :event-height="5"
                   :type="type"
+                  @click:event="showEvent"
                 ></v-calendar>
               </v-container>
             </v-sheet>
@@ -98,7 +99,9 @@
                   color="primary"
                   :events="events"
                   :event-color="getEventColor"
+                  :event-height="5"
                   :type="type"
+                  @click:event="showEvent"
                 ></v-calendar>
               </v-container>
             </v-sheet>
@@ -119,7 +122,9 @@
                   color="primary"
                   :events="events"
                   :event-color="getEventColor"
+                  :event-height="5"
                   :type="type"
+                  @click:event="showEvent"
                 ></v-calendar>
               </v-container>
             </v-sheet>
@@ -140,7 +145,9 @@
                   color="primary"
                   :events="events"
                   :event-color="getEventColor"
+                  :event-height="5"
                   :type="type"
+                  @click:event="showEvent"
                 ></v-calendar>
               </v-container>
             </v-sheet>
@@ -149,11 +156,56 @@
       </v-flex>
 
       <v-flex sm4>
-        <v-container px-5 style="height: 100%;">
+        <v-container px-5 py-15 style="height: 100%;">
           <h3>Details</h3>
 
           <v-container id="details-pane">
+            <div v-if="selectedEvent">
+              {% verbatim %}
+              <table class="details-table">
+                <tr>
+                  <td>Organiser</td>
+                  <td> {{ selectedEvent.organiser }} </td>
+                </tr>
 
+                <tr>
+                  <td>Email</td>
+                  <td> {{ selectedEvent.email }} </td>
+                </tr>
+
+                <tr>
+                  <td>Event ID</td>
+                  <td> {{ selectedEvent.identifier }} </td>
+                </tr>
+
+                <tr>
+                  <td>Event title</td>
+                  <td> {{ selectedEvent.name }} </td>
+                </tr>
+
+                <tr>
+                  <td>Location</td>
+                  <td> {{ selectedEvent.location }} </td>
+                </tr>
+
+                <tr>
+                  <td>Expected attendance</td>
+                  <td> {{ selectedEvent.attendance }} </td>
+                </tr>
+
+                <tr>
+                  <td>Description</td>
+                  <td> {{ selectedEvent.description }} </td>
+                </tr>
+              </table>
+              {% endverbatim %}
+            </div>
+
+            <div v-else>
+              <h4 style="text-align: center; margin-top: 50px;">
+                Click an event to see details
+              </h4>
+            </div>
           </v-container>
         </v-container>
       </v-flex>
@@ -166,37 +218,91 @@
 <script src='https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js'></script>
 
 <script>
+
+  const COLORS = [
+    'blue',
+    'red',
+    'orange',
+    'pink',
+    'green',
+    'brown',
+    'purple',
+    'grey',
+  ];
+
   new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     data () {
+      const dateStr = new Date().toISOString().slice(0, 10)
+      const y = dateStr.split('-')[0]
+      const month = new Date().getMonth() + 1;
+      const zeroPad = (m) => m < 10 ? `0${m}` : `${m}`;
+      const addMonths = (n) => {
+        const m = zeroPad(month + n)
+        return `${y}-${m}-01`
+      }
+      const defaultDates = [
+        dateStr,
+        addMonths(1),
+        addMonths(2),
+        addMonths(3),
+      ]
+      let icolor = 0
+      const getColor = () => {
+        c = COLORS[icolor];
+        icolor += 1;
+        return c
+      }
       return {
-        focus1: '',
-        focus2: '2022-04-01',
-        focus3: '2022-05-01',
-        focus4: '2022-06-01',
+        selectedEvent: null,
+        defaultDates: defaultDates,
+        focus1: defaultDates[0],
+        focus2: defaultDates[1],
+        focus3: defaultDates[2],
+        focus4: defaultDates[3],
         type: 'month',
         events: [
           {name: 'Training', start: '2022-03-01', end: '2022-03-02', color: 'red'},
-          {name: 'Training', start: '2022-03-11', end: '2022-03-15', color: 'blue'},
-          {name: 'Training', start: '2022-03-11', end: '2022-03-12', color: 'orange'},
+          {% for event in events %}
+          {
+            name: "{{ event.title }}",
+            start: "{{ event.start|date:'Y-m-d' }}",
+            end: "{{ event.end|date:'Y-m-d' }}",
+            color: getColor(),
+            // Other info for details pane
+            organiser: "{{ event.name }}",
+            email: "{{ event.email }}",
+            description: "{{ event.description }}",
+            website: "{{ event.website }}",
+            location: "{{ event.location }}",
+            use_gtn: "{{ event.use_gtn|yesno:'Yes,No' }}",
+            attendance: {{ event.attendance }},
+            identifier: "{{ event.training_identifier }}",
+            other_requests: "{{ event.other_requests }}",
+          },
+          {% endfor %}
         ],
       }
     },
     mounted () {
       this.$refs.calendar1.checkChange();
       this.$refs.calendar2.checkChange();
-      this.$refs.calendar1.move(0);
+      this.next();
+      setTimeout( this.prev, 50 );
     },
     methods: {
+      showEvent ({ nativeEvent, event }) {
+        this.selectedEvent = event;
+      },
       getEventColor (event) {
         return event.color
       },
       setToday () {
-        this.focus1 = '';
-        this.focus2 = '2022-04-01';
-        this.focus3 = '2022-05-01';
-        this.focus4 = '2022-06-01';
+        this.focus1 = this.defaultDates[0];
+        this.focus2 = this.defaultDates[1];
+        this.focus3 = this.defaultDates[2];
+        this.focus4 = this.defaultDates[3];
       },
       prev () {
         this.$refs.calendar1.prev(2);
@@ -222,6 +328,15 @@
     border: 1px solid #ccc;
     border-radius: 1rem;
     min-height: 500px;
+    margin-top: 50px;
+  }
+  .details-table td {
+    padding: .5rem 1rem;
+    border-bottom: 1px solid #ccc;
+  }
+  .details-table td:first-child {
+    font-weight: bold;
+    background-color: #eee;
   }
 </style>
 
