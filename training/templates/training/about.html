@@ -2,43 +2,51 @@
 {% load humanize %}
 
 {% block content %}
-<h1>TIaaS</h1>
-<p><img src="https://galaxyproject.eu/assets/media/tiaas-logo.png" alt="tiaas logo depicting people in queues" width="300em" style="margin: 1em"></p>
-<p><a href="{{ settings.TIAAS_OWNER_SITE }}">{{ settings.TIAAS_OWNER }}</a> is proud to provide Training Infrastructure as a Service (TIaaS) for the Galaxy training community. You provide the training, we provide the infrastructure <i>at no cost</i>.</p>
-<h2 id="why-tiaas">Why TIaaS?</h2>
 
-<ul>
-<li>Private queue where only your training's jobs will run</li>
-<li>Free</li>
-<li>No Galaxy Maintenance</li>
-<li>No Galaxy Administration</li>
-<li>Official <a href="https://training.galaxyproject.org">Galaxy Training Materials</a> are guaranteed to work and <a href="https://github.com/usegalaxy-eu/workflow-testing/">regularly tested</a></li>
-<li>See how your students are progressing with <a href="https://galaxyproject.eu/posts/2019/06/17/tiaas-queue/">our dashboard</a>:</li>
-</ul>
+<div class="container">
 
-<figure>
-<img src="https://galaxyproject.eu/assets/media/tiaas-queue.png" alt="tiaas queue visualizer" /><figcaption>TIaaS queue visualizer</figcaption>
-</figure>
+  <h1>TIaaS</h1>
 
-<h2 id="how-tiaas-works">How TIaaS Works</h2>
+  <p><img src="https://galaxyproject.eu/assets/media/tiaas-logo.png" alt="tiaas logo depicting people in queues" width="300em" style="margin: 1em"></p>
 
-<p>We have several &quot;pools&quot; of resources attached to {{ settings.TIAAS_OWNER }} that run user jobs. For trainings we attach a new pool of resources that is specially labelled for that training. When normal users run tools on our server, these jobs are instructed to avoid the training pools by default.</p>
-<p>When users join a training, using a special URL we provide you, they then are placed in a special training group. Their jobs will then preferentially run the jobs on a training machine, and, in the event there is no more capacity, they will run on the main queue. If a spot on the training specific resources opens up first, they will run there rather than continuing to wait in the main queue.</p>
+  <p><a href="{{ settings.TIAAS_OWNER_SITE }}">{{ settings.TIAAS_OWNER }}</a> is proud to provide Training Infrastructure as a Service (TIaaS) for the Galaxy training community. You provide the training, we provide the infrastructure <i>at no cost</i>.</p>
 
-<h2 id="eligibility">Eligibility</h2>
+  <h2 id="why-tiaas">Why TIaaS?</h2>
 
-<p>We have significant capacity and have dedicated some of this to providing training using our service. Anyone providing training on using Galaxy is eligible to request the use of this service.</p>
+  <ul>
+    <li>Private queue where only your training's jobs will run</li>
+    <li>Free</li>
+    <li>No Galaxy Maintenance</li>
+    <li>No Galaxy Administration</li>
+    <li>Official <a href="https://training.galaxyproject.org">Galaxy Training Materials</a> are guaranteed to work and <a href="https://github.com/usegalaxy-eu/workflow-testing/">regularly tested</a></li>
+    <li>See how your students are progressing with <a href="https://galaxyproject.eu/posts/2019/06/17/tiaas-queue/">our dashboard</a>:</li>
+  </ul>
 
-<p>
-<a style="font-size: 200%;font-weight: 900;border: 1px solid black;padding: 0.5em;" href="{% url 'register' %}">Apply now!</a>
-</p>
+  <figure>
+    <img src="https://galaxyproject.eu/assets/media/tiaas-queue.png" alt="tiaas queue visualizer" /><figcaption>TIaaS queue visualizer</figcaption>
+  </figure>
 
-<h2>Stats</h2>
-Check out our new <a href="{% url 'stats' %}">Statistics Page</a> and <a href="{% url 'calendar' %}">Training Calendar</a>.
+  <h2 id="how-tiaas-works">How TIaaS Works</h2>
+
+  <p>We have several &quot;pools&quot; of resources attached to {{ settings.TIAAS_OWNER }} that run user jobs. For trainings we attach a new pool of resources that is specially labelled for that training. When normal users run tools on our server, these jobs are instructed to avoid the training pools by default.</p>
+  <p>When users join a training, using a special URL we provide you, they then are placed in a special training group. Their jobs will then preferentially run the jobs on a training machine, and, in the event there is no more capacity, they will run on the main queue. If a spot on the training specific resources opens up first, they will run there rather than continuing to wait in the main queue.</p>
+
+  <h2 id="eligibility">Eligibility</h2>
+
+  <p>We have significant capacity and have dedicated some of this to providing training using our service. Anyone providing training on using Galaxy is eligible to request the use of this service.</p>
+
+  <p>
+    <a style="font-size: 200%;font-weight: 900;border: 1px solid black;padding: 0.5em;" href="{% url 'register' %}">Apply now!</a>
+  </p>
+
+  <h2>Stats</h2>
+  Check out our new <a href="{% url 'stats' %}">Statistics Page</a> and <a href="{% url 'calendar' %}">Training Calendar</a>.
 
 
-<h2 id="service-level-agreement">Service Level Agreement</h2>
+  <h2 id="service-level-agreement">Service Level Agreement</h2>
 
-<p>We <em>cannot</em> promise any degree of uptime. We will do our best to have this service online and functioning during the entire time period but there are cases where the service may experience interruptions that are outside of our control. We will keep you informed of any outages that may affect your training.</p>
+  <p>We <em>cannot</em> promise any degree of uptime. We will do our best to have this service online and functioning during the entire time period but there are cases where the service may experience interruptions that are outside of our control. We will keep you informed of any outages that may affect your training.</p>
+
+</div>
 
 {% endblock %}
