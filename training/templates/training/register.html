@@ -43,83 +43,85 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 	}
 </style>
 
-<h1>{{ settings.TIAAS_OWNER }} Training Infrastructure as a Service</h1>
+<div class="container">
+	<h1>{{ settings.TIAAS_OWNER }} Training Infrastructure as a Service</h1>
 
-<div class="my-5">
-	<p class="lead text-danger">
-		<em>N.B. Placeholder text is in red throughout</em>
+	<div class="my-5">
+		<p class="lead text-danger">
+			<em>N.B. Placeholder text is in red throughout</em>
 
-		<br>
+			<br>
 
-		Please use this form to request a new training reservation on
-		{{ settings.TIAAS_OWNER }}.
-	</p>
+			Please use this form to request a new training reservation on
+			{{ settings.TIAAS_OWNER }}.
+		</p>
+	</div>
+
+	<form action="{% url 'register' %}" method="post" class="form">
+		{% csrf_token %}
+
+		<div class="row">
+			{% bootstrap_field form.name show_label=False form_group_class="col-md-4" %}
+			{% bootstrap_field form.email show_label=False form_group_class="col-md-4" %}
+			{% bootstrap_field form.retain_contact show_label=False form_group_class="col-md-12" %}
+		</div>
+
+		<hr>
+
+		<h2>About the Course</h2>
+		<div class="row">
+			{% bootstrap_field form.title form_group_class="col-md-6" show_label=False %}
+			{% bootstrap_field form.website show_label=False form_group_class="col-md-6" %}
+			{% bootstrap_field form.description form_group_class="col-md-12" show_label=False %}
+			{% bootstrap_field form.start show_label=True form_group_class="col-md-3" %}
+			{% bootstrap_field form.end show_label=True form_group_class="col-md-3" %}
+			{% bootstrap_field form.location show_label=True form_group_class="col-md-3" %}
+			{% bootstrap_field form.training_identifier form_group_class="col-md-3" %}
+		</div>
+
+		<hr>
+
+		<h2>Estimating Resource Usage</h2>
+
+		<p class="text-danger">
+			{% lorem 5 w %}
+		</p>
+
+		<div class="row">
+			{% bootstrap_field form.use_gtn form_group_class="col-md-12" show_label=True %}
+			{% bootstrap_field form.gtn_links form_group_class="col-md-6" show_label=False %}
+			{% bootstrap_field form.non_gtn_links form_group_class="col-md-6" show_label=False %}
+			{% bootstrap_field form.attendance form_group_class="col-md-12" show_label=True %}
+		</div>
+
+		{% if settings.TIAAS_SHOW_ADVERTISING %}
+		<h2>Advertising</h2>
+
+		<p class="text-danger">
+			{% lorem 5 w %}
+		</p>
+
+		<div class="row">
+			{% bootstrap_field form.advertise show_label=True form_group_class="col-md-12" %}
+			{% bootstrap_field form.blogpost form_group_class="col-md-12" %}
+		</div>
+		{% else %}
+		{{ form.advertise.as_hidden }}
+		{{ form.blogpost.as_hidden }}
+		{% endif %}
+
+		<h2>Anything else to add?</h2>
+
+		<div>
+			{% bootstrap_field form.other_requests show_label=False placeholder="Comments" %}
+		</div>
+
+		{% buttons %}
+		<button type="submit" class="btn btn-primary">
+			{% bootstrap_icon "star" %} Submit
+		</button>
+		{% endbuttons %}
+	</form>
 </div>
-
-<form action="{% url 'register' %}" method="post" class="form">
-  {% csrf_token %}
-
-	<div class="row">
-		{% bootstrap_field form.name show_label=False form_group_class="col-md-4" %}
-		{% bootstrap_field form.email show_label=False form_group_class="col-md-4" %}
-		{% bootstrap_field form.retain_contact show_label=False form_group_class="col-md-12" %}
-	</div>
-
-	<hr>
-
-	<h2>About the Course</h2>
-	<div class="row">
-		{% bootstrap_field form.title form_group_class="col-md-6" show_label=False %}
-		{% bootstrap_field form.website show_label=False form_group_class="col-md-6" %}
-		{% bootstrap_field form.description form_group_class="col-md-12" show_label=False %}
-		{% bootstrap_field form.start show_label=True form_group_class="col-md-3" %}
-		{% bootstrap_field form.end show_label=True form_group_class="col-md-3" %}
-		{% bootstrap_field form.location show_label=True form_group_class="col-md-3" %}
-		{% bootstrap_field form.training_identifier form_group_class="col-md-3" %}
-	</div>
-
-	<hr>
-
-	<h2>Estimating Resource Usage</h2>
-
-	<p class="text-danger">
-		{% lorem 5 w %}
-	</p>
-
-	<div class="row">
-		{% bootstrap_field form.use_gtn form_group_class="col-md-12" show_label=True %}
-		{% bootstrap_field form.gtn_links form_group_class="col-md-6" show_label=False %}
-		{% bootstrap_field form.non_gtn_links form_group_class="col-md-6" show_label=False %}
-		{% bootstrap_field form.attendance form_group_class="col-md-12" show_label=True %}
-	</div>
-
-	{% if settings.TIAAS_SHOW_ADVERTISING %}
-	<h2>Advertising</h2>
-
-	<p class="text-danger">
-		{% lorem 5 w %}
-	</p>
-
-	<div class="row">
-		{% bootstrap_field form.advertise show_label=True form_group_class="col-md-12" %}
-		{% bootstrap_field form.blogpost form_group_class="col-md-12" %}
-	</div>
-	{% else %}
-	{{ form.advertise.as_hidden }}
-	{{ form.blogpost.as_hidden }}
-	{% endif %}
-
-	<h2>Anything else to add?</h2>
-
-	<div>
-		{% bootstrap_field form.other_requests show_label=False placeholder="Comments" %}
-	</div>
-
-  {% buttons %}
-  <button type="submit" class="btn btn-primary">
-    {% bootstrap_icon "star" %} Submit
-  </button>
-  {% endbuttons %}
-</form>
 
 {% endblock %}
