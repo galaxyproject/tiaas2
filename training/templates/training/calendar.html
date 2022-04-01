@@ -23,8 +23,8 @@
 
   <div id="app">
     <v-app v-cloak>
-      <v-row>
-        <v-flex sm8 px-5 class="border-right">
+      <v-row class="justify-content-center">
+        <v-flex sm8 px-5 {% if admin_user %}class="border-right"{% endif %}>
           <v-sheet height="64">
             <v-toolbar
               flat
@@ -157,6 +157,7 @@
           </v-row>
         </v-flex>
 
+        {% if admin_user %}
         <v-flex sm4>
           <v-container px-5 py-15 style="height: 100%;">
             <h3>Details</h3>
@@ -172,7 +173,7 @@
 
                   <tr>
                     <td>Email</td>
-                    <td> {{ selectedEvent.email }} </td>
+                    <td> <small>{{ selectedEvent.email }}</small> </td>
                   </tr>
 
                   <tr>
@@ -197,7 +198,7 @@
 
                   <tr>
                     <td>Description</td>
-                    <td> {{ selectedEvent.description }} </td>
+                    <td> <small>{{ selectedEvent.description }}</small> </td>
                   </tr>
                 </table>
                 {% endverbatim %}
@@ -211,6 +212,8 @@
             </v-container>
           </v-container>
         </v-flex>
+        {% endif %}
+
       </v-row>
     </v-app>
   </div>

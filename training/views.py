@@ -1,4 +1,3 @@
-import calendar
 import collections
 import re
 from datetime import date
@@ -116,6 +115,7 @@ def calendar_view(request):
         {
             "settings": settings,
             "events": approved_trainings,
+            "admin_user": request.user.is_staff,
         },
     )
 
