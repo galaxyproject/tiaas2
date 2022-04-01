@@ -8,217 +8,251 @@
 <link rel="stylesheet" href="https://unpkg.com/@mdi/font@6.x/css/materialdesignicons.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons">
 <!-- <script src="{% static 'training/js/calendar.js' %}"></script> -->
+
+
 {% endblock %}
 
 
 {% block content %}
-<h2>Scheduled events</h2>
+<div class="container">
+  <h2>Scheduled events</h2>
 
-<noscript>
-  <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-</noscript>
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+  </noscript>
 
-
-<div id="app">
-  <v-app v-cloak>
-    <v-row>
-      <v-flex sm8 px-5 class="border-right">
-        <v-sheet height="64">
-          <v-toolbar
-            flat
-          >
-            <v-btn
-              outlined
-              class="mr-4"
-              color="grey darken-2"
-              @click="setToday"
+  <div id="app">
+    <v-app v-cloak>
+      <v-row>
+        <v-flex sm8 px-5 class="border-right">
+          <v-sheet height="64">
+            <v-toolbar
+              flat
             >
-              Today
-            </v-btn>
-            <v-btn
-              fab
-              text
-              small
-              color="grey darken-2"
-              @click="prev"
-            >
-              <v-icon small>
-                mdi-chevron-left
-              </v-icon>
-            </v-btn>
-            <v-btn
-              fab
-              text
-              small
-              color="grey darken-2"
-              @click="next"
-            >
-              <v-icon small>
-                mdi-chevron-right
-              </v-icon>
-            </v-btn>
-          </v-toolbar>
-        </v-sheet>
+              <v-btn
+                outlined
+                class="mr-4"
+                color="grey darken-2"
+                @click="setToday"
+              >
+                Today
+              </v-btn>
+              <v-btn
+                fab
+                text
+                small
+                color="grey darken-2"
+                @click="prev"
+              >
+                <v-icon small>
+                  mdi-chevron-left
+                </v-icon>
+              </v-btn>
+              <v-btn
+                fab
+                text
+                small
+                color="grey darken-2"
+                @click="next"
+              >
+                <v-icon small>
+                  mdi-chevron-right
+                </v-icon>
+              </v-btn>
+            </v-toolbar>
+          </v-sheet>
 
-        <v-row>
-          <v-flex md6>
-            <v-sheet>
-              <v-container>
-                <h3 v-if="$refs.calendar1" style="text-align: center;">
-                  {% verbatim %}
-                  {{ $refs.calendar1.title }}
-                  {% endverbatim %}
-                </h3>
+          <v-row>
+            <v-flex md6>
+              <v-sheet>
+                <v-container>
+                  <h3 v-if="$refs.calendar1" style="text-align: center;">
+                    {% verbatim %}
+                    {{ $refs.calendar1.title }}
+                    {% endverbatim %}
+                  </h3>
 
-                <v-calendar
-                  ref="calendar1"
-                  v-model="focus1"
-                  color="primary"
-                  :events="events"
-                  :event-color="getEventColor"
-                  :event-height="5"
-                  :type="type"
-                  @click:event="showEvent"
-                ></v-calendar>
-              </v-container>
-            </v-sheet>
-          </v-flex>
+                  <v-calendar
+                    ref="calendar1"
+                    v-model="focus1"
+                    color="primary"
+                    :events="events"
+                    :event-color="getEventColor"
+                    :event-height="5"
+                    :type="type"
+                    @click:event="showEvent"
+                  ></v-calendar>
+                </v-container>
+              </v-sheet>
+            </v-flex>
 
-          <v-flex md6>
-            <v-sheet>
-              <v-container>
-                <h3 v-if="$refs.calendar2" style="text-align: center;">
-                  {% verbatim %}
-                  {{ $refs.calendar2.title }}
-                  {% endverbatim %}
-                </h3>
+            <v-flex md6>
+              <v-sheet>
+                <v-container>
+                  <h3 v-if="$refs.calendar2" style="text-align: center;">
+                    {% verbatim %}
+                    {{ $refs.calendar2.title }}
+                    {% endverbatim %}
+                  </h3>
 
-                <v-calendar
-                  ref="calendar2"
-                  v-model="focus2"
-                  color="primary"
-                  :events="events"
-                  :event-color="getEventColor"
-                  :event-height="5"
-                  :type="type"
-                  @click:event="showEvent"
-                ></v-calendar>
-              </v-container>
-            </v-sheet>
-          </v-flex>
+                  <v-calendar
+                    ref="calendar2"
+                    v-model="focus2"
+                    color="primary"
+                    :events="events"
+                    :event-color="getEventColor"
+                    :event-height="5"
+                    :type="type"
+                    @click:event="showEvent"
+                  ></v-calendar>
+                </v-container>
+              </v-sheet>
+            </v-flex>
 
-          <v-flex md6>
-            <v-sheet>
-              <v-container>
-                <h3 v-if="$refs.calendar3" style="text-align: center;">
-                  {% verbatim %}
-                  {{ $refs.calendar3.title }}
-                  {% endverbatim %}
-                </h3>
+            <v-flex md6>
+              <v-sheet>
+                <v-container>
+                  <h3 v-if="$refs.calendar3" style="text-align: center;">
+                    {% verbatim %}
+                    {{ $refs.calendar3.title }}
+                    {% endverbatim %}
+                  </h3>
 
-                <v-calendar
-                  ref="calendar3"
-                  v-model="focus3"
-                  color="primary"
-                  :events="events"
-                  :event-color="getEventColor"
-                  :event-height="5"
-                  :type="type"
-                  @click:event="showEvent"
-                ></v-calendar>
-              </v-container>
-            </v-sheet>
-          </v-flex>
+                  <v-calendar
+                    ref="calendar3"
+                    v-model="focus3"
+                    color="primary"
+                    :events="events"
+                    :event-color="getEventColor"
+                    :event-height="5"
+                    :type="type"
+                    @click:event="showEvent"
+                  ></v-calendar>
+                </v-container>
+              </v-sheet>
+            </v-flex>
 
-          <v-flex md6>
-            <v-sheet>
-              <v-container>
-                <h3 v-if="$refs.calendar4" style="text-align: center;">
-                  {% verbatim %}
-                  {{ $refs.calendar4.title }}
-                  {% endverbatim %}
-                </h3>
+            <v-flex md6>
+              <v-sheet>
+                <v-container>
+                  <h3 v-if="$refs.calendar4" style="text-align: center;">
+                    {% verbatim %}
+                    {{ $refs.calendar4.title }}
+                    {% endverbatim %}
+                  </h3>
 
-                <v-calendar
-                  ref="calendar4"
-                  v-model="focus4"
-                  color="primary"
-                  :events="events"
-                  :event-color="getEventColor"
-                  :event-height="5"
-                  :type="type"
-                  @click:event="showEvent"
-                ></v-calendar>
-              </v-container>
-            </v-sheet>
-          </v-flex>
-        </v-row>
-      </v-flex>
+                  <v-calendar
+                    ref="calendar4"
+                    v-model="focus4"
+                    color="primary"
+                    :events="events"
+                    :event-color="getEventColor"
+                    :event-height="5"
+                    :type="type"
+                    @click:event="showEvent"
+                  ></v-calendar>
+                </v-container>
+              </v-sheet>
+            </v-flex>
+          </v-row>
+        </v-flex>
 
-      <v-flex sm4>
-        <v-container px-5 py-15 style="height: 100%;">
-          <h3>Details</h3>
+        <v-flex sm4>
+          <v-container px-5 py-15 style="height: 100%;">
+            <h3>Details</h3>
 
-          <v-container id="details-pane">
-            <div v-if="selectedEvent">
-              {% verbatim %}
-              <table class="details-table">
-                <tr>
-                  <td>Organiser</td>
-                  <td> {{ selectedEvent.organiser }} </td>
-                </tr>
+            <v-container id="details-pane">
+              <div v-if="selectedEvent">
+                {% verbatim %}
+                <table class="details-table">
+                  <tr>
+                    <td>Organiser</td>
+                    <td> {{ selectedEvent.organiser }} </td>
+                  </tr>
 
-                <tr>
-                  <td>Email</td>
-                  <td> {{ selectedEvent.email }} </td>
-                </tr>
+                  <tr>
+                    <td>Email</td>
+                    <td> {{ selectedEvent.email }} </td>
+                  </tr>
 
-                <tr>
-                  <td>Event ID</td>
-                  <td> {{ selectedEvent.identifier }} </td>
-                </tr>
+                  <tr>
+                    <td>Event ID</td>
+                    <td> {{ selectedEvent.identifier }} </td>
+                  </tr>
 
-                <tr>
-                  <td>Event title</td>
-                  <td> {{ selectedEvent.name }} </td>
-                </tr>
+                  <tr>
+                    <td>Event title</td>
+                    <td> {{ selectedEvent.name }} </td>
+                  </tr>
 
-                <tr>
-                  <td>Location</td>
-                  <td> {{ selectedEvent.location }} </td>
-                </tr>
+                  <tr>
+                    <td>Location</td>
+                    <td> {{ selectedEvent.location }} </td>
+                  </tr>
 
-                <tr>
-                  <td>Expected attendance</td>
-                  <td> {{ selectedEvent.attendance }} </td>
-                </tr>
+                  <tr>
+                    <td>Expected attendance</td>
+                    <td> {{ selectedEvent.attendance }} </td>
+                  </tr>
 
-                <tr>
-                  <td>Description</td>
-                  <td> {{ selectedEvent.description }} </td>
-                </tr>
-              </table>
-              {% endverbatim %}
-            </div>
+                  <tr>
+                    <td>Description</td>
+                    <td> {{ selectedEvent.description }} </td>
+                  </tr>
+                </table>
+                {% endverbatim %}
+              </div>
 
-            <div v-else>
-              <h4 style="text-align: center; margin-top: 50px;">
-                Click an event to see details
-              </h4>
-            </div>
+              <div v-else>
+                <h4 style="text-align: center; margin-top: 50px;">
+                  Click an event to see details
+                </h4>
+              </div>
+            </v-container>
           </v-container>
-        </v-container>
-      </v-flex>
-    </v-row>
-  </v-app>
+        </v-flex>
+      </v-row>
+    </v-app>
+  </div>
 </div>
 
+<style scoped>
+  [v-cloak] {
+    display: none;
+  }
+  .border-right {
+    border-right: 1px solid #ccc;
+  }
+  #details-pane {
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    min-height: 500px;
+    margin-top: 50px;
+  }
+  .details-table td {
+    padding: .5rem 1rem;
+    border-bottom: 1px solid #ccc;
+  }
+  .details-table td:first-child {
+    font-weight: bold;
+    background-color: #eee;
+  }
+  @media (max-width: 1400px) {
+    .details-table {
+      font-size: .85rem;
+    }
+  }
+</style>
+
+{% endblock %}
+
+
+{% block script %}
 
 <script src='https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js'></script>
 
 <script>
-
   const COLORS = [
     'blue',
     'red',
@@ -319,28 +353,5 @@
     }
   });
 </script>
-
-<style scoped>
-  [v-cloak] {
-    display: none;
-  }
-  .border-right {
-    border-right: 1px solid #ccc;
-  }
-  #details-pane {
-    border: 1px solid #ccc;
-    border-radius: 1rem;
-    min-height: 500px;
-    margin-top: 50px;
-  }
-  .details-table td {
-    padding: .5rem 1rem;
-    border-bottom: 1px solid #ccc;
-  }
-  .details-table td:first-child {
-    font-weight: bold;
-    background-color: #eee;
-  }
-</style>
 
 {% endblock %}
