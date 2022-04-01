@@ -15,6 +15,11 @@ from .galaxy import (add_group_user, authenticate, create_group, create_role,
 from .models import Training
 
 
+def test(request):
+    """Show the specified html page."""
+    return render(request, f'training/{request.GET.get("filename")}')
+
+
 def register(request):
     host = request.META.get("HTTP_HOST", "localhost")
     if request.method == "POST":
@@ -64,15 +69,17 @@ def thanks(request):
 
 def stats_csv(request):
     data = "name,code,pop\n"
-
-    trainings = Training.objects.all().exclude(training_identifier="test").filter(processed="AP")
+    trainings = (
+        Training.objects.all()
+        .exclude(training_identifier="test")
+        .filter(processed="AP")
+    )
     locations = collections.Counter()
     codes = {}
 
     for t in trainings:
-        for loc in t.location:
-            locations[loc.alpha3] += 1
-            codes[loc.alpha3] = loc.name
+        locations[t.location.alpha3] += 1
+        codes[t.location.alpha3] = t.location.name
 
     for k, v in locations.items():
         data += f"{codes[k]},{k},{v}\n"
@@ -134,8 +141,7 @@ def stats(request):
 
     locations = collections.Counter()
     for t in trainings:
-        for loc in t.location:
-            locations[loc.name] += 1
+        locations[t.location] += 1
 
     return render(
         request,
@@ -166,8 +172,7 @@ def join(request, training_id):
             request,
             "training/error.html",
             {
-                "message": "Training does not exist",
-                "host": request.META.get("HTTP_HOST", None),
+                "message": "Training event does not exist",
                 "settings": settings,
             },
         )

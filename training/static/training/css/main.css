@@ -1,6 +1,9 @@
 body {
   margin-top: 100px;
 }
+.main {
+  min-height: 78vh;
+}
 .container {
   padding: 1rem;
   max-width: 1500px;
