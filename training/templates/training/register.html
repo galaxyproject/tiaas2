@@ -1,5 +1,12 @@
 {% extends "base.html" %}
+{% load static %}
 {% load bootstrap3 %}
+
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'training/css/register.css' %}">
+{% endblock %}
+
 
 {% block content %}
 
@@ -8,52 +15,24 @@ django-bootstrap template tag reference:
 https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 -->
 
-<style type="text/css" media="all">
-	form {
-		font-size: 1.2rem;
-		margin: 6rem 0 10rem 0;
-	}
-	hr {
-		margin-top: 3rem;
-	}
-	h2 {
-		margin-top: 5rem;
-		margin-bottom: 2rem;
-	}
-	.form-group {
-		margin-bottom: 1.5rem;
-	}
-  .control-label{
-	  font-weight: 600;
-	  font-size: 1.25rem;
-  }
-	.help-block {
-		font-size: 0.8rem;
-	}
-	.bootstrap3-multi-input {
-		margin-left: 0;
-		margin-right: 0;
-	}
-	[class^="col"] {
-		margin-bottom: 1.5rem;
-	}
-	input[type="checkbox"] {
-		margin-top: .4rem;
-		margin-right: 1rem;
-	}
-</style>
-
 <div class="container">
-	<h1>{{ settings.TIAAS_OWNER }} Training Infrastructure as a Service</h1>
+	<h1>Apply for a new allocation</h1>
 
-	<div class="my-5">
-		<p class="lead text-danger">
-			<em>N.B. Placeholder text is in red throughout</em>
+	<div class="my-5 text-danger">
+		<p>
+			<em>N.B. Placeholder text in red throughout</em>
+		</p>
 
-			<br>
-
+		<p class="lead">
 			Please use this form to request a new training reservation on
 			{{ settings.TIAAS_OWNER }}.
+		</p>
+
+		<p class="alert alert-success">
+			<b>Hint:</b>
+			Check the
+			<a href="/tiaas/calendar">training calendar</a>
+			before making a request!
 		</p>
 	</div>
 
@@ -124,4 +103,13 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 	</form>
 </div>
 
+{% endblock %}
+
+
+{% block script %}
+<script type="text/javascript">
+	$(document).ready( () => {
+		// Validation functions
+	})
+</script>
 {% endblock %}

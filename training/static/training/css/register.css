@@ -1,0 +1,32 @@
+form {
+	font-size: 1.2rem;
+	margin: 6rem 0 10rem 0;
+}
+hr {
+	margin-top: 3rem;
+}
+h2 {
+	margin-top: 5rem;
+	margin-bottom: 2rem;
+}
+.form-group {
+	margin-bottom: 1.5rem;
+}
+.control-label {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+.help-block {
+	font-size: 0.8rem;
+}
+.bootstrap3-multi-input {
+	margin-left: 0;
+	margin-right: 0;
+}
+[class^="col"] {
+	margin-bottom: 1.5rem;
+}
+input[type="checkbox"] {
+	margin-top: .4rem;
+	margin-right: 1rem;
+}

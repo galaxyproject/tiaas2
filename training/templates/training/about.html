@@ -1,51 +1,117 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'training/css/about.css' %}">
+{% endblock %}
+
+
 {% block content %}
 
 <div class="container">
+  <div class="container-flex text-center my-5">
+    <img id="header-img" src="{% static 'training/img/tiaas-logo.png' %}" alt="tiaas logo">
+  </div>
 
-  <h1>TIaaS</h1>
+  <div class="my-5">
+    <p>
+      {{ settings.TIAAS_OWNER }}
+      is proud to provide Training Infrastructure as a Service (TIaaS) for the
+      Galaxy training community.
+      You provide the training, we provide the
+      infrastructure and cover all costs.
+    </p>
+  </div>
 
-  <p><img src="https://galaxyproject.eu/assets/media/tiaas-logo.png" alt="tiaas logo depicting people in queues" width="300em" style="margin: 1em"></p>
+  <h3> Why TIaaS?</h3>
 
-  <p><a href="{{ settings.TIAAS_OWNER_SITE }}">{{ settings.TIAAS_OWNER }}</a> is proud to provide Training Infrastructure as a Service (TIaaS) for the Galaxy training community. You provide the training, we provide the infrastructure <i>at no cost</i>.</p>
+  <section class="card-group justify-content-between">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title">
+          <h1><span class="material-icons">favorite</span></h1>
+        </div>
 
-  <h2 id="why-tiaas">Why TIaaS?</h2>
+        <div class="card-text">
+          TIaaS costs are covered by the Australian BioCommons for Australian
+          trainers and researchers.
+        </div>
+      </div>
+    </div>
 
-  <ul>
-    <li>Private queue where only your training's jobs will run</li>
-    <li>Free</li>
-    <li>No Galaxy Maintenance</li>
-    <li>No Galaxy Administration</li>
-    <li>Official <a href="https://training.galaxyproject.org">Galaxy Training Materials</a> are guaranteed to work and <a href="https://github.com/usegalaxy-eu/workflow-testing/">regularly tested</a></li>
-    <li>See how your students are progressing with <a href="https://galaxyproject.eu/posts/2019/06/17/tiaas-queue/">our dashboard</a>:</li>
-  </ul>
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title">
+          <h1><span class="material-icons">speed</span></h1>
+        </div>
 
-  <figure>
-    <img src="https://galaxyproject.eu/assets/media/tiaas-queue.png" alt="tiaas queue visualizer" /><figcaption>TIaaS queue visualizer</figcaption>
-  </figure>
+        <div class="card-text">
+          Private job queue to service your training event effectively. See our
+          <a href="#">Event Dashboard</a>.
+        </div>
+      </div>
+    </div>
 
-  <h2 id="how-tiaas-works">How TIaaS Works</h2>
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title">
+          <h1><span class="material-icons">handyman</span></h1>
+        </div>
 
-  <p>We have several &quot;pools&quot; of resources attached to {{ settings.TIAAS_OWNER }} that run user jobs. For trainings we attach a new pool of resources that is specially labelled for that training. When normal users run tools on our server, these jobs are instructed to avoid the training pools by default.</p>
-  <p>When users join a training, using a special URL we provide you, they then are placed in a special training group. Their jobs will then preferentially run the jobs on a training machine, and, in the event there is no more capacity, they will run on the main queue. If a spot on the training specific resources opens up first, they will run there rather than continuing to wait in the main queue.</p>
+        <div class="card-text">
+          No maintenance or administration required.
+        </div>
+      </div>
+    </div>
 
-  <h2 id="eligibility">Eligibility</h2>
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title">
+          <h1><span class="material-icons">book</span></h1>
+        </div>
 
-  <p>We have significant capacity and have dedicated some of this to providing training using our service. Anyone providing training on using Galaxy is eligible to request the use of this service.</p>
+        <div class="card-text">
+          <a href="https://training.galaxyproject.org" target="_blank">
+            Official Galaxy Training materials
+          </a>
+          are regularly tested and highly reliable.
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <p>
-    <a style="font-size: 200%;font-weight: 900;border: 1px solid black;padding: 0.5em;" href="{% url 'register' %}">Apply now!</a>
-  </p>
+  <section>
+    <h3>Eligibility</h3>
 
-  <h2>Stats</h2>
-  Check out our new <a href="{% url 'stats' %}">Statistics Page</a> and <a href="{% url 'calendar' %}">Training Calendar</a>.
+    <p>
+      We have access to large computing capacity, some of which is dedicated
+      to provide training for our service. Anyone who provides training using
+      Galaxy is eligible to request the use of this service.
+    </p>
 
+    <div class="my-5">
+      <a class="ga-btn" href="/tiaas/new">Apply now</a>
+    </div>
+  </section>
 
-  <h2 id="service-level-agreement">Service Level Agreement</h2>
+  <section>
+    <h3>How does it work?</h3>
 
-  <p>We <em>cannot</em> promise any degree of uptime. We will do our best to have this service online and functioning during the entire time period but there are cases where the service may experience interruptions that are outside of our control. We will keep you informed of any outages that may affect your training.</p>
+    <p class="text-info">
+      {% lorem 50 w %}
+    </p>
+
+    <p class="text-info">
+      {% lorem 100 w %}
+    </p>
+
+    <p>
+      Check our current schedule with the
+      <a href="/tiaas/calendar">training calendar</a>.
+    </p>
+  </section>
 
 </div>
 
