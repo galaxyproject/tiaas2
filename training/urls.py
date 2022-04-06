@@ -1,8 +1,16 @@
 from django.urls import path
+from django.shortcuts import redirect
 
 from . import views
 
+
+# Useful for development
+def redirect_about(request):
+    return redirect('/tiaas/')
+
+
 urlpatterns = [
+    path("", redirect_about, name="about"),
     path("tiaas/", views.about, name="about"),
     path("tiaas/new/", views.register, name="register"),
     path("tiaas/thanks/", views.thanks, name="thanks"),

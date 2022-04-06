@@ -1,5 +1,12 @@
 {% extends "base.html" %}
+{% load static %}
 {% load bootstrap3 %}
+
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'training/css/register.css' %}">
+{% endblock %}
+
 
 {% block content %}
 
@@ -8,118 +15,101 @@ django-bootstrap template tag reference:
 https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 -->
 
-<style type="text/css" media="all">
-	form {
-		font-size: 1.2rem;
-		margin: 6rem 0 10rem 0;
-	}
-	hr {
-		margin-top: 3rem;
-	}
-	h2 {
-		margin-top: 5rem;
-		margin-bottom: 2rem;
-	}
-	.form-group {
-		margin-bottom: 1.5rem;
-	}
-  .control-label{
-	  font-weight: 600;
-	  font-size: 1.25rem;
-  }
-	.help-block {
-		font-size: 0.8rem;
-	}
-	.bootstrap3-multi-input {
-		margin-left: 0;
-		margin-right: 0;
-	}
-	[class^="col"] {
-		margin-bottom: 1.5rem;
-	}
-	input[type="checkbox"] {
-		margin-top: .4rem;
-		margin-right: 1rem;
-	}
-</style>
+<div class="container">
+	<h1>Apply for a new allocation</h1>
 
-<h1>{{ settings.TIAAS_OWNER }} Training Infrastructure as a Service</h1>
+	<div class="my-5 text-danger">
+		<p>
+			<em>N.B. Placeholder text in red throughout</em>
+		</p>
 
-<div class="my-5">
-	<p class="lead text-danger">
-		<em>N.B. Placeholder text is in red throughout</em>
+		<p class="lead">
+			Please use this form to request a new training reservation on
+			{{ settings.TIAAS_OWNER }}.
+		</p>
 
-		<br>
+		<p class="alert alert-success">
+			<b>Hint:</b>
+			Check the
+			<a href="/tiaas/calendar">training calendar</a>
+			before making a request!
+		</p>
+	</div>
 
-		Please use this form to request a new training reservation on
-		{{ settings.TIAAS_OWNER }}.
-	</p>
+	<form action="{% url 'register' %}" method="post" class="form">
+		{% csrf_token %}
+
+		<div class="row">
+			{% bootstrap_field form.name show_label=False form_group_class="col-md-4" %}
+			{% bootstrap_field form.email show_label=False form_group_class="col-md-4" %}
+			{% bootstrap_field form.retain_contact show_label=False form_group_class="col-md-12" %}
+		</div>
+
+		<hr>
+
+		<h2>About the Course</h2>
+		<div class="row">
+			{% bootstrap_field form.title form_group_class="col-md-6" show_label=False %}
+			{% bootstrap_field form.website show_label=False form_group_class="col-md-6" %}
+			{% bootstrap_field form.description form_group_class="col-md-12" show_label=False %}
+			{% bootstrap_field form.start show_label=True form_group_class="col-md-3" %}
+			{% bootstrap_field form.end show_label=True form_group_class="col-md-3" %}
+			{% bootstrap_field form.location show_label=True form_group_class="col-md-3" %}
+			{% bootstrap_field form.training_identifier form_group_class="col-md-3" %}
+		</div>
+
+		<hr>
+
+		<h2>Estimating Resource Usage</h2>
+
+		<p class="text-danger">
+			{% lorem 5 w %}
+		</p>
+
+		<div class="row">
+			{% bootstrap_field form.use_gtn form_group_class="col-md-12" show_label=True %}
+			{% bootstrap_field form.gtn_links form_group_class="col-md-6" show_label=False %}
+			{% bootstrap_field form.non_gtn_links form_group_class="col-md-6" show_label=False %}
+			{% bootstrap_field form.attendance form_group_class="col-md-12" show_label=True %}
+		</div>
+
+		{% if settings.TIAAS_SHOW_ADVERTISING %}
+		<h2>Advertising</h2>
+
+		<p class="text-danger">
+			{% lorem 5 w %}
+		</p>
+
+		<div class="row">
+			{% bootstrap_field form.advertise show_label=True form_group_class="col-md-12" %}
+			{% bootstrap_field form.blogpost form_group_class="col-md-12" %}
+		</div>
+		{% else %}
+		{{ form.advertise.as_hidden }}
+		{{ form.blogpost.as_hidden }}
+		{% endif %}
+
+		<h2>Anything else to add?</h2>
+
+		<div>
+			{% bootstrap_field form.other_requests show_label=False placeholder="Comments" %}
+		</div>
+
+		{% buttons %}
+		<button type="submit" class="btn btn-primary">
+			{% bootstrap_icon "star" %} Submit
+		</button>
+		{% endbuttons %}
+	</form>
 </div>
 
-<form action="{% url 'register' %}" method="post" class="form">
-  {% csrf_token %}
+{% endblock %}
 
-	<div class="row">
-		{% bootstrap_field form.name show_label=False form_group_class="col-md-4" %}
-		{% bootstrap_field form.email show_label=False form_group_class="col-md-4" %}
-		{% bootstrap_field form.retain_contact show_label=False form_group_class="col-md-12" %}
-	</div>
 
-	<hr>
-
-	<h2>About the Course</h2>
-	<div class="row">
-		{% bootstrap_field form.title form_group_class="col-md-6" show_label=False %}
-		{% bootstrap_field form.website show_label=False form_group_class="col-md-6" %}
-		{% bootstrap_field form.description form_group_class="col-md-12" show_label=False %}
-		{% bootstrap_field form.start show_label=True form_group_class="col-md-3" %}
-		{% bootstrap_field form.end show_label=True form_group_class="col-md-3" %}
-		{% bootstrap_field form.location show_label=True form_group_class="col-md-3" %}
-		{% bootstrap_field form.training_identifier form_group_class="col-md-3" %}
-	</div>
-
-	<hr>
-
-	<h2>Estimating Resource Usage</h2>
-
-	<p class="text-danger">
-		{% lorem 5 w %}
-	</p>
-
-	<div class="row">
-		{% bootstrap_field form.use_gtn form_group_class="col-md-12" show_label=True %}
-		{% bootstrap_field form.gtn_links form_group_class="col-md-6" show_label=False %}
-		{% bootstrap_field form.non_gtn_links form_group_class="col-md-6" show_label=False %}
-		{% bootstrap_field form.attendance form_group_class="col-md-12" show_label=True %}
-	</div>
-
-	{% if settings.TIAAS_SHOW_ADVERTISING %}
-	<h2>Advertising</h2>
-
-	<p class="text-danger">
-		{% lorem 5 w %}
-	</p>
-
-	<div class="row">
-		{% bootstrap_field form.advertise show_label=True form_group_class="col-md-12" %}
-		{% bootstrap_field form.blogpost form_group_class="col-md-12" %}
-	</div>
-	{% else %}
-	{{ form.advertise.as_hidden }}
-	{{ form.blogpost.as_hidden }}
-	{% endif %}
-
-	<h2>Anything else to add?</h2>
-
-	<div>
-		{% bootstrap_field form.other_requests show_label=False placeholder="Comments" %}
-	</div>
-
-  {% buttons %}
-  <button type="submit" class="btn btn-primary">
-    {% bootstrap_icon "star" %} Submit
-  </button>
-  {% endbuttons %}
-</form>
-
+{% block script %}
+<script type="text/javascript">
+	$(document).ready( () => {
+		// Validation functions
+	})
+</script>
 {% endblock %}

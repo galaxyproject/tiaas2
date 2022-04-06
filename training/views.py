@@ -1,4 +1,3 @@
-import calendar
 import collections
 import re
 from datetime import date
@@ -14,6 +13,11 @@ from .galaxy import (add_group_user, authenticate, create_group, create_role,
                      get_groups, get_jobs, get_roles, get_users,
                      get_workflow_invocations)
 from .models import Training
+
+
+def test(request):
+    """Show the specified html page."""
+    return render(request, f'training/{request.GET.get("filename")}')
 
 
 def register(request):
@@ -65,15 +69,17 @@ def thanks(request):
 
 def stats_csv(request):
     data = "name,code,pop\n"
-
-    trainings = Training.objects.all().exclude(training_identifier="test").filter(processed="AP")
+    trainings = (
+        Training.objects.all()
+        .exclude(training_identifier="test")
+        .filter(processed="AP")
+    )
     locations = collections.Counter()
     codes = {}
 
     for t in trainings:
-        for loc in t.location:
-            locations[loc.alpha3] += 1
-            codes[loc.alpha3] = loc.name
+        locations[t.location.alpha3] += 1
+        codes[t.location.alpha3] = t.location.name
 
     for k, v in locations.items():
         data += f"{codes[k]},{k},{v}\n"
@@ -103,63 +109,20 @@ def trainings_for(trainings, year, month, day):
 
 
 def calendar_view(request):
-    trainings = Training.objects.all().exclude(
-        training_identifier="test"
-    )  # Exclude the 'test' group from showing up in calendar
-    approved_trainings = [x for x in trainings if x.processed == "AP"]
-    approved = len(approved_trainings)
-    start = min([x.start for x in approved_trainings])
-    end = max([x.end for x in approved_trainings])
-    years = list(range(start.year, end.year + 1))[::-1]
-    months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "Juli",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    ]
-
-    max_value = 0
-
-    days = {}
-    for year in years:
-        for idx, month in enumerate(months):
-            if year not in days:
-                days[year] = {}
-
-            days_au = calendar.monthcalendar(year, idx + 1)
-            days_fix = []
-            for row in days_au:
-                new_row = [
-                    (x, trainings_for(approved_trainings, year, idx + 1, x))
-                    for x in row
-                ]
-                m = max([x[1] for x in new_row])
-                if m > max_value:
-                    max_value = m
-                days_fix.append(new_row)
-
-            days[year][month] = days_fix
-
+    """Display scheduled events in an interactive calendar view."""
+    approved_trainings = (
+        Training.objects.all()
+        .exclude(training_identifier="test")
+        .filter(processed="AP")
+        .order_by('start')
+    )
     return render(
         request,
         "training/calendar.html",
         {
-            "trainings": approved,
-            "start": start,
-            "end": end,
-            "years": years,
-            "months": months,
-            "days": days,
-            "max_value": max_value,
             "settings": settings,
+            "events": approved_trainings,
+            "admin_user": request.user.is_staff,
         },
     )
 
@@ -178,8 +141,7 @@ def stats(request):
 
     locations = collections.Counter()
     for t in trainings:
-        for loc in t.location:
-            locations[loc.name] += 1
+        locations[t.location] += 1
 
     return render(
         request,
@@ -210,8 +172,7 @@ def join(request, training_id):
             request,
             "training/error.html",
             {
-                "message": "Training does not exist",
-                "host": request.META.get("HTTP_HOST", None),
+                "message": "Training event does not exist",
                 "settings": settings,
             },
         )

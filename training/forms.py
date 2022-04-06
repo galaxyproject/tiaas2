@@ -6,7 +6,11 @@ from . import models
 
 
 class TrainingForm(forms.ModelForm):
+    """Define training request form."""
+
     class Meta:
+        """Define form metadata."""
+
         model = models.Training
         fields = (
             "name",
@@ -29,7 +33,7 @@ class TrainingForm(forms.ModelForm):
         )
 
         labels = {
-            "name": "Your name",
+            "name": "Your full name",
             "title": "Title of your training event",
             "email": "Contact email",
             "retain_contact": (
@@ -59,7 +63,8 @@ class TrainingForm(forms.ModelForm):
                 '" target="_blank"> Galaxy Training Network</a>.'),
             "advertise": (
                 "We will create an event article that will be visible on"
-                f" {settings.TIAAS_DOMAIN}"),
+                f' <a href="{settings.TIAAS_DOMAIN}">'
+                f'{settings.TIAAS_DOMAIN}</a>'),
             "gtn_links": (
                 "If you are using official training materials: which ones?"
                 " Please provide the topic + material name, or URLs so we can"
@@ -80,7 +85,8 @@ class TrainingForm(forms.ModelForm):
                 " summarising your experience with TIaaS and how it helped"
                 " you?"),
             "training_identifier": (
-                "A unique name to help identify your training resources."),
+                "A unique name to help identify your training resources."
+                " Please use only alphanumeric and -_ characters."),
             "location": "Where the training will be hosted.",
         }
 

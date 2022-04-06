@@ -6,3 +6,4 @@ psycopg2-binary==2.8.4
 pycrypto==2.6.1
 # Had to conda install this from conda-forge:
 uWSGI==2.0.18
+factory_boy
