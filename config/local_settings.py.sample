@@ -1,0 +1,32 @@
+"""Local settings for tiaas app."""
+
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+    },
+    "galaxy": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "tiaas",
+        "USER": "tiaas",
+        "PASSWORD": "secret",
+        "HOST": "localhost",
+        "PORT": "5432",
+    },
+}
+
+GALAXY_SECRET = "enter-secret-string-here"
+TIAAS_OWNER = "Galaxy EU"
+TIAAS_EMAIL = "None"
+TIAAS_OWNER_SITE = "https://mysite.com"
+TIAAS_GALAXY_SITE = "https://usegalaxy.eu"
+
+TIAAS_SEND_EMAIL_TO = "root@localhost"
+TIAAS_SEND_EMAIL_FROM = "tiaas_noreply@example.org"
+
+TIAAS_SHOW_ADVERTISING = True
+TIAAS_GDPR_RETAIN_EXTRA = 12  # months

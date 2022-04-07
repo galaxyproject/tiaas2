@@ -63,8 +63,8 @@ class TrainingForm(forms.ModelForm):
                 '" target="_blank"> Galaxy Training Network</a>.'),
             "advertise": (
                 "We will create an event article that will be visible on"
-                f' <a href="{settings.TIAAS_DOMAIN}">'
-                f'{settings.TIAAS_DOMAIN}</a>'),
+                f' <a href="{settings.TIAAS_GALAXY_SITE}">'
+                f'{settings.TIAAS_GALAXY_SITE}</a>'),
             "gtn_links": (
                 "If you are using official training materials: which ones?"
                 " Please provide the topic + material name, or URLs so we can"
