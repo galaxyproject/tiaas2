@@ -23,7 +23,8 @@ h2 {
 	margin-left: 0;
 	margin-right: 0;
 }
-[class^="col"] {
+.col,
+[class^="col-"] {
 	margin-bottom: 1.5rem;
 }
 input[type="checkbox"] {
