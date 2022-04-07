@@ -115,6 +115,8 @@ STATIC_ROOT = "./static"
 TIAAS_SHOW_ADVERTISING = True
 TIAAS_GDPR_RETAIN_EXTRA = 12  # months
 
+LOGOUT_REDIRECT_URL = '/tiaas/'
+
 try:
     from config.local_settings import *
 except Exception as e:
