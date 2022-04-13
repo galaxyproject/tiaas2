@@ -3,10 +3,13 @@
 import random
 import factory
 import datetime
-from factory import lazy_attribute
+from factory import lazy_attribute, LazyFunction
 from factory.django import DjangoModelFactory
 
 from .models import Training
+
+START_IN_DAYS_MIN = 0
+START_IN_DAYS_MAX = 180
 
 
 class TrainingFactory(DjangoModelFactory):
@@ -15,12 +18,20 @@ class TrainingFactory(DjangoModelFactory):
     class Meta:
         model = Training
 
+    class Params:
+        start_min_days = START_IN_DAYS_MIN
+        start_max_days = START_IN_DAYS_MAX
+
     @lazy_attribute
     def start(self):
         return (
             datetime.date.today()
             + datetime.timedelta(
-                days=random.randint(-30, 120))
+                days=random.randint(
+                    self.start_min_days,
+                    self.start_max_days,
+                )
+            )
         )
 
     received = factory.Faker('date')
