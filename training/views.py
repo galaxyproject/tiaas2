@@ -123,6 +123,7 @@ def calendar_view(request):
             "settings": settings,
             "events": approved_trainings,
             "admin_user": request.user.is_staff,
+            "n_events": approved_trainings.count()
         },
     )
 
