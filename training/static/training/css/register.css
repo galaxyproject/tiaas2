@@ -1,3 +1,6 @@
+main {
+	max-width: 1200px;
+}
 form {
 	font-size: 1.2rem;
 	margin: 6rem 0 10rem 0;
@@ -22,6 +25,14 @@ h2 {
 .bootstrap3-multi-input {
 	margin-left: 0;
 	margin-right: 0;
+}
+.short-field input,
+.short-field select {
+	max-width: 400px;
+}
+.x-short-field input,
+.x-short-field select {
+	max-width: 100px;
 }
 .col,
 [class^="col-"] {

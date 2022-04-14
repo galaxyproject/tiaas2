@@ -39,23 +39,25 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 	<form action="{% url 'register' %}" method="post" class="form">
 		{% csrf_token %}
 
-		<div class="row">
-			{% bootstrap_field form.name show_label=False form_group_class="col-md-4" %}
-			{% bootstrap_field form.email show_label=False form_group_class="col-md-4" %}
-			{% bootstrap_field form.retain_contact show_label=False form_group_class="col-md-12" %}
+		<div>
+			{% bootstrap_field form.name placeholder="" form_group_class="form-group short-field" %}
+			{% bootstrap_field form.email placeholder="" form_group_class="form-group short-field" %}
+			{% bootstrap_field form.retain_contact show_label=False %}
 		</div>
 
 		<hr>
 
 		<h2>About the Course</h2>
-		<div class="row">
-			{% bootstrap_field form.title form_group_class="col-md-6" show_label=False %}
-			{% bootstrap_field form.website show_label=False form_group_class="col-md-6" %}
-			{% bootstrap_field form.description form_group_class="col-md-12" show_label=False %}
-			{% bootstrap_field form.start show_label=True form_group_class="col-md-3" %}
-			{% bootstrap_field form.end show_label=True form_group_class="col-md-3" %}
-			{% bootstrap_field form.location show_label=True form_group_class="col-md-3" %}
-			{% bootstrap_field form.training_identifier form_group_class="col-md-3" %}
+		<div>
+			{% bootstrap_field form.title placeholder="" %}
+			{% bootstrap_field form.website placeholder="" %}
+			{% bootstrap_field form.description placeholder="" %}
+			<div class="row">
+				{% bootstrap_field form.start form_group_class="col-md-6" %}
+				{% bootstrap_field form.end form_group_class="col-md-6" %}
+			</div>
+			{% bootstrap_field form.location form_group_class="form-group short-field" %}
+			{% bootstrap_field form.training_identifier  form_group_class="form-group short-field" %}
 		</div>
 
 		<hr>
@@ -66,30 +68,38 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 			{% lorem 5 w %}
 		</p>
 
-		<div class="row">
-			{% bootstrap_field form.use_gtn form_group_class="col-md-12" show_label=True %}
-			{% bootstrap_field form.gtn_links form_group_class="col-md-6" show_label=False %}
-			{% bootstrap_field form.non_gtn_links form_group_class="col-md-6" show_label=False %}
-			{% bootstrap_field form.attendance form_group_class="col-md-12" show_label=True %}
+		<div>
+			{% bootstrap_field form.use_gtn form_group_class="form-group x-short-field" show_label=True %}
+			{% bootstrap_field form.gtn_links form_group_class="form-group" placeholder="" %}
+			{% bootstrap_field form.non_gtn_links form_group_class="form-group" placeholder="" %}
+			{% bootstrap_field form.attendance form_group_class="form-group x-short-field" show_label=True placeholder="" %}
 		</div>
 
 		{% if settings.TIAAS_SHOW_ADVERTISING %}
+
+		<hr>
+
 		<h2>Advertising</h2>
 
 		<p class="text-danger">
 			{% lorem 5 w %}
 		</p>
 
-		<div class="row">
-			{% bootstrap_field form.advertise show_label=True form_group_class="col-md-12" %}
-			{% bootstrap_field form.blogpost form_group_class="col-md-12" %}
+		<div>
+			{% bootstrap_field form.advertise show_label=True form_group_class="form-group x-short-field" %}
+			<br>
+			{% bootstrap_field form.blogpost form_group_class="form-group" %}
 		</div>
 		{% else %}
 		{{ form.advertise.as_hidden }}
 		{{ form.blogpost.as_hidden }}
 		{% endif %}
 
-		<h2>Anything else to add?</h2>
+		<hr>
+
+		<br><br>
+
+		<p class="lead">Anything else to add?</p>
 
 		<div>
 			{% bootstrap_field form.other_requests show_label=False placeholder="Comments" %}

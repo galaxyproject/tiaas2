@@ -33,7 +33,7 @@ class TrainingForm(forms.ModelForm):
         )
 
         labels = {
-            "name": "Your full name",
+            "name": "Full name",
             "title": "Title of your training event",
             "email": "Contact email",
             "retain_contact": (
@@ -95,8 +95,10 @@ class TrainingForm(forms.ModelForm):
             "start": forms.SelectDateWidget(),
             "end": forms.SelectDateWidget(),
             "title": forms.TextInput(),
-            "description": forms.Textarea(attrs={'rows': 4}),
-            "attendance": forms.NumberInput(attrs={"min": 1}),
             "location": forms.Select(),
+            "description": forms.Textarea(attrs={'rows': 4}),
+            "gtn_links": forms.Textarea(attrs={'rows': 4}),
+            "non_gtn_links": forms.Textarea(attrs={'rows': 4}),
+            "attendance": forms.NumberInput(attrs={"min": 1}),
             "other_requests": forms.Textarea(attrs={'rows': 4}),
         }
