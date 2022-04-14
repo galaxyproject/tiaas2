@@ -10,7 +10,8 @@
 
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://unpkg.com/@mdi/font@6.x/css/materialdesignicons.min.css">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons">
+	<link rel="stylesheet" href="{% static 'vendor/fontawesome-5.15.4/css/all.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'vendor/material-icons.css' %}">
 
 	{% block head %}{% endblock %}
 
@@ -34,11 +35,11 @@
 				</li>
 
 				<li class="nav-item">
-					<a class="nav-link" href="/tiaas/new" id="nav-link-request">Request</a>
+					<a class="nav-link" href="/tiaas/calendar" id="nav-link-calendar">Calendar</a>
 				</li>
 
 				<li class="nav-item">
-					<a class="nav-link" href="/tiaas/calendar" id="nav-link-calendar">Calendar</a>
+					<a class="nav-link" href="/tiaas/new" id="nav-link-request">Request</a>
 				</li>
 
 				{% if user.is_authenticated %}
@@ -56,16 +57,24 @@
 		</div>
 	</nav>
 
-	<div class="main">
+	<main>
 
 		{% block content %}
 		{% endblock %}
 
-	</div>
+	</main>
 
 	<footer>
-		<div class="text-center" style="margin: 3em 0;border-top: 1px solid gray;padding: 1em;">
-			<b>Training Infrastructure as a Service (TIaaS)</b> licensed under the AGPLv3, running commit <a href="https://github.com/usegalaxy-eu/tiaas2/commit/{{ settings.GIT_COMMIT_ID }}" target="_blank">{{ settings.GIT_COMMIT_ID }}</a>
+
+		{% include 'snippets/footer.html' %}
+
+		<div class="version">
+			<b>Training Infrastructure as a Service (TIaaS)</b>
+			licensed under the AGPLv3, running commit
+			<a
+				href="https://github.com/usegalaxy-eu/tiaas2/commit/{{ settings.GIT_COMMIT_ID }}"
+				target="_blank"
+			>{{ settings.GIT_COMMIT_ID }}</a>
 		</div>
 	</footer>
 

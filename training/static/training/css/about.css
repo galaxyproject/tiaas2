@@ -1,3 +1,6 @@
+main {
+  max-width: 1200px;
+}
 #header-img {
   height: 100px;
   width: auto;
@@ -10,5 +13,8 @@
   font-size: 3rem;
 }
 .card-title {
+  text-align: center;
+}
+.card-body {
   text-align: center;
 }

@@ -13,8 +13,10 @@ section {
 h3 {
   margin-bottom: 2rem;
 }
-.main {
+main {
   min-height: 78vh;
+  padding: 15px;
+  margin: 0 auto;
 }
 .container {
   padding: 1rem;
@@ -42,4 +44,90 @@ h3 {
   color: white;
   background-color: var(--color-main);
   text-decoration: none;
+}
+
+/* Footer */
+footer {
+  margin-top: 6vw;
+  padding-bottom: 1rem;
+}
+.logo img {
+  width: auto;
+  height: 3.5rem;
+  margin: 1rem;
+}
+.logo .second img {
+  width: auto;
+  height: 1.75rem;
+  margin: .5rem;
+}
+#footer-links-row {
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+footer .col-6 {
+  padding: 0 1rem;
+  max-width: fit-content;
+}
+footer .links h6 {
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+footer a:hover {
+  text-decoration: none;
+}
+footer .links a {
+  color: inherit;
+  white-space: nowrap;
+}
+footer small {
+  font-size: .75rem;
+}
+footer p.tight {
+  line-height: 1.15;
+}
+#footer-galaxy-logo {
+  text-align: end;
+  padding: 1rem;
+}
+#footer-galaxy-logo img {
+  height: 35px;
+  width: auto;
+  margin: 2.75rem 1.5rem;
+}
+footer .version {
+  text-align: center;
+  padding: 1em;
+  border-top: 1px solid gray;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  :root {
+    font-size: 14px;
+  }
+  #footer-site-links {
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+  }
+  #footer-galaxy-logo {
+    display: none;
+  }
+  footer .col-md-6 {
+    min-width: fit-content;
+  }
+}
+
+@media (max-width: 576px) {
+  footer {
+    margin-top: 2rem;
+  }
+  footer p {
+    margin-top: 2rem;
+  }
+  footer .contact-info {
+    font-size: .75rem;
+  }
 }
