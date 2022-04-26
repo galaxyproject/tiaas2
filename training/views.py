@@ -163,17 +163,37 @@ def stats(request):
 
 def join(request, training_id):
     training_id = training_id.lower()
-
-    trainings = Training.objects.all().filter(training_identifier__iexact=training_id)
-    any_approved = any([t.processed == "AP" for t in trainings])
+    trainings = Training.objects.filter(
+        training_identifier__iexact=training_id,
+        processed='AP',
+    )
 
     # If we don't know this training, reject
-    if len(trainings) == 0 or not any_approved:
+    if not trainings.count():
         return render(
             request,
             "training/error.html",
             {
                 "message": "Training event does not exist",
+                "settings": settings,
+            },
+        )
+
+    event = trainings.first()
+
+    # If the event has already finished, reject request
+    if event.end < date.today():
+        return render(
+            request,
+            "training/error.html",
+            {
+                "message": (
+                    "Sorry, this event finished on"
+                    f" {event.end.strftime('%Y-%m-%d')}."
+                    " If you think this is a mistake, please contact Galaxy"
+                    " support."
+                ),
+                "host": request.META.get("HTTP_HOST", None),
                 "settings": settings,
             },
         )
@@ -204,17 +224,24 @@ def join(request, training_id):
     if not role_exists:
         role_id = create_role(training_role_name)
     else:
-        role_id = [x for x in current_roles if training_role_name == x["name"]][0]["id"]
+        role_id = [
+            x for x in current_roles
+            if training_role_name == x["name"]
+        ][0]["id"]
 
-    # Create group if need to.
+    # Create group if need to
     current_groups = list(get_groups())
-    group_exists = any([training_role_name == x["name"] for x in current_groups])
+    group_exists = any([
+        training_role_name == x["name"]
+        for x in current_groups
+    ])
     if not group_exists:
         group_id = create_group(training_role_name, role_id)
     else:
-        group_id = [x for x in current_groups if training_role_name == x["name"]][0][
-            "id"
-        ]
+        group_id = [
+            x for x in current_groups
+            if training_role_name == x["name"]
+        ][0]["id"]
 
     ################
     #  END UNSAFE  #
@@ -226,7 +253,7 @@ def join(request, training_id):
         request,
         "training/join.html",
         {
-            "training": trainings[0],
+            "training": event,
             "host": request.META.get("HTTP_HOST", None),
             "settings": settings,
         },
