@@ -48,6 +48,11 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 		<hr>
 
 		<h2>About the Course</h2>
+
+		<p class="text-danger">
+			{% lorem 5 w %}
+		</p>
+
 		<div>
 			{% bootstrap_field form.title placeholder="" %}
 			{% bootstrap_field form.website placeholder="" %}
@@ -98,6 +103,10 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 		<hr>
 
 		<br><br>
+
+		<p class="text-danger">
+			{% lorem 5 w %}
+		</p>
 
 		<p class="lead">Anything else to add?</p>
 
