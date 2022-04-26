@@ -55,16 +55,16 @@ def register(request):
         form = TrainingForm()
 
     return render(
-        request, "training/register.html", {"form": form, "settings": settings}
+        request, "training/register.html", {"form": form}
     )
 
 
 def about(request):
-    return render(request, "training/about.html", {"settings": settings})
+    return render(request, "training/about.html")
 
 
 def thanks(request):
-    return render(request, "training/thanks.html", {"settings": settings})
+    return render(request, "training/thanks.html")
 
 
 def stats_csv(request):
@@ -120,7 +120,6 @@ def calendar_view(request):
         request,
         "training/calendar.html",
         {
-            "settings": settings,
             "events": approved_trainings,
             "admin_user": request.user.is_staff,
             "n_events": approved_trainings.count()
@@ -156,7 +155,6 @@ def stats(request):
             "locations": dict(locations.items()),
             "current_trainings": current_trainings,
             "earliest": earliest,
-            "settings": settings,
         },
     )
 
@@ -175,7 +173,6 @@ def join(request, training_id):
             "training/error.html",
             {
                 "message": "Training event does not exist",
-                "settings": settings,
             },
         )
 
@@ -194,7 +191,6 @@ def join(request, training_id):
                     " support."
                 ),
                 "host": request.META.get("HTTP_HOST", None),
-                "settings": settings,
             },
         )
 
@@ -206,7 +202,6 @@ def join(request, training_id):
             {
                 "message": "Please login to Galaxy first!",
                 "host": request.META.get("HTTP_HOST", None),
-                "settings": settings,
             },
         )
 
@@ -255,7 +250,6 @@ def join(request, training_id):
         {
             "training": event,
             "host": request.META.get("HTTP_HOST", None),
-            "settings": settings,
         },
     )
 
@@ -287,7 +281,6 @@ def status(request, training_id):
             {
                 "message": "Training does not exist",
                 "host": request.META.get("HTTP_HOST", None),
-                "settings": settings,
             },
         )
 
@@ -342,6 +335,5 @@ def status(request, training_id):
             "state": state_summary,
             "wf_state": wf_state_summary,
             "refresh": refresh,
-            "settings": settings,
         },
     )
