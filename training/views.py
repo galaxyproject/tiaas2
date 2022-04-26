@@ -70,8 +70,7 @@ def thanks(request):
 def stats_csv(request):
     data = "name,code,pop\n"
     trainings = (
-        Training.objects.all()
-        .exclude(training_identifier="test")
+        Training.objects.exclude(training_identifier="test")
         .filter(processed="AP")
     )
     locations = collections.Counter()
@@ -90,7 +89,10 @@ def stats_csv(request):
 def numbers_csv(request):
     data = "id,start,end,location,use_gtn,attendance\n"
 
-    trainings = Training.objects.all().exclude(training_identifier="test").filter(processed="AP")
+    trainings = (
+        Training.objects.exclude(training_identifier="test")
+        .filter(processed="AP")
+    )
     for t in trainings:
         countries = [x.code for x in t.location]
         data += f"{t.id},{t.start},{t.end},{'|'.join(countries)},{t.use_gtn},{t.attendance}\n"
