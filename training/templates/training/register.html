@@ -4,6 +4,7 @@
 
 
 {% block head %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="{% static 'training/css/register.css' %}">
 {% endblock %}
 
@@ -61,8 +62,29 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 				{% bootstrap_field form.start form_group_class="col-md-6" %}
 				{% bootstrap_field form.end form_group_class="col-md-6" %}
 			</div>
-			{% bootstrap_field form.location form_group_class="form-group short-field" %}
-			{% bootstrap_field form.training_identifier  form_group_class="form-group short-field" %}
+
+			<!-- bootstrap_field form.location form_group_class="form-group select2" -->
+
+			<div class="form-group">
+				<label class="control-label" for="location">Training location(s)</label>
+				<select
+					class="form-control select2"
+					name="location"
+					id="location"
+					multiple="true"
+					aria-describedby="emailHelp"
+					required
+				>
+					{% for code, country in form.location.field.choices %}
+					<option value="{{ code }}"> {{ country }} </option>
+					{% endfor %}
+				</select>
+				<div id="locationHelp" class="form-text">
+					This is where the training will be hosted.
+				</div>
+			</div>
+
+			{% bootstrap_field form.training_identifier form_group_class="form-group short-field" %}
 		</div>
 
 		<hr>
@@ -126,8 +148,12 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 
 
 {% block script %}
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script type="text/javascript">
 	$(document).ready( () => {
+		$('.select2').select2();
 		// Validation functions
 	})
 </script>

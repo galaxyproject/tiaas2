@@ -15,7 +15,7 @@ class Training(models.Model):
     start = models.DateField()
     end = models.DateField()
     website = models.URLField(blank=True)
-    location = CountryField(multiple=False, blank_label="Select country")
+    location = CountryField(multiple=True, blank_label="Select country")
     use_gtn = models.CharField(
         max_length=1, choices=(("Y", "Yes"), ("N", "No")), default="N"
     )

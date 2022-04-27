@@ -86,16 +86,14 @@ class TrainingForm(forms.ModelForm):
                 " you?"),
             "training_identifier": (
                 "A unique name to help identify your training resources."
-                " Please use only alphanumeric and -_ characters."),
-            "location": "Where the training will be hosted.",
+                " Please use only alphanumeric and -_ characters. 20"
+                " characters maximum."),
         }
 
         widgets = {
-            "country": CountrySelectWidget(),
             "start": forms.SelectDateWidget(),
             "end": forms.SelectDateWidget(),
             "title": forms.TextInput(),
-            "location": forms.Select(),
             "description": forms.Textarea(attrs={'rows': 4}),
             "gtn_links": forms.Textarea(attrs={'rows': 4}),
             "non_gtn_links": forms.Textarea(attrs={'rows': 4}),
