@@ -84,7 +84,7 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 				</div>
 			</div>
 
-			{% bootstrap_field form.training_identifier form_group_class="form-group short-field" %}
+			{% bootstrap_field form.training_identifier form_group_class="form-group short-field autocomplete-off" %}
 		</div>
 
 		<hr>
@@ -154,7 +154,16 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 <script type="text/javascript">
 	$(document).ready( () => {
 		$('.select2').select2();
-		// Validation functions
+		$('.autocomplete-off input').attr('autocomplete', 'off');
+
+		// Reorder short form components with the help text below the label
+		$('.x-short-field').each( (i, item) => {
+			const input = $(item).children('.form-control');
+			$(item).children('.help-block').insertBefore(input);
+		});
+
+		// Validation?
+
 	})
 </script>
 {% endblock %}

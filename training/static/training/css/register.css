@@ -22,6 +22,9 @@ h2 {
 .help-block {
 	font-size: 0.8rem;
 }
+.x-short-field .help-block{
+	margin-bottom: 0.5rem;
+}
 .bootstrap3-multi-input {
 	margin-left: 0;
 	margin-right: 0;
