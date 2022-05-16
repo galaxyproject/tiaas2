@@ -8,7 +8,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'formatters': {
-            'verbose': {
+            'simple': {
                 'format': '{levelname} | {asctime} | {module}: {message}',
                 'style': '{',
             },
