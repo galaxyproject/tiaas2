@@ -112,6 +112,7 @@ USE_TZ = True
 STATIC_URL = "/tiaas/static/"
 STATIC_ROOT = "./static"
 
+TIAAS_LOG_FILE = None         # Add path in local conf to enable
 TIAAS_SHOW_ADVERTISING = True
 TIAAS_GDPR_RETAIN_EXTRA = 12  # months
 
@@ -121,5 +122,9 @@ try:
     from config.local_settings import *
 except Exception as e:
     print(e)
+
+if TIAAS_LOG_FILE:
+    from tiaas.logging import LOGGING
+    LOGGING['handlers']['file']['filename'] = TIAAS_LOG_FILE
 
 GIT_COMMIT_ID = git.get_commit_id(BASE_DIR)
