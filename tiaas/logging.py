@@ -1,6 +1,5 @@
 """Logging configuration."""
 
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -19,14 +18,17 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '/tmp/main.log',
+            'filename': '/tmp/tiaas.log',
             'backupCount': 5,
             'maxBytes': 1000000,  # 1MB ~ 20k rows
             'formatter': 'verbose',
         },
     },
-    'django': {
-        'handlers': ['console', 'file'],
-        'level': 'DEBUG',
-    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    }
 }
