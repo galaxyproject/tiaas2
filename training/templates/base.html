@@ -71,7 +71,7 @@
 			<b>Training Infrastructure as a Service (TIaaS)</b>
 			licensed under the AGPLv3, running commit
 			<a
-				href="https://github.com/usegalaxy-eu/tiaas2/commit/{{ settings.GIT_COMMIT_ID }}"
+				href="{{ settings.GIT_REMOTE_URL }}/tree/{{ settings.GIT_COMMIT_ID }}"
 				target="_blank"
 			>{{ settings.GIT_COMMIT_ID }}</a>
 		</div>
@@ -82,14 +82,13 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 	<script type="text/javascript">
+		const LOCATIONS = {
+			'tiaas': 'home',
+			'tiaas/new': 'request',
+			'tiaas/calendar': 'calendar',
+		}
 		$(document).ready( () => {
 			// Set current page nav link to 'active'
-			const LOCATIONS = {
-				'tiaas': 'home',
-				'tiaas/new': 'request',
-				'tiaas/calendar': 'calendar',
-			}
-
 			const loc = window.location.pathname.replace(/^\/+|\/+$/g, '');
 			if (LOCATIONS[loc]) {
 				$('.nav-link').removeClass('active');

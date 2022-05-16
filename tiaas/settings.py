@@ -128,3 +128,4 @@ if TIAAS_LOG_FILE:
     LOGGING['handlers']['file']['filename'] = TIAAS_LOG_FILE
 
 GIT_COMMIT_ID = git.get_commit_id(BASE_DIR)
+GIT_REMOTE_URL = git.get_remote_url(BASE_DIR)
