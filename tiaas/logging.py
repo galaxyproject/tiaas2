@@ -1,30 +1,28 @@
 """Logging configuration."""
 
-import logging
-
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'handlers': {
-        'formatters': {
-            'simple': {
-                'format': '{levelname} | {asctime} | {module}: {message}',
-                'style': '{',
-            },
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} | {asctime} | {module}: {message}',
+            'style': '{',
         },
+    },
+    'handlers': {
         'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter': 'simple',
+            'formatter': 'verbose',
         },
         'file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '/var/log/tiaas/main.log',
+            'filename': '/tmp/main.log',
             'backupCount': 5,
             'maxBytes': 1000000,  # 1MB ~ 20k rows
-            'formatter': 'simple',
+            'formatter': 'verbose',
         },
     },
     'django': {
