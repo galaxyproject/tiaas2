@@ -3,7 +3,7 @@
 import random
 import factory
 import datetime
-from factory import lazy_attribute, LazyFunction
+from factory import lazy_attribute
 from factory.django import DjangoModelFactory
 
 from .models import Training
@@ -53,7 +53,7 @@ class TrainingFactory(DjangoModelFactory):
         )
     )
     website = factory.Faker('ascii_email')
-    location = factory.Faker('country')
+    location = factory.Faker('country_code')
     use_gtn = factory.Faker(
         'random_element',
         elements=['Y', 'N'],

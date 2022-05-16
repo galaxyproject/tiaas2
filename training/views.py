@@ -77,8 +77,9 @@ def stats_csv(request):
     codes = {}
 
     for t in trainings:
-        locations[t.location.alpha3] += 1
-        codes[t.location.alpha3] = t.location.name
+        for loc in t.location:
+            locations[loc.alpha3] += 1
+            codes[loc.alpha3] = loc.name
 
     for k, v in locations.items():
         data += f"{codes[k]},{k},{v}\n"
@@ -95,7 +96,14 @@ def numbers_csv(request):
     )
     for t in trainings:
         countries = [x.code for x in t.location]
-        data += f"{t.id},{t.start},{t.end},{'|'.join(countries)},{t.use_gtn},{t.attendance}\n"
+        data += ','.join([
+            t.id,
+            t.start,
+            t.end,
+            '|'.join(countries),
+            t.use_gtn,
+            t.attendance,
+        ]) + '\n'
 
     return HttpResponse(data, content_type="text/csv")
 
@@ -105,9 +113,18 @@ def trainings_for(trainings, year, month, day):
     if day == 0:
         return 0
     if year == 2020 and month == 1:
-        print(day, [x for x in trainings if x.start <= date(year, month, day) <= x.end])
+        print(
+            day,
+            [
+                x for x in trainings
+                if x.start <= date(year, month, day) <= x.end
+            ]
+        )
 
-    return len([x for x in trainings if x.start <= date(year, month, day) <= x.end])
+    return len([
+        x for x in trainings
+        if x.start <= date(year, month, day) <= x.end
+    ])
 
 
 def calendar_view(request):
@@ -138,12 +155,18 @@ def stats(request):
     days = sum([(x.end - x.start).days for x in trainings])
     students = sum([x.attendance for x in trainings])
 
-    current_trainings = len([x for x in trainings if x.start <= date.today() <= x.end])
+    current_trainings = len([
+        x for x in trainings
+        if x.start <= date.today() <= x.end
+    ])
     earliest = min([x.start for x in trainings])
 
     locations = collections.Counter()
     for t in trainings:
-        locations[t.location] += 1
+        for loc in t.location:
+            locations[loc.name] += 1
+
+    print("Locations:\n", locations)
 
     return render(
         request,
@@ -273,7 +296,8 @@ def _summarize(d):
 def status(request, training_id):
     training_id = training_id.lower()
 
-    trainings = Training.objects.all().filter(training_identifier__iexact=training_id)
+    trainings = Training.objects.all().filter(
+        training_identifier__iexact=training_id)
     any_approved = any([t.processed == "AP" for t in trainings])
 
     if len(trainings) == 0 or not any_approved:
