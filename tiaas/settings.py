@@ -114,7 +114,7 @@ STATIC_ROOT = "./static"
 
 TIAAS_LOG_FILE = None         # Add path in local conf to enable
 TIAAS_SHOW_ADVERTISING = True
-TIAAS_GDPR_RETAIN_EXTRA = 12  # months
+TIAAS_GDPR_RETAIN_EXTRA_MONTHS = 12
 
 LOGOUT_REDIRECT_URL = '/tiaas/'
 

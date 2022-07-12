@@ -19,22 +19,8 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 <div class="container">
 	<h1>Apply for a new allocation</h1>
 
-	<div class="my-5 text-danger">
-		<p>
-			<em>N.B. Placeholder text in red throughout</em>
-		</p>
-
-		<p class="lead">
-			Please use this form to request a new training reservation on
-			{{ settings.TIAAS_OWNER }}.
-		</p>
-
-		<p class="alert alert-success">
-			<b>Hint:</b>
-			Check the
-			<a href="/tiaas/calendar">training calendar</a>
-			before making a request!
-		</p>
+	<div class="my-5">
+		{% include 'snippets/register/1_intro.html' %}
 	</div>
 
 	<form action="{% url 'register' %}" method="post" class="form">
@@ -43,27 +29,32 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 		<div>
 			{% bootstrap_field form.name placeholder="" form_group_class="form-group short-field" %}
 			{% bootstrap_field form.email placeholder="" form_group_class="form-group short-field" %}
+
+			{% if settings.TIAAS_RETAIN_CONTACT_CONSENT %}
 			{% bootstrap_field form.retain_contact show_label=False %}
+			{% endif %}
 		</div>
 
 		<hr>
 
 		<h2>About the Course</h2>
 
-		<p class="text-danger">
-			{% lorem 5 w %}
-		</p>
+		{% include 'snippets/register/2_about_the_course.html' %}
 
 		<div>
 			{% bootstrap_field form.title placeholder="" %}
 			{% bootstrap_field form.website placeholder="" %}
 			{% bootstrap_field form.description placeholder="" %}
 			<div class="row">
+				<p class="alert alert-success">
+					<b>Hint:</b>
+					Check the
+					<a href="/tiaas/calendar">training calendar</a>
+					before selecting a date! Quiet dates are more likely to be accepted.
+				</p>
 				{% bootstrap_field form.start form_group_class="col-md-6" %}
 				{% bootstrap_field form.end form_group_class="col-md-6" %}
 			</div>
-
-			<!-- bootstrap_field form.location form_group_class="form-group select2" -->
 
 			<div class="form-group">
 				<label class="control-label" for="location">Training location(s)</label>
@@ -72,7 +63,7 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 					name="location"
 					id="location"
 					multiple="true"
-					aria-describedby="emailHelp"
+					aria-describedby="locationHelp"
 					required
 				>
 					{% for code, country in form.location.field.choices %}
@@ -91,9 +82,7 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 
 		<h2>Estimating Resource Usage</h2>
 
-		<p class="text-danger">
-			{% lorem 5 w %}
-		</p>
+		{% include 'snippets/register/3_resource_usage.html' %}
 
 		<div>
 			{% bootstrap_field form.use_gtn form_group_class="form-group x-short-field" show_label=True %}
@@ -108,9 +97,7 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 
 		<h2>Advertising</h2>
 
-		<p class="text-danger">
-			{% lorem 5 w %}
-		</p>
+		{% include 'snippets/register/4_advertising.html' %}
 
 		<div>
 			{% bootstrap_field form.advertise show_label=True form_group_class="form-group x-short-field" %}
@@ -126,15 +113,15 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 
 		<br><br>
 
-		<p class="text-danger">
-			{% lorem 5 w %}
-		</p>
-
 		<p class="lead">Anything else to add?</p>
 
 		<div>
 			{% bootstrap_field form.other_requests show_label=False placeholder="Comments" %}
 		</div>
+
+
+		{% include 'snippets/register/5_conclusion.html' %}
+
 
 		{% buttons %}
 		<button type="submit" class="btn btn-primary">

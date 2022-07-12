@@ -1,8 +1,15 @@
+import string
 from django import forms
 from django.conf import settings
 from django_countries.widgets import CountrySelectWidget
 
 from . import models
+
+IDENTIFIER_ALLOWED_CHARS = (
+    string.ascii_lowercase
+    + string.digits
+    + '-'
+)
 
 
 class TrainingForm(forms.ModelForm):
@@ -38,7 +45,7 @@ class TrainingForm(forms.ModelForm):
             "email": "Contact email",
             "retain_contact": (
                 "Permission to retain your contact information for"
-                f" {settings.TIAAS_GDPR_RETAIN_EXTRA} months"
+                f" {settings.TIAAS_GDPR_RETAIN_EXTRA_MONTHS} months"
             ),
             "description": "Brief overview of your planned workshop content",
             "start": "Start of your course",
@@ -67,17 +74,18 @@ class TrainingForm(forms.ModelForm):
                 f'{settings.TIAAS_GALAXY_SITE}</a>'),
             "gtn_links": (
                 "If you are using official training materials: which ones?"
-                " Please provide the topic + material name, or URLs so we can"
-                " find it."),
+                " Please provide the topic and material name, or URLs so we"
+                " can find it."),
             "non_gtn_links": (
                 "If not using official training materials, can you provide"
                 " URLs to your workflows, or just simply a list of all tool"
                 " IDs that you will run. We need the internal Galaxy tool IDs"
-                " (if you right click a tool in the Galaxy  UI + copy link"
-                " location, this will provide the tool ID in the URL)"),
+                " (if you right click a tool in the Galaxy UI and copy link"
+                " location, the link will contain the tool ID)."),
             "retain_contact": (
                 "If you consent we will retain your information for a longer"
-                " period of time. We will use this to contact you regarding"
+                f" period of time ({settings.TIAAS_GDPR_RETAIN_EXTRA_MONTHS}"
+                " months). We will use this to contact you regarding"
                 " letters of support for our continued funding, and similar"
                 " matters."),
             "blogpost": (
@@ -86,8 +94,8 @@ class TrainingForm(forms.ModelForm):
                 " you?"),
             "training_identifier": (
                 "A unique name to help identify your training resources."
-                " Please use only alphanumeric and -_ characters. 20"
-                " characters maximum."),
+                " Please use only lowercase letters, numbers and dash (-)"
+                " characters. 20 characters maximum."),
         }
 
         widgets = {
@@ -100,3 +108,26 @@ class TrainingForm(forms.ModelForm):
             "attendance": forms.NumberInput(attrs={"min": 1}),
             "other_requests": forms.Textarea(attrs={'rows': 4}),
         }
+
+    def clean(self):
+        """Validate and clean submitted content."""
+        data = self.cleaned_data
+        data['training_identifier'] = validate_identifier(
+            data['training_identifier'])
+        return data
+
+
+def validate_identifier(identifier):
+    """Validate that identifier complies with requirements."""
+    identifier = identifier.lower()
+    allowed = set(IDENTIFIER_ALLOWED_CHARS)
+    submitted = set(identifier)
+    if submitted - allowed:
+        for i, char in enumerate(identifier):
+            if char not in IDENTIFIER_ALLOWED_CHARS:
+                raise ValueError(
+                    f'Invalid character "{char}" at position {i + 1}.'
+                )
+        # Should never get to this point, but let's catch anyway
+        raise ValueError("Invalid character(s) in submitted identifier.")
+    return identifier

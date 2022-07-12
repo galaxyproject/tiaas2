@@ -27,16 +27,12 @@ def register(request):
         form = TrainingForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            # process the data in form.cleaned_data as required
-            safe_id = form.cleaned_data["training_identifier"].lower()
-            safe_id = re.sub(r"[^a-z0-9_-]*", "", safe_id)
-
-            form.cleaned_data["training_identifier"] = safe_id
             form.save()
 
             if settings.TIAAS_SEND_EMAIL_TO:
+                identifier = form.cleaned_data['training_identifier']
                 send_mail(
-                    f"New TIaaS Request ({safe_id})",
+                    f"New TIaaS Request ({identifier})",
                     (
                         'We received a new tiaas request. View it in the '
                         '<a href="'
@@ -65,6 +61,11 @@ def about(request):
 
 def thanks(request):
     return render(request, "training/thanks.html")
+
+
+def dashboard_example(request):
+    """Show the example training dashboard page."""
+    return render(request, 'training/dashboard-example.html')
 
 
 def stats_csv(request):

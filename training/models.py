@@ -50,7 +50,7 @@ class Training(models.Model):
     def gdpr_clean(self):
         days = 60
         if self.retain_contact:
-            days = int(settings.TIAAS_GDPR_RETAIN_EXTRA) * 30
+            days = int(settings.TIAAS_GDPR_RETAIN_EXTRA_MONTHS) * 30
 
         return (date.today() - self.end).days > days
 
@@ -73,6 +73,14 @@ class Training(models.Model):
             return f"Redacted"
         else:
             return self.name
+
+    @property
+    def str_locations(self):
+        """Return locations as comma-delimited string."""
+        return ', '.join([
+            x.name
+            for x in self.location
+        ])
 
     def __str__(self):
         return self.training_identifier

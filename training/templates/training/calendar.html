@@ -18,6 +18,8 @@
 
   <p>{{ n_events }} events scheduled</p>
 
+  {% include 'snippets/calendar/intro.html' %}
+
   <noscript>
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
   </noscript>
@@ -262,6 +264,7 @@
 <script>
   const COLORS = [
     'blue',
+    {% if user.is_staff %}
     'red',
     'orange',
     'pink',
@@ -269,6 +272,7 @@
     'brown',
     'purple',
     'grey',
+    {% endif %}
   ];
 
   new Vue({
@@ -320,7 +324,7 @@
             email: "{{ event.email }}",
             description: "{{ event.description }}",
             website: "{{ event.website }}",
-            location: "{{ event.location }}",
+            location: "{{ event.str_locations }}",
             use_gtn: "{{ event.use_gtn|yesno:'Yes,No' }}",
             attendance: {{ event.attendance }},
             identifier: "{{ event.training_identifier }}",

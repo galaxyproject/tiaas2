@@ -16,13 +16,7 @@
   </div>
 
   <div class="my-5">
-    <p>
-      {{ settings.TIAAS_OWNER }}
-      is proud to provide Training Infrastructure as a Service (TIaaS) for the
-      Galaxy training community.
-      You provide the training, we provide the
-      infrastructure and cover all costs.
-    </p>
+    {% include 'snippets/about/1_intro.html' %}
   </div>
 
   <h3> Why TIaaS?</h3>
@@ -35,8 +29,7 @@
         </div>
 
         <div class="card-text">
-          All costs are covered by the Australian BioCommons for Australian
-          users.
+          {% include 'snippets/about/2_why_tiaas_funding.txt' %}
         </div>
       </div>
     </div>
@@ -49,7 +42,7 @@
 
         <div class="card-text">
           Priority job queue to service your training event effectively. See our
-          <a href="#">Event Dashboard</a>.
+          <a href="/tiaas/dashboard-example">Event Dashboard</a>.
         </div>
       </div>
     </div>
@@ -85,11 +78,7 @@
   <section>
     <h3>Eligibility</h3>
 
-    <p>
-      We have access to large computing capacity, some of which is dedicated
-      to provide training for our service. Anyone who provides training using
-      Galaxy is eligible to request the use of this service.
-    </p>
+    {% include 'snippets/about/3_eligibility.html' %}
 
     <div class="my-5">
       <a class="ga-btn" href="/tiaas/new">Apply now</a>
@@ -99,13 +88,7 @@
   <section>
     <h3>How does it work?</h3>
 
-    <p class="text-info">
-      {% lorem 50 w %}
-    </p>
-
-    <p class="text-info">
-      {% lorem 100 w %}
-    </p>
+    {% include 'snippets/about/4_how_does_it_work.html' %}
 
     <p>
       Check our current schedule with the
