@@ -16,9 +16,11 @@
 <div class="container">
   <h2>Scheduled events</h2>
 
-  <p>{{ n_events }} events scheduled</p>
+  <p class="alert alert-primary">{{ n_events }} events scheduled</p>
 
   {% include 'snippets/calendar/intro.html' %}
+
+  <br>
 
   <noscript>
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
