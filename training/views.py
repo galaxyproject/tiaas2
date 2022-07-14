@@ -1,6 +1,7 @@
 import collections
 import re
 from datetime import date
+from django_countries import countries
 
 from django.conf import settings
 from django.core.mail import send_mail
@@ -148,38 +149,53 @@ def calendar_view(request):
 
 
 def stats(request):
-    trainings = Training.objects.all().exclude(
+    trainings = Training.objects.exclude(
         training_identifier="test"
     )  # Exclude the 'test' group from showing up in calendar
-    approved = len([x for x in trainings if x.processed == "AP"])
-    waiting = len([x for x in trainings if x.processed == "UN"])
-    days = sum([(x.end - x.start).days for x in trainings])
-    students = sum([x.attendance for x in trainings])
 
-    current_trainings = len([
-        x for x in trainings
-        if x.start <= date.today() <= x.end
-    ])
-    earliest = min([x.start for x in trainings])
+    approved = trainings.filter(processed="AP")
+    # approved = len([x for x in trainings if x.processed == "AP"])
 
+    waiting = trainings.filter(processed="UN")
+    # waiting = len([x for x in trainings if x.processed == "UN"])
+
+    days = sum(
+        (end - start).days
+        for end, start in
+        approved.values_list('end', 'start')
+    )
+    # days = sum([(x.end - x.start).days for x in trainings])
+
+    students = sum(approved.values_list('attendance', flat=True))
+    # students = sum([x.attendance for x in trainings])
+
+    today = date.today()
+    current = approved.filter(start__lte=today, end__gte=today)
+    # current_trainings = len([
+    #     x for x in trainings
+    #     if x.start <= date.today() <= x.end
+    # ])
+
+    earliest = min(approved.values_list('start', flat=True))
+    # earliest = min([x.start for x in trainings])
+
+    countries_lookup = dict(countries)
     locations = collections.Counter()
-    for t in trainings:
-        for loc in t.location:
-            locations[loc.name] += 1
-
-    print("Locations:\n", locations)
+    for locs in approved.values_list('location', flat=True):
+        for loc in locs.split(','):
+            locations[countries_lookup[loc]] += 1
 
     return render(
         request,
         "training/stats.html",
         {
             "trainings": trainings,
-            "waiting": waiting,
-            "approved": approved,
+            "waiting": waiting.count(),
+            "approved": approved.count(),
             "days": days,
             "students": students,
             "locations": dict(locations.items()),
-            "current_trainings": current_trainings,
+            "current_trainings": current.count(),
             "earliest": earliest,
         },
     )
