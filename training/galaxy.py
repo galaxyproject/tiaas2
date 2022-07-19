@@ -18,12 +18,24 @@ TRAINING_QUEUE_HEADERS = [
     "user_id",
     "create_time",
 ]
-TRAINING_QUEUE_QUERY = """
+
+HIDDEN_USERNAME = """
+    substring(md5(COALESCE(galaxy_user.username, 'Anonymous') || now()::date), 0, 7)
+"""
+
+EXPOSED_USERNAME= """galaxy_user.username"""
+
+if settings.TIAAS_EXPOSE_USERNAME:
+    USERNAME = EXPOSED_USERNAME
+else:
+    USERNAME = HIDDEN_USERNAME
+
+TRAINING_QUEUE_QUERY = f"""
 SELECT
         job.state,
         job.job_runner_external_id AS extid,
         regexp_replace(job.tool_id, '.*toolshed.*/repos/', ''),
-        substring(md5(COALESCE(galaxy_user.username, 'Anonymous') || now()::date), 0, 7),
+        {USERNAME},
         date_trunc('second', job.create_time) AS created
 FROM
         job, galaxy_user
@@ -46,9 +58,9 @@ ORDER BY
 LIMIT 300
 """
 
-TRAINING_USERS_QUERY = """
+TRAINING_USERS_QUERY = f"""
 SELECT
-        substring(md5(COALESCE(galaxy_user.username, 'Anonymous') || now()::date), 0, 7)
+    {USERNAME}
 FROM
         galaxy_user
 WHERE
@@ -73,10 +85,10 @@ TRAINING_WF_QUEUE_HEADERS = [
     "state",
     "id",
 ]
-TRAINING_WF_QUEUE_QUERY = """
+TRAINING_WF_QUEUE_QUERY = f"""
 
 SELECT
-    substring(md5(COALESCE(galaxy_user.username, 'Anonymous') || now()::date), 0, 7),
+    {USERNAME},
     date_trunc('second', workflow.create_time) AS created,
     workflow.name,
     workflow_invocation.state,

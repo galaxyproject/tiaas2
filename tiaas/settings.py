@@ -136,6 +136,10 @@ TIAAS_SEND_EMAIL_TO = "root@localhost"
 TIAAS_SEND_EMAIL_FROM = "tiaas+noreply@example.org"
 
 TIAAS_SHOW_ADVERTISING = True
+TIAAS_REDIRECT_LOCATION = TIAAS_DOMAIN
+
+# Expose the username publicly in the status page, rather than an encoded ID.
+TIAAS_EXPOSE_USERNAME = True
 
 # EMAIL_HOST
 # EMAIL_PORT
