@@ -127,10 +127,10 @@ STATIC_URL = "/tiaas/static/"
 STATIC_ROOT = "./static"
 
 GALAXY_SECRET = "USING THE DEFAULT IS NOT SECURE!"
-TIAAS_OWNER = "UseGalaxy.eu"
-TIAAS_EMAIL = "galaxy@informatik.uni-freiburg.de"
-TIAAS_OWNER_SITE = "https://galaxyproject.eu"
-TIAAS_DOMAIN = "https://usegalaxy.eu"
+TIAAS_OWNER = "Galaxy Antartica" # A human-readable name 
+TIAAS_EMAIL = "admin@example.org"
+TIAAS_OWNER_SITE = "https://example.org" # Your website, if you have one.
+TIAAS_DOMAIN = "https://galaxy.example.org" # Your Galaxy instance
 
 TIAAS_SEND_EMAIL_TO = "root@localhost"
 TIAAS_SEND_EMAIL_FROM = "tiaas+noreply@example.org"
@@ -139,7 +139,7 @@ TIAAS_SHOW_ADVERTISING = True
 TIAAS_REDIRECT_LOCATION = TIAAS_DOMAIN
 
 # Expose the username publicly in the status page, rather than an encoded ID.
-TIAAS_EXPOSE_USERNAME = True
+TIAAS_EXPOSE_USERNAME = False
 
 # EMAIL_HOST
 # EMAIL_PORT
