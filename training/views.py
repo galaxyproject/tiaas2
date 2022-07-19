@@ -28,39 +28,33 @@ from .models import Training
 def register(request):
     if request.method != "POST":
         # if a GET (or any other method) we'll create a blank form
-        form = TrainingForm()
-    else:
-        # create a form instance and populate it with data from the request:
-        form = TrainingForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            form.save()
-            if settings.TIAAS_SEND_EMAIL_TO:
-                identifier = form.cleaned_data["training_identifier"]
-                host = request.META.get("HTTP_HOST", "localhost")
-                send_mail(
-                    "New TIaaS Request (%s)" % identifier,
-                    "We received a new tiaas request. View it in the"
-                    '<a href="https://%s/tiaas/admin/training/training/?processed__exact=UN">admin dashboard</a>'  # noqa: E501
-                    % host,
-                    settings.TIAAS_SEND_EMAIL_FROM,
-                    [settings.TIAAS_SEND_EMAIL_TO],
-                    fail_silently=True,  # on the fence about this one. (Same. TODO)
-                )
-            return HttpResponseRedirect(reverse("thanks"))
-        else:
-            return render(
-                request, "training/register.html", {"form": form, "settings": settings}
-            )
-
-    # if a GET (or any other method) we'll create a blank form
-    else:
         form = TrainingForm(initial=request.GET.dict())
+        return render(
+            request, "training/register.html", {"form": form, "settings": settings}
+        )
 
-    return render(
-        request, "training/register.html", {"form": form, "settings": settings}
-    )
-
+    # create a form instance and populate it with data from the request:
+    form = TrainingForm(request.POST)
+    # check whether it's valid:
+    if form.is_valid():
+        form.save()
+        if settings.TIAAS_SEND_EMAIL_TO:
+            identifier = form.cleaned_data["training_identifier"]
+            host = request.META.get("HTTP_HOST", "localhost")
+            send_mail(
+                "New TIaaS Request (%s)" % identifier,
+                "We received a new tiaas request. View it in the"
+                '<a href="https://%s/tiaas/admin/training/training/?processed__exact=UN">admin dashboard</a>'  # noqa: E501
+                % host,
+                settings.TIAAS_SEND_EMAIL_FROM,
+                [settings.TIAAS_SEND_EMAIL_TO],
+                fail_silently=True,  # on the fence about this one. (Same. TODO)
+            )
+        return HttpResponseRedirect(reverse("thanks"))
+    else:
+        return render(
+            request, "training/register.html", {"form": form, "settings": settings}
+        )
 
 def about(request):
     return render(request, "training/about.html", {"settings": settings})
