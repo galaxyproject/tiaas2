@@ -15,6 +15,9 @@ class Command(BaseCommand):
         yesterday = datetime.date.today() - datetime.timedelta(days=1)
         for event in Training.objects.filter(end__lte=yesterday):
             print(f"Removing users from {event}")
+            if event.gdpr_clean:
+                event._redact()
+
             try:
                 print(disassociate_role(event.training_identifier.lower(), commit=commit))
             except ProgrammingError as pe:
