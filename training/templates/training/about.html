@@ -3,8 +3,8 @@
 
 {% block content %}
 <h1>TIaaS</h1>
-<p><img src="https://galaxyproject.eu/assets/media/tiaas-logo.png" alt="tiaas logo depicting people in queues" width="300em" style="margin: 1em"></p>
-<p><a href="{{ settings.TIAAS_OWNER_SITE }}">{{ settings.TIAAS_OWNER }}</a> is proud to provide Training Infrastructure as a Service (TIaaS) for the Galaxy training community. You provide the training, we provide the infrastructure <i>at no cost</i>.</p>
+<p><img src="https://galaxyproject.eu/assets/media/tiaas-logo.png" alt="tiaas logo depicting people in queues" class="tiaas_logo"></p>
+<p><a href="https://usegalaxy.eu">UseGalaxy.eu</a> is proud to provide Training Infrastructure as a Service (TIaaS) for the Galaxy training community. You provide the training, we provide the infrastructure <i>at no cost</i>.</p>
 <h2 id="why-tiaas">Why TIaaS?</h2>
 
 <ul>
@@ -30,7 +30,7 @@
 <p>We have significant capacity and have dedicated some of this to providing training using our service. Anyone providing training on using Galaxy is eligible to request the use of this service.</p>
 
 <p>
-<a style="font-size: 200%;font-weight: 900;border: 1px solid black;padding: 0.5em;" href="{% url 'register' %}">Apply now!</a>
+<a class="btn_apply" href="{% url 'register' %}">Apply now!</a>
 </p>
 
 <h2>Stats</h2>

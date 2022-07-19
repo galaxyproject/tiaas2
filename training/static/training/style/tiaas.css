@@ -1,0 +1,89 @@
+/* add custom css to overwrite galaxy.css here */
+
+/* base.html ********************************************************/
+
+#center {
+  padding-right: 10em;
+  padding-left: 10em;
+  overflow-y: auto;
+}
+
+#everything {
+  overflow-y: scroll!important;
+}
+
+#center {
+  padding-top: 3em;
+  overflow-y: scroll!important;
+}
+
+#columns .text-center {
+  margin: 3em 0;
+  border-top: 1px solid gray;
+  padding: 1em;
+}
+
+/* about.html *******************************************************/
+
+.btn_apply {
+  font-size: 200%;
+  font-weight: 900;
+  border: 1px solid black;
+  padding: 0.5em;
+}
+
+.tiaas_logo {
+  margin: 1em;
+  width: 22em;
+}
+
+/* register.html ****************************************************/
+
+.register {
+  font-size: 16px;
+}
+
+.register .editable {
+  border-left: 4px solid gold;
+  padding-left: 1em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.register .row.bootstrap3-multi-input {
+  margin-left: 0px;
+}
+
+.register .control-label{
+  font-weight: 900;
+  font-size: 115%
+}
+
+/* calendar.html */
+.calendar .date {
+  padding: 0.3em;
+}
+
+/* form validation **************************************************/
+
+div.error input,
+div.error select {
+  background: #fcfaf0;
+}
+
+div.error label.control-label,  /* field label */
+div.error input + div,          /* help text after text input */
+div.error div.row + div {       /* help text after bootstrap row w/select inputs */
+  color: red;
+}
+
+div.alert-danger {
+    color:red;
+    background-color: #f8d7da;
+    border-color: red;
+    margin-top: 1em;
+}
+
+div.alert-danger ul {
+  margin-bottom: 0;
+}

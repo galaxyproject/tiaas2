@@ -1,9 +1,15 @@
 from datetime import date
 
 from django.conf import settings
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MinValueValidator
 from django.db import models
 from django_countries.fields import CountryField
+
+from .validators import validate_date_precedence, validate_identifier
+
+
+REDACTION_CODE = 'redacted'
+REDACTED_EMAIL = REDACTION_CODE + '@example.com'
 
 
 class Training(models.Model):
@@ -22,7 +28,8 @@ class Training(models.Model):
     gtn_links = models.TextField(blank=True)
     non_gtn_links = models.TextField(blank=True)
     attendance = models.IntegerField(validators=[MinValueValidator(1)])
-    training_identifier = models.CharField(max_length=20)
+    training_identifier = models.CharField(
+        max_length=20, unique=True, validators=[validate_identifier])
     advertise_eu = models.CharField(
         max_length=1, choices=(("Y", "Yes"), ("N", "No")), default="N"
     )
@@ -57,22 +64,22 @@ class Training(models.Model):
     @property
     def safe_email(self):
         if self.gdpr_clean:
-            self.name = "GDPR Redacted"
-            self.email = "<gdpr-redacted>"
-            self.save()
-            return f""
-        else:
-            return self.email
+            self._redact()
+        return self.email
 
     @property
     def safe_name(self):
         if self.gdpr_clean:
-            self.name = "GDPR Redacted"
-            self.email = "<gdpr-redacted>"
-            self.save()
-            return f"Redacted"
-        else:
-            return self.name
+            self._redact()
+        return self.name
+
+    def _redact(self):
+        self.name = REDACTION_CODE
+        self.email = REDACTED_EMAIL
+        self.save()
 
     def __str__(self):
         return self.training_identifier
+
+    def clean(self):
+        validate_date_precedence(self.start, self.end, 'end')
