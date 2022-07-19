@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
+{% load markdownify %}
 
 {% block content %}
 
@@ -7,6 +8,8 @@
 {% csrf_token %}
 
 <h1>{{ settings.TIAAS_OWNER }}'s Training Infrastructure as a Service</h1>
+
+{{ settings.DOCUMENTATION | markdownify }}
 
 {% if form.all_error_messages %}
     <div class="alert alert-danger">Please correct the following errors in the form below:
@@ -18,25 +21,6 @@
     </div>
 {% endif %}
 
-<p>
-We want to help you conduct your training seminars. Where you provide the training, we can
-provide you training infrastructure as a service (TIaaS). Some of the benefits of using our 
-{{ settings.TIAAS_OWNER }} infrastructure:
-</p>
-
-<ul>
-    <li>Private queue, no wait times</li>
-    <li>No Galaxy Maintenance</li>
-    <li>No Galaxy Administration</li>
-    <li>Free</li>
-</ul>
-
-<p>
-Please note that we do provide this service for free to everyone, so we ask you kindly likewise
-ensure that no one is restricted in their participation (e.g. due to sex/age/race/too high course
-fees/etc.). You can read more about TIaaS on <a href="https://galaxyproject.eu/tiaas">Galaxy
-Europe's info page</a>.
-</p>
 
 {% if settings.TIAAS_SHOW_ADVERTISING %}
 <p>

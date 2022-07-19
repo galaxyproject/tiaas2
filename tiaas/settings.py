@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "django_countries",
     "django.contrib.humanize",
     "bootstrap3",
+    "markdownify",
 ]
 
 MIDDLEWARE = [
@@ -112,6 +113,28 @@ TIAAS_GDPR_RETAIN_EXTRA = 12  # months
 # Default "from" address for automated email
 TIAAS_SEND_EMAIL_TO = None # Your admin email, setting to None leaves this feature disabled.
 TIAAS_SEND_EMAIL_FROM = "tiaas+noreply@example.org"
+
+
+DOCUMENTATION = """
+We want to help you conduct your training seminars. Where you provide the
+training, we can provide you training infrastructure as a service (TIaaS). Some
+of the benefits of using our infrastructure:
+
+- Private queue, no wait times
+- No Galaxy Maintenance
+- No Galaxy Administration
+- Free
+
+Please note that we do provide this service for free to everyone, so we ask you
+kindly likewise ensure that no one is restricted in their participation (e.g.
+due to gender/age/race/too high course fees/etc.). You can read more [about TIaaS
+on it's info page](https://galaxyproject.eu/tiaas)
+"""
+
+
+#############
+# END TIAAS #
+#############
 
 try:
     from config.local_settings import *  # noqa: F401,F403  ignore these flake8 errors
