@@ -38,6 +38,7 @@ fees/etc.). You can read more about TIaaS on <a href="https://galaxyproject.eu/t
 Europe's info page</a>.
 </p>
 
+{% if settings.TIAAS_SHOW_ADVERTISING %}
 <p>
 This service is free for you. For us, we need to care for funding to continue this service. To do
 this, we are happy to show the usefulness of our service for you und we would kindly to ask you to
@@ -45,6 +46,7 @@ write a small blogpost for our homepage about your training course given with Ga
 you can find on {{ settings.TIAAS_OWNER_SITE }}. Please submit your blogpost to 
 {{ settings.TIAAS_EMAIL }}. Thanks a lot!
 </p>
+{% endif %}
 
 <p>
 We normally need to know about training for <b>2 weeks in advance</b> to fit it into the calendar
@@ -76,6 +78,7 @@ training.
 <p>
 You can contact us at <a href="mailto:{{ settings.TIAAS_EMAIL }}">{{ settings.TIAAS_EMAIL }}</a>
 </p>
+
 
 <div class="editable">
     {% bootstrap_field form.name %}
@@ -141,6 +144,7 @@ training
     {% bootstrap_field form.training_identifier %}
 </div>
 
+{% if settings.TIAAS_SHOW_ADVERTISING %}
 <h2>Advertising</h2>
 
 <p>
@@ -152,6 +156,10 @@ it has had in the worldwide Galaxy community.
     {% bootstrap_field form.advertise_eu %}
     {% bootstrap_field form.blogpost %}
 </div>
+{% else %}
+{{ form.advertise_eu.as_hidden }}
+{{ form.blogpost.as_hidden }}
+{% endif %}
 
 <h2>Anything else?</h2>
 
@@ -159,7 +167,9 @@ it has had in the worldwide Galaxy community.
     {% bootstrap_field form.other_requests %}
 </div>
 
-{% buttons %}
+<input type="hidden" id="apology" name="apology" value="">
+
+  {% buttons %}
     <button type="submit" class="btn btn-primary">
         {% bootstrap_icon "star" %} Submit
     </button>
@@ -167,4 +177,14 @@ it has had in the worldwide Galaxy community.
 
 </form>
 
+
+<script>
+	const queryString = window.location.search;
+	const urlParams = new URLSearchParams(queryString);
+	if(urlParams.get("apology") !== null) {
+		document.getElementById("apology").value = "I am very sorry"
+		// Add it to the form, in case they get other validation errors.
+		document.getElementsByTagName("form")[0].action = document.getElementsByTagName("form")[0].action + "?" + urlParams.get("apology")
+	}
+</script>
 {% endblock %}

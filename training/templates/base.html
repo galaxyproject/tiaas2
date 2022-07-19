@@ -2,15 +2,20 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="maximum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-    <title>Galaxy TIaaS {% block title %}{% endblock %}</title>
-    <link  href="{% static 'training/style/galaxy.css' %}" media="screen" rel="stylesheet" type="text/css" />
-    <link  href="{% static 'training/style/tiaas.css' %}" media="screen" rel="stylesheet" type="text/css" />
-    {% if refresh %}
-    <meta http-equiv="refresh" content="5">
-    {% endif %}
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+	<title>Galaxy TIaaS {% block title %}{% endblock %}</title>
+	<link href="{{ settings.TIAAS_REDIRECT_LOCATION }}/static/style/base.css" media="screen" rel="stylesheet" type="text/css" />
+	<link href="{{ settings.TIAAS_REDIRECT_LOCATION }}/static/dist/base.css" media="screen" rel="stylesheet" type="text/css" />
+
+	<style type="text/css" media="all">
+		#center{ padding-right: 10em; padding-left: 10em; overflow-y: auto; }
+	</style>
+	{% if refresh %}
+	<meta http-equiv="refresh" content="5">
+	{% endif %}
 </head>
 <body scroll="no" class="full-content ">
     <div id="everything">

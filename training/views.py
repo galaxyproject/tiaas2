@@ -1,5 +1,6 @@
 import calendar
 import collections
+import re
 from datetime import date
 
 from django.conf import settings
@@ -20,6 +21,7 @@ from .galaxy import (
     get_users,
     get_workflow_invocations,
 )
+
 from .models import Training
 
 
@@ -46,6 +48,14 @@ def register(request):
                     fail_silently=True,  # on the fence about this one. (Same. TODO)
                 )
             return HttpResponseRedirect(reverse("thanks"))
+        else:
+            return render(
+                request, "training/register.html", {"form": form, "settings": settings}
+            )
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = TrainingForm(initial=request.GET.dict())
 
     return render(
         request, "training/register.html", {"form": form, "settings": settings}
@@ -63,7 +73,7 @@ def thanks(request):
 def stats_csv(request):
     data = "name,code,pop\n"
 
-    trainings = Training.objects.all()
+    trainings = Training.objects.all().exclude(training_identifier="test").filter(processed="AP")
     locations = collections.Counter()
     codes = {}
 
@@ -73,20 +83,18 @@ def stats_csv(request):
             codes[loc.alpha3] = loc.name
 
     for k, v in locations.items():
-        data += "%s,%s,%s\n" % (codes[k], k, v)
+        data += f"{codes[k]},{k},{v}\n"
 
     return HttpResponse(data, content_type="text/csv")
 
 
 def numbers_csv(request):
-    data = "name,start,location,use_gtn,attendance\n"
+    data = "id,start,end,location,use_gtn,attendance\n"
 
-    trainings = Training.objects.all().exclude(training_identifier="test")
+    trainings = Training.objects.all().exclude(training_identifier="test").filter(processed="AP")
     for t in trainings:
-        if t.processed == "AP":
-            data += "{},{},{},{},{}\n".format(
-                t.training_identifier, t.start, t.location, t.use_gtn, t.attendance
-            )
+        countries = [x.code for x in t.location]
+        data += f"{t.id},{t.start},{t.end},{'|'.join(countries)},{t.use_gtn},{t.attendance}\n"
 
     return HttpResponse(data, content_type="text/csv")
 
@@ -102,16 +110,29 @@ def trainings_for(trainings, year, month, day):
 
 
 def calendar_view(request):
-    # Exclude the 'test' group from showing up in calendar
-    trainings = Training.objects.all().exclude(training_identifier="test")
+    trainings = Training.objects.all().exclude(
+        training_identifier="test"
+    )  # Exclude the 'test' group from showing up in calendar
     approved_trainings = [x for x in trainings if x.processed == "AP"]
     approved = len(approved_trainings)
     start = min([x.start for x in approved_trainings])
     end = max([x.end for x in approved_trainings])
     years = list(range(start.year, end.year + 1))[::-1]
-    months = ['January', 'February', 'March', 'April', 'May', 'June',
-              'Juli', 'August', 'September', 'October', 'November',
-              'December']
+
+    months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ]
 
     max_value = 0
 
@@ -252,7 +273,7 @@ def join(request, training_id):
         {
             "training": trainings[0],
             "host": request.META.get("HTTP_HOST", None),
-            "settings": settings
+            "settings": settings,
         },
     )
 

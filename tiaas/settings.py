@@ -84,12 +84,31 @@ USE_TZ = True
 STATIC_URL = "/tiaas/static/"
 STATIC_ROOT = "./static"
 
+GALAXY_SECRET = "USING THE DEFAULT IS NOT SECURE!"
+TIAAS_OWNER = "Galaxy Antartica" # A human-readable name 
+TIAAS_EMAIL = "admin@example.org"
+TIAAS_OWNER_SITE = "https://example.org" # Your website, if you have one.
+TIAAS_DOMAIN = "https://galaxy.example.org" # Your Galaxy instance
 
 # TIaaS-specific settings
 
 # Default period to retain contact information (months)
 TIAAS_GDPR_RETAIN_EXTRA = 12
+TIAAS_SHOW_ADVERTISING = True
+TIAAS_REDIRECT_LOCATION = TIAAS_DOMAIN
 
+# Expose the username publicly in the status page, rather than an encoded ID.
+TIAAS_EXPOSE_USERNAME = False
+
+TIAAS_LATE_REQUEST_PREVENTION = 10 # calendar days
+TIAAS_GDPR_RETAIN_EXTRA = 12  # months
+
+# EMAIL_HOST
+# EMAIL_PORT
+# EMAIL_HOST_USER
+# EMAIL_HOST_PASSWORD
+# EMAIL_USE_TLS
+# EMAIL_USE_SSL
 # Default "from" address for automated email
 TIAAS_SEND_EMAIL_FROM = "tiaas+noreply@example.org"
 
@@ -100,16 +119,16 @@ except Exception as e:
     sys.exit('Local settings file not found: %s' % e)
 
 
-git_head = os.path.join(BASE_DIR, '.git', 'HEAD')
+git_head = os.path.join(BASE_DIR, ".git", "HEAD")
 # https://stackoverflow.com/questions/14989858/get-the-current-git-hash-in-a-python-script#21901260
 # Open .git\HEAD file:
-with open(git_head, 'r') as git_head_file:
+with open(git_head, "r") as git_head_file:
     # Contains e.g. ref: ref/heads/master if on "master"
     git_head_data = str(git_head_file.read()).strip()
 
 # Open the correct file in .git\ref\heads\[branch]
-git_head_ref = os.path.join(BASE_DIR, '.git', git_head_data.split(' ')[1])
+git_head_ref = os.path.join(BASE_DIR, ".git", git_head_data.split(" ")[1])
 # Get the commit hash ([:7] used to get "--short")
 
-with open(git_head_ref, 'r') as git_head_ref_file:
+with open(git_head_ref, "r") as git_head_ref_file:
     GIT_COMMIT_ID = git_head_ref_file.read().strip()

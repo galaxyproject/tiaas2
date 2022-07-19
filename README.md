@@ -1,6 +1,8 @@
-# Training Infrastructure as a Service 2
+![Tiaas logo, galaxy three bars logo with human icons instead of bars, one bar is yellow and faster looking](./images/tiaas-logo.png)
 
-The latest and greatest TIaaS from Galaxy Europe!
+# Training Infrastructure as a Service 2 [![Gitter](https://badges.gitter.im/galaxyproject/training-material.svg)](https://gitter.im/galaxyproject/tiaas?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+The latest and greatest TIaaS from Galaxy Europe, ready for the world!
 
 This should be easier than ever to setup and get started with at your own institution.
 
