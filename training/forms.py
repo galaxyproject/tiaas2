@@ -4,13 +4,10 @@ from django_countries.widgets import CountrySelectWidget
 
 from . import models
 from .validators import validate_start_date
+
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from django.forms import DateField, BooleanField
-
-from . import models
-from . import validators
 
 class TrainingForm(forms.ModelForm):
 
@@ -23,8 +20,24 @@ class TrainingForm(forms.ModelForm):
 
     def clean_start(self):
         start = self.cleaned_data['start']
+        now = timezone.now().date()
         validate_start_date(start)
+
+        if 'apology' in self.data and self.data['apology'] == "I am very sorry":
+            # They're allowed to submit it.
+            return start
+        else:
+            if (start - now).days < settings.TIAAS_LATE_REQUEST_PREVENTION:
+                raise ValidationError("You are too late to submit this, unfortunately.")
+
         return start
+
+    def clean_end(self):
+        data = self.cleaned_data['end']
+        now = timezone.now().date()
+        if data < now:
+            raise ValidationError("This event would have already ended")
+        return data
 
     class Meta:
         model = models.Training
@@ -104,25 +117,3 @@ class TrainingForm(forms.ModelForm):
             "description": forms.TextInput(),
             "attendance": forms.NumberInput(attrs={"min": 1}),
         }
-
-    def clean_end(self):
-        data = self.cleaned_data['end']
-        now = timezone.now().date()
-        if data < now:
-            raise ValidationError("This event would have already ended")
-        return data
-
-    def clean_start(self):
-        data = self.cleaned_data['start']
-        now = timezone.now().date()
-        if data < now:
-            raise ValidationError("This event would have already started")
-
-        if 'apology' in self.data and self.data['apology'] == "I am very sorry":
-            # They're allowed to submit it.
-            return data
-        else:
-            if (data - now).days < settings.TIAAS_LATE_REQUEST_PREVENTION:
-                raise ValidationError("You are too late to submit this, unfortunately.")
-
-        return data

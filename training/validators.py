@@ -1,4 +1,4 @@
-from datetime import date
+from django.utils import timezone
 import re
 
 from django.core.exceptions import ValidationError
@@ -14,7 +14,7 @@ def validate_date_precedence(start_date, end_date, field_name=None):
 
 
 def validate_start_date(start_date):
-    if start_date < date.today():
+    if start_date < timezone.now().date():
         raise ValidationError('Start date has passed', code='start_date_in_the_past')
 
 
