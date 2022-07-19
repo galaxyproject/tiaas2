@@ -47,7 +47,7 @@ def register(request):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = TrainingForm()
+        form = TrainingForm(initial=request.GET.dict())
 
     return render(
         request, "training/register.html", {"form": form, "settings": settings}
