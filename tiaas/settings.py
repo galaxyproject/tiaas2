@@ -111,8 +111,9 @@ TIAAS_GDPR_RETAIN_EXTRA = 12  # months
 # EMAIL_USE_TLS
 # EMAIL_USE_SSL
 # Default "from" address for automated email
-TIAAS_SEND_EMAIL_TO = None # Your admin email, setting to None leaves this feature disabled.
-TIAAS_SEND_EMAIL_FROM = "tiaas+noreply@example.org"
+TIAAS_SEND_EMAIL_TO = "admin@example.org" # Your admin email
+TIAAS_SEND_EMAIL_FROM = None # "tiaas+noreply@example.org", setting to None leaves this feature disabled.
+TIAAS_SEND_EMAIL_TO_REQUESTER = False # If you'd like to inform them of a successful request.
 
 
 DOCUMENTATION = """
