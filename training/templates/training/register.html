@@ -72,6 +72,7 @@ We will use the country in which the training is held in our reporting on that s
 
 You can contact us at <a href="mailto:{{ settings.TIAAS_EMAIL }}">{{ settings.TIAAS_EMAIL }}</a>
 
+
 <div class="editable">
 {% bootstrap_field form.name %}
 {% bootstrap_field form.email %}
@@ -141,6 +142,8 @@ We offer this service for free so we would love to be able to show the positive 
 {% bootstrap_field form.other_requests %}
 </div>
 
+<input type="hidden" id="apology" name="apology" value="">
+
   {% buttons %}
     <button type="submit" class="btn btn-primary">
       {% bootstrap_icon "star" %} Submit
@@ -148,4 +151,14 @@ We offer this service for free so we would love to be able to show the positive 
   {% endbuttons %}
 </form>
 
+
+<script>
+	const queryString = window.location.search;
+	const urlParams = new URLSearchParams(queryString);
+	if(urlParams.get("apology") !== null) {
+		document.getElementById("apology").value = "I am very sorry"
+		// Add it to the form, in case they get other validation errors.
+		document.getElementsByTagName("form")[0].action = document.getElementsByTagName("form")[0].action + "?" + urlParams.get("apology")
+	}
+</script>
 {% endblock %}

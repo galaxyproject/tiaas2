@@ -40,6 +40,10 @@ def register(request):
                     fail_silently=True,  # on the fence about this one.
                 )
             return HttpResponseRedirect(reverse("thanks"))
+        else:
+            return render(
+                request, "training/register.html", {"form": form, "settings": settings}
+            )
 
     # if a GET (or any other method) we'll create a blank form
     else:

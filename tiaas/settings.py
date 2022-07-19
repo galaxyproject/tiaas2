@@ -141,6 +141,8 @@ TIAAS_REDIRECT_LOCATION = TIAAS_DOMAIN
 # Expose the username publicly in the status page, rather than an encoded ID.
 TIAAS_EXPOSE_USERNAME = False
 
+TIAAS_LATE_REQUEST_PREVENTION = 10 # calendar days
+
 # EMAIL_HOST
 # EMAIL_PORT
 # EMAIL_HOST_USER
