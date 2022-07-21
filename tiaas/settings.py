@@ -96,7 +96,6 @@ TIAAS_DOMAIN = "https://galaxy.example.org" # Your Galaxy instance
 # Default period to retain contact information (months)
 TIAAS_GDPR_RETAIN_EXTRA = 12
 TIAAS_SHOW_ADVERTISING = True
-TIAAS_REDIRECT_LOCATION = TIAAS_DOMAIN
 
 # Expose the username publicly in the status page, rather than an encoded ID.
 TIAAS_EXPOSE_USERNAME = False
