@@ -4,7 +4,7 @@ from Crypto.Cipher import Blowfish
 from django.conf import settings
 from django.db import connections, transaction
 
-cipher = Blowfish.new(settings.GALAXY_SECRET)
+cipher = Blowfish.new(settings.GALAXY_SECRET.encode('utf-8'), mode=Blowfish.MODE_ECB)
 
 
 class IntentionalRollback(Exception):
