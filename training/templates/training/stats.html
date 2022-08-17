@@ -44,6 +44,7 @@
     <svg id="my_dataviz" width="1000" height="600"></svg>
   </div>
 
+  {% if approved %}
   <table class="table table-striped">
     <thead>
       <tr>
@@ -60,6 +61,7 @@
       {% endfor %}
     </tbody>
   </table>
+  {% endif %}
 </div>
 {% endblock %}
 
