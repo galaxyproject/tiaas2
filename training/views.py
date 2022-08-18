@@ -185,17 +185,8 @@ def stats(request):
         for locs in approved.values_list('location', flat=True):
             for loc in locs.split(','):
                 locations[countries_lookup[loc]] += 1
-    else:
-        days = 0
-        students = 0
-        current = 0
-        earliest = None
-        locations = {}
 
-    return render(
-        request,
-        "training/stats.html",
-        {
+        data = {
             "trainings": trainings,
             "waiting": waiting.count(),
             "approved": approved.count(),
@@ -204,8 +195,20 @@ def stats(request):
             "locations": dict(locations.items()),
             "current_trainings": current.count(),
             "earliest": earliest,
-        },
-    )
+        }
+    else:
+        data = {
+            "trainings": trainings,
+            "waiting": waiting.count(),
+            "approved": 0,
+            "days": 0,
+            "students": 0,
+            "locations": {},
+            "current_trainings": 0,
+            "earliest": None,
+        }
+
+    return render(request, "training/stats.html", data)
 
 
 def join(request, training_id):
