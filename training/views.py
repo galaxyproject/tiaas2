@@ -30,8 +30,8 @@ def register(request):
         if form.is_valid():
             form.save()
 
+            identifier = form.cleaned_data['training_identifier']
             if settings.TIAAS_SEND_EMAIL_TO:
-                identifier = form.cleaned_data['training_identifier']
                 send_mail(
                     f"New TIaaS Request ({identifier})",
                     (
@@ -45,6 +45,21 @@ def register(request):
                     [settings.TIAAS_SEND_EMAIL_TO],
                     fail_silently=True,  # should handle and log appropriately
                 )
+            send_mail(
+                f"TIaaS Request confirmation: ({identifier})",
+                (
+                    f'Dear {form.name},'
+                    'Thanks for requesting a new TIaaS allocation. We will'
+                    ' contact you to let you know when your request has been'
+                    ' reviewed.\n\n'
+                    'Regards,\n'
+                    settings.TIAAS_OWNER,
+                ),
+                settings.TIAAS_SEND_EMAIL_FROM,
+                [form.email],
+                fail_silently=True,  # !! should handle and log appropriately
+            )
+
             return HttpResponseRedirect(reverse("thanks"))
 
     # if a GET (or any other method) we'll create a blank form

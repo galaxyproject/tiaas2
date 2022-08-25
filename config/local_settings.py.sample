@@ -29,13 +29,12 @@ GALAXY_SECRET = "enter-secret-string-here"
 TIAAS_OWNER = "Galaxy EU"
 TIAAS_EMAIL = "None"
 TIAAS_OWNER_SITE = "https://mysite.com"
-TIAAS_OWNER_SITE = "https://usegalaxy.eu"
 
 TIAAS_SEND_EMAIL_TO = "root@localhost"
 TIAAS_SEND_EMAIL_FROM = "tiaas_noreply@example.org"
 
 TIAAS_SHOW_ADVERTISING = True
-TIAAS_RETAIN_CONTACT_CONSENT = True
+TIAAS_RETAIN_CONTACT_REQUIRE_CONSENT = True
 TIAAS_GDPR_RETAIN_EXTRA_MONTHS = 12
 
 TIAAS_LOG_FILE = os.path.join(BASE_DIR, 'tiaas.log')

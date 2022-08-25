@@ -17,7 +17,7 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 -->
 
 <div class="container">
-	<h1>Apply for a new allocation</h1>
+	<h2>Apply for a new allocation</h2>
 
 	<div class="my-5">
 		{% include 'snippets/register/1_intro.html' %}
@@ -30,7 +30,7 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 			{% bootstrap_field form.name placeholder="" form_group_class="form-group short-field" %}
 			{% bootstrap_field form.email placeholder="" form_group_class="form-group short-field" %}
 
-			{% if settings.TIAAS_RETAIN_CONTACT_CONSENT %}
+			{% if settings.TIAAS_RETAIN_CONTACT_REQUIRE_CONSENT %}
 			{% bootstrap_field form.retain_contact show_label=False %}
 			{% endif %}
 		</div>
