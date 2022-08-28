@@ -48,12 +48,11 @@ def register(request):
             send_mail(
                 f"TIaaS Request confirmation: ({identifier})",
                 (
-                    f'Dear {form.name},'
-                    'Thanks for requesting a new TIaaS allocation. We will'
-                    ' contact you to let you know when your request has been'
-                    ' reviewed.\n\n'
-                    'Regards,\n'
-                    settings.TIAAS_OWNER,
+                    f'Dear {form.name},\n\n'
+                    'Thanks for requesting a new TIaaS allocation.\n'
+                    'We will contact you to let you know when your request'
+                    ' has been reviewed.\n\n'
+                    f'Regards,\nThe {settings.TIAAS_OWNER} team'
                 ),
                 settings.TIAAS_SEND_EMAIL_FROM,
                 [form.email],
