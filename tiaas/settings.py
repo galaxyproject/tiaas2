@@ -151,7 +151,11 @@ with open(git_head, "r") as git_head_file:
     git_head_data = str(git_head_file.read()).strip()
 
 # Open the correct file in .git\ref\heads\[branch]
-git_head_ref = os.path.join(BASE_DIR, ".git", git_head_data.split(" ")[1])
+if ' ' in git_head_data:
+    git_head_ref = os.path.join(BASE_DIR, ".git", git_head_data.split(" ")[1])
+else:
+    # When pinned to a specific commit
+    git_head_ref = os.path.join(BASE_DIR, ".git", git_head_data)
 # Get the commit hash ([:7] used to get "--short")
 
 with open(git_head_ref, "r") as git_head_ref_file:
