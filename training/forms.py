@@ -1,7 +1,7 @@
 import string
 from django import forms
 from django.conf import settings
-from django_countries.widgets import CountrySelectWidget
+from django.core.exceptions import ValidationError
 
 from . import models
 
@@ -125,9 +125,9 @@ def validate_identifier(identifier):
     if submitted - allowed:
         for i, char in enumerate(identifier):
             if char not in IDENTIFIER_ALLOWED_CHARS:
-                raise ValueError(
+                raise ValidationError(
                     f'Invalid character "{char}" at position {i + 1}.'
                 )
         # Should never get to this point, but let's catch anyway
-        raise ValueError("Invalid character(s) in submitted identifier.")
+        raise ValidationError("Invalid character(s) in submitted identifier.")
     return identifier
