@@ -1,5 +1,4 @@
 import collections
-import re
 from datetime import date
 from django_countries import countries
 
@@ -10,9 +9,18 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from .forms import TrainingForm
-from .galaxy import (add_group_user, authenticate, create_group, create_role,
-                     get_groups, get_jobs, get_roles, get_users,
-                     get_workflow_invocations)
+from .galaxy import (
+    add_group_user,
+    authenticate,
+    create_group,
+    create_role,
+    get_groups,
+    get_jobs,
+    get_roles,
+    get_users,
+    get_workflow_invocations,
+)
+
 from .models import Training
 
 
@@ -30,6 +38,7 @@ def register(request):
         if form.is_valid():
             form.save()
 
+            # TODO: refactor this into forms:
             identifier = form.cleaned_data['training_identifier']
             if settings.TIAAS_SEND_EMAIL_TO:
                 send_mail(
@@ -69,6 +78,36 @@ def register(request):
         request, "training/register.html", {"form": form}
     )
 
+    # create a form instance and populate it with data from the request:
+    form = TrainingForm(request.POST)
+    # check whether it's valid:
+    if form.is_valid():
+        form.save()
+        if settings.TIAAS_SEND_EMAIL_FROM:
+            identifier = form.cleaned_data["training_identifier"]
+            host = request.META.get("HTTP_HOST", "localhost")
+            send_mail(
+                "New TIaaS Request (%s)" % identifier,
+                "We received a new tiaas request. View it in the"
+                '<a href="https://%s/tiaas/admin/training/training/?processed__exact=UN">admin dashboard</a>'  # noqa: E501
+                % host,
+                settings.TIAAS_SEND_EMAIL_FROM,
+                [settings.TIAAS_SEND_EMAIL_TO],
+                fail_silently=True,  # on the fence about this one. (Same. TODO)
+            )
+
+            send_mail(
+                "TIaaS Request Submitted (%s)" % identifier,
+                "We received a new tiaas request and will process it as quickly as possible, considering weekends and public holidays.",
+                settings.TIAAS_SEND_EMAIL_FROM,
+                [form.cleaned_data['email']],
+                fail_silently=True,
+            )
+        return HttpResponseRedirect(reverse("thanks"))
+    else:
+        return render(
+            request, "training/register.html", {"form": form, "settings": settings}
+        )
 
 def about(request):
     return render(request, "training/about.html")
@@ -351,7 +390,7 @@ def status(request, training_id):
             },
         )
 
-    refresh = request.GET.get("refresh", False) != False
+    refresh = request.GET.get("refresh", False) is not False
     # hours param
     hours = int(request.GET.get("hours", 3))
     if hours > 64:

@@ -1,8 +1,14 @@
+local_settings.py
+# ignore root static directory populated by collectstatic (mind leading '/')
+/static
+
+# ignore linked external css file
+training/static/training/style/galaxy.css
+
 todo.md
 
 # Js
 node_modules/
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -63,7 +69,8 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
-db.sqlite3
+*.sqlite
+*.sqlite3
 db.sqlite3-journal
 
 # Flask stuff:
@@ -109,6 +116,7 @@ celerybeat.pid
 # Environments
 .env
 .venv
+.venv3
 env/
 venv/
 ENV/

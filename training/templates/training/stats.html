@@ -92,10 +92,10 @@ d3.queue()
 
 function ready(error, topo) {
 
-	var colorScale = d3.scaleLinear()
-	.domain([0, d3.max(data.values())])
-	.range(["#eee", "#003399"])
-	console.log(d3.max(data));
+    var colorScale = d3.scaleLinear()
+    .domain([0, d3.max(data.values())])
+    .range(["#eee", "#003399"])
+    console.log(d3.max(data));
 
   // Draw the map
   svg.append("g")

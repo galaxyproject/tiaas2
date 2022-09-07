@@ -4,6 +4,9 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 
 from . import models
+from .validators import validate_start_date
+
+from django.utils import timezone
 
 IDENTIFIER_ALLOWED_CHARS = (
     string.ascii_lowercase
@@ -14,6 +17,8 @@ IDENTIFIER_ALLOWED_CHARS = (
 
 class TrainingForm(forms.ModelForm):
     """Define training request form."""
+
+    error_css_class = 'error'
 
     class Meta:
         """Define form metadata."""
@@ -109,25 +114,49 @@ class TrainingForm(forms.ModelForm):
             "other_requests": forms.Textarea(attrs={'rows': 4}),
         }
 
-    def clean(self):
-        """Validate and clean submitted content."""
-        data = self.cleaned_data
-        data['training_identifier'] = validate_identifier(
-            data['training_identifier'])
+    @property
+    def all_error_messages(self):
+        """Return list items from self.errors.
+
+        self.errors is a dict-like collection with values as lists. We only
+        need the list items.
+        """
+        return [e for elist in self.errors.values() for e in elist]
+
+    def clean_start(self):
+        start = self.cleaned_data['start']
+        now = timezone.now().date()
+        validate_start_date(start)
+
+        if 'apology' in self.data and self.data['apology'] == "I am very sorry":
+            # They're allowed to submit it.
+            return start
+        else:
+            if (start - now).days < settings.TIAAS_LATE_REQUEST_PREVENTION:
+                raise ValidationError(
+                    "You are too late to submit this, unfortunately.")
+
+        return start
+
+    def clean_end(self):
+        data = self.cleaned_data['end']
+        now = timezone.now().date()
+        if data < now:
+            raise ValidationError("This event would have already ended")
         return data
 
-
-def validate_identifier(identifier):
-    """Validate that identifier complies with requirements."""
-    identifier = identifier.lower()
-    allowed = set(IDENTIFIER_ALLOWED_CHARS)
-    submitted = set(identifier)
-    if submitted - allowed:
-        for i, char in enumerate(identifier):
-            if char not in IDENTIFIER_ALLOWED_CHARS:
-                raise ValidationError(
-                    f'Invalid character "{char}" at position {i + 1}.'
-                )
-        # Should never get to this point, but let's catch anyway
-        raise ValidationError("Invalid character(s) in submitted identifier.")
-    return identifier
+    def clean_training_identifier(self):
+        """Validate that identifier complies with requirements."""
+        identifier = self.cleaned_data['training_identifier'].lower()
+        allowed = set(IDENTIFIER_ALLOWED_CHARS)
+        submitted = set(identifier)
+        if submitted - allowed:
+            for i, char in enumerate(identifier):
+                if char not in IDENTIFIER_ALLOWED_CHARS:
+                    raise ValidationError(
+                        f'Invalid character "{char}" at position {i + 1}.'
+                    )
+            # Should never get to this point, but let's catch anyway
+            raise ValidationError(
+                "Invalid character(s) in submitted identifier.")
+        return identifier

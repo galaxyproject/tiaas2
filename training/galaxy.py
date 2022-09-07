@@ -4,7 +4,7 @@ from Crypto.Cipher import Blowfish
 from django.conf import settings
 from django.db import connections, transaction
 
-cipher = Blowfish.new(settings.GALAXY_SECRET)
+cipher = Blowfish.new(settings.GALAXY_SECRET.encode('utf-8'), mode=Blowfish.MODE_ECB)
 
 
 class IntentionalRollback(Exception):
@@ -18,12 +18,24 @@ TRAINING_QUEUE_HEADERS = [
     "user_id",
     "create_time",
 ]
-TRAINING_QUEUE_QUERY = """
+
+HIDDEN_USERNAME = """
+    substring(md5(COALESCE(galaxy_user.username, 'Anonymous') || now()::date), 0, 7)
+"""
+
+EXPOSED_USERNAME= """galaxy_user.username"""
+
+if settings.TIAAS_EXPOSE_USERNAME:
+    USERNAME = EXPOSED_USERNAME
+else:
+    USERNAME = HIDDEN_USERNAME
+
+TRAINING_QUEUE_QUERY = f"""
 SELECT
         job.state,
         job.job_runner_external_id AS extid,
         regexp_replace(job.tool_id, '.*toolshed.*/repos/', ''),
-        substring(md5(COALESCE(galaxy_user.username, 'Anonymous') || now()::date), 0, 7),
+        {USERNAME},
         date_trunc('second', job.create_time) AS created
 FROM
         job, galaxy_user
@@ -46,9 +58,9 @@ ORDER BY
 LIMIT 300
 """
 
-TRAINING_USERS_QUERY = """
+TRAINING_USERS_QUERY = f"""
 SELECT
-        substring(md5(COALESCE(galaxy_user.username, 'Anonymous') || now()::date), 0, 7)
+    {USERNAME}
 FROM
         galaxy_user
 WHERE
@@ -73,10 +85,10 @@ TRAINING_WF_QUEUE_HEADERS = [
     "state",
     "id",
 ]
-TRAINING_WF_QUEUE_QUERY = """
+TRAINING_WF_QUEUE_QUERY = f"""
 
 SELECT
-    substring(md5(COALESCE(galaxy_user.username, 'Anonymous') || now()::date), 0, 7),
+    {USERNAME},
     date_trunc('second', workflow.create_time) AS created,
     workflow.name,
     workflow_invocation.state,
@@ -174,8 +186,9 @@ def get_groups():
 
 def create_group(training_id, role_id):
     execute(
-        "insert into galaxy_group (name, create_time, update_time, deleted) values (%s, now(), now(), false)",
-        (training_id,),
+        "insert into galaxy_group (name, create_time, update_time, deleted) "
+        "values (%s, now(), now(), false)", (training_id,)
+
     )
     # get the role back
     groups = fetch_all("select id from galaxy_group where name = %s", (training_id,))
@@ -183,7 +196,8 @@ def create_group(training_id, role_id):
     for group in groups:
         group_id = group[0]
     execute(
-        "insert into group_role_association (group_id, role_id, create_time, update_time) values (%s, %s, now(), now())"
+        "insert into group_role_association (group_id, role_id, create_time, update_time) "
+        "values (%s, %s, now(), now())"
         % (group_id, role_id)
     )
     return group_id
@@ -191,7 +205,8 @@ def create_group(training_id, role_id):
 
 def add_group_user(group_id, user_id):
     execute(
-        "insert into user_group_association (user_id, group_id, create_time, update_time) values (%s, %s, now(), now())"
+        "insert into user_group_association (user_id, group_id, create_time, update_time) "
+        "values (%s, %s, now(), now())"
         % (user_id, group_id)
     )
 

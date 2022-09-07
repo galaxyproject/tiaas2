@@ -17,15 +17,7 @@
 	<br><br>
 
 	<div class="container" style="max-width: 800px;">
-		<h2>How does it work?</h2>
-		<p>
-			We have deployed a dedicated compute node just for your training session to
-			use. No one outside of your training has access to this machine. Completely
-			transparently to you, all of the jobs that you run in Galaxy, during the
-			period of the training event, will "prefer" to run on this machine. If there is
-			no room on that machine, they will run on any other machine in our cluster with
-			resources.
-		</p>
+		{% include 'snippets/about/4_how_does_it_work.html' %}
 	</div>
 </div>
 
