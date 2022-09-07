@@ -54,11 +54,11 @@ def register(request):
                     [settings.TIAAS_SEND_EMAIL_TO],
                     fail_silently=True,  # TODO should handle and log appropriately
                 )
-            if settings.TIAAS_SEND_EMAIL_FROM:
+            if settings.TIAAS_SEND_EMAIL_TO_REQUESTER:
                 send_mail(
                     f"TIaaS Request confirmation: ({identifier})",
                     (
-                        f'Dear {form.cleaned_data['name']},\n\n'
+                        f'Dear {form.cleaned_data["name"]},\n\n'
                         'Thanks for requesting a new TIaaS allocation.\n'
                         'We will contact you to let you know when your request'
                         ' has been reviewed.\n\n'
@@ -73,7 +73,7 @@ def register(request):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = TrainingForm()
+        form = TrainingForm(initial=request.GET.dict())
 
     return render(request, "training/register.html", {"form": form})
 
