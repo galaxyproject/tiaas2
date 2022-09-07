@@ -1,4 +1,8 @@
-"""Local settings for tiaas app."""
+"""
+This is a sample of site-specific settings for the TIaaS project.
+All settings are required, unless stated otherwise.
+The values are provided as examples.
+"""
 
 import os
 
@@ -30,11 +34,33 @@ TIAAS_OWNER = "Galaxy EU"
 TIAAS_EMAIL = "None"
 TIAAS_OWNER_SITE = "https://mysite.com"
 
+# Your Galaxy instance URL
+TIAAS_DOMAIN = "https://mygalaxy.org"
+
 TIAAS_SEND_EMAIL_TO = "root@localhost"
 TIAAS_SEND_EMAIL_FROM = "tiaas_noreply@example.org"
 
 TIAAS_SHOW_ADVERTISING = True
 TIAAS_RETAIN_CONTACT_REQUIRE_CONSENT = True
+
+# Expose the username publicly in the status page, rather than an encoded ID
+TIAAS_EXPOSE_USERNAME = False
+
+# How long you're allowed to retain their email address for follow up contact
 TIAAS_GDPR_RETAIN_EXTRA_MONTHS = 12
 
 TIAAS_LOG_FILE = os.path.join(BASE_DIR, 'tiaas.log')
+
+# Recipient address for automated email notifications
+TIAAS_SEND_EMAIL_TO = "admin@example.org" # Your admin email
+
+# "tiaas+noreply@example.org", setting to None leaves this feature disabled.
+TIAAS_SEND_EMAIL_FROM = None
+
+# If you'd like to inform them of a successful request
+TIAAS_SEND_EMAIL_TO_REQUESTER = False
+
+# Prevent people from submitting requests later than this date.
+# If you like them, tell them they can go to /tiaas/new/?apology=I'm so sorry
+# And then it will ignore this check
+TIAAS_LATE_REQUEST_PREVENTION = 10 # calendar days
