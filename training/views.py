@@ -44,29 +44,30 @@ def register(request):
                 send_mail(
                     f"New TIaaS Request ({identifier})",
                     (
-                        'We received a new tiaas request. View it in the '
-                        '<a href="'
+                        'A new TIaaS request has been received. View it in the'
+                        ' <a href="'
                         f'https://{host}/tiaas/admin/training/training/'
                         '?processed__exact=UN'
                         '">admin dashboard</a>'
                     ),
                     settings.TIAAS_SEND_EMAIL_FROM,
                     [settings.TIAAS_SEND_EMAIL_TO],
-                    fail_silently=True,  # should handle and log appropriately
+                    fail_silently=True,  # TODO should handle and log appropriately
                 )
-            send_mail(
-                f"TIaaS Request confirmation: ({identifier})",
-                (
-                    f'Dear {form.name},\n\n'
-                    'Thanks for requesting a new TIaaS allocation.\n'
-                    'We will contact you to let you know when your request'
-                    ' has been reviewed.\n\n'
-                    f'Regards,\nThe {settings.TIAAS_OWNER} team'
-                ),
-                settings.TIAAS_SEND_EMAIL_FROM,
-                [form.email],
-                fail_silently=True,  # !! should handle and log appropriately
-            )
+            if settings.TIAAS_SEND_EMAIL_FROM:
+                send_mail(
+                    f"TIaaS Request confirmation: ({identifier})",
+                    (
+                        f'Dear {form.cleaned_data['name']},\n\n'
+                        'Thanks for requesting a new TIaaS allocation.\n'
+                        'We will contact you to let you know when your request'
+                        ' has been reviewed.\n\n'
+                        f'Regards,\nThe {settings.TIAAS_OWNER} team'
+                    ),
+                    settings.TIAAS_SEND_EMAIL_FROM,
+                    [form.cleaned_data['email']],
+                    fail_silently=True,  # TODO should handle and log appropriately
+                )
 
             return HttpResponseRedirect(reverse("thanks"))
 
@@ -74,40 +75,8 @@ def register(request):
     else:
         form = TrainingForm()
 
-    return render(
-        request, "training/register.html", {"form": form}
-    )
+    return render(request, "training/register.html", {"form": form})
 
-    # create a form instance and populate it with data from the request:
-    form = TrainingForm(request.POST)
-    # check whether it's valid:
-    if form.is_valid():
-        form.save()
-        if settings.TIAAS_SEND_EMAIL_FROM:
-            identifier = form.cleaned_data["training_identifier"]
-            host = request.META.get("HTTP_HOST", "localhost")
-            send_mail(
-                "New TIaaS Request (%s)" % identifier,
-                "We received a new tiaas request. View it in the"
-                '<a href="https://%s/tiaas/admin/training/training/?processed__exact=UN">admin dashboard</a>'  # noqa: E501
-                % host,
-                settings.TIAAS_SEND_EMAIL_FROM,
-                [settings.TIAAS_SEND_EMAIL_TO],
-                fail_silently=True,  # on the fence about this one. (Same. TODO)
-            )
-
-            send_mail(
-                "TIaaS Request Submitted (%s)" % identifier,
-                "We received a new tiaas request and will process it as quickly as possible, considering weekends and public holidays.",
-                settings.TIAAS_SEND_EMAIL_FROM,
-                [form.cleaned_data['email']],
-                fail_silently=True,
-            )
-        return HttpResponseRedirect(reverse("thanks"))
-    else:
-        return render(
-            request, "training/register.html", {"form": form, "settings": settings}
-        )
 
 def about(request):
     return render(request, "training/about.html")
