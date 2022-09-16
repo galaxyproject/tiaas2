@@ -117,8 +117,13 @@ def calendar_view(request):
     )  # Exclude the 'test' group from showing up in calendar
     approved_trainings = [x for x in trainings if x.processed == "AP"]
     approved = len(approved_trainings)
-    start = min([x.start for x in approved_trainings])
-    end = max([x.end for x in approved_trainings])
+    if len(approved_trainings) > 0:
+        start = min([x.start for x in approved_trainings])
+        end = max([x.end for x in approved_trainings])
+    else:
+        start = date.today()
+        end = date.today()
+
     years = list(range(start.year, end.year + 1))[::-1]
 
     months = [
