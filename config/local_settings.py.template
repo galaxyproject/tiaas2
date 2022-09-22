@@ -82,3 +82,11 @@ TIAAS_SEND_EMAIL_TO_REQUESTER = False
 # If you like them, tell them they can go to /tiaas/new/?apology=I'm so sorry
 # And then it will ignore this check
 TIAAS_LATE_REQUEST_PREVENTION_DAYS = 10
+
+# Mail settings
+# EMAIL_HOST
+# EMAIL_PORT
+# EMAIL_HOST_USER
+# EMAIL_HOST_PASSWORD
+# EMAIL_USE_TLS
+# EMAIL_USE_SSL
