@@ -7,7 +7,8 @@ reflects the identity of your Galaxy service.
 If you find some text in the website you'd like to edit, try grepping this
 directory to see if a template holds the text! The templates are very concise
 and are broken into parts of a page, rather than entire pages, to make the
-content more editable.
+content more editable. Bootstrap 4 styling, Material Icons and FontAwesome
+icons can all be used here.
 
 If you see text content that you would like to edit which is not exposed here,
 please make an issue on GitHub to request this.
