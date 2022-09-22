@@ -17,6 +17,7 @@ class TrainingFactory(DjangoModelFactory):
 
     class Meta:
         model = Training
+        django_get_or_create = ['training_identifier']
 
     class Params:
         start_min_days = START_IN_DAYS_MIN
