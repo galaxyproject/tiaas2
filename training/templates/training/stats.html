@@ -2,34 +2,48 @@
 {% load humanize %}
 {% load static %}
 
+
+{% block head %}
+<style media="all">
+  .card-title {
+    text-align: center;
+    font-size: 4rem;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <div class="container">
   <h2>Overview</h2>
-  Data is cumulative since {{ earliest }}
+  <p>Data is cumulative since {{ earliest }}</p>
 
   <br><br>
 
   <div class="card-group">
     <div class="card">
+      <h5 class="card-header">Today</h5>
       <div class="card-body">
-        <h1 class="card-title">{{ approved }} Events</h1>
-        <p class="card-text">With {{ waiting }} new training requests waiting</p>
+        <h1 class="card-title">{{ current_trainings }} <i class="fas fa-chalkboard-teacher"></i></h1>
+        <p class="card-text">Training events happening today</p>
       </div>
     </div>
     <div class="card">
+      <h5 class="card-header">Overall</h5>
       <div class="card-body">
-        <h1 class="card-title">{{ current_trainings }} Events Today!</h1>
-        <p class="card-text">Currently active training events</p>
+        <h1 class="card-title">{{ approved }} <i class="fas fa-calendar-alt"></i> </h1>
+        <p class="card-text">Events since {{ earliest }}, with {{ waiting }} new training requests waiting</p>
       </div>
     </div>
     <div class="card">
+      <h5 class="card-header">Overall</h5>
       <div class="card-body">
-        <h1 class="card-title">{{ students }} Students</h1>
-        <p class="card-text">taught over the lifetime of the TIaaS service</p>
+        <h1 class="card-title">{{ students }} <i class="fas fa-user-graduate"></i></h1>
+        <p class="card-text">students taught over the lifetime of the TIaaS service</p>
       </div>
     </div>
     <div class="card">
+      <h5 class="card-header">Overall</h5>
       <div class="card-body">
         <h1 class="card-title">{{ days }} Days</h1>
         <p class="card-text">Days of training we have resourced</p>
@@ -37,9 +51,6 @@
     </div>
   </div>
 
-  <script src="{% static 'vendor/d3-geo/d3.v4.js' %}"></script>
-  <script src="{% static 'vendor/d3-geo/d3-scale-chromatic.v1.min.js' %}"></script>
-  <script src="{% static 'vendor/d3-geo/d3-geo-projection.v2.min.js' %}"></script>
   <div class="text-center">
     <svg id="my_dataviz" width="1000" height="600"></svg>
   </div>
@@ -67,8 +78,11 @@
 
 
 {% block script %}
-<script>
+<script src="{% static 'vendor/d3-geo/d3.v4.js' %}"></script>
+<script src="{% static 'vendor/d3-geo/d3-scale-chromatic.v1.min.js' %}"></script>
+<script src="{% static 'vendor/d3-geo/d3-geo-projection.v2.min.js' %}"></script>
 
+<script>
 // The svg
 var svg = d3.select("svg"),
   width = +svg.attr("width"),
