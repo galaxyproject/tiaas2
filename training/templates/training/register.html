@@ -64,6 +64,7 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 					id="location"
 					multiple="true"
 					aria-describedby="locationHelp"
+					value="{{ form.location.value|default_if_none:'' }}"
 					required
 				>
 					{% for code, country in form.location.field.choices %}
@@ -141,7 +142,16 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 
 <script type="text/javascript">
 	$(document).ready( () => {
+		// Activate and fill select2 form element
 		$('.select2').select2();
+		const locations = [
+			{% for loc in form.location.value %}
+			"{{ loc }}",
+			{% endfor %}
+		];
+		$('#location').val(locations).trigger('change');
+
+		// Disable autocomplete
 		$('.autocomplete-off input').attr('autocomplete', 'off');
 
 		// Reorder short form components with the help text below the label
@@ -150,9 +160,18 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 			$(item).children('.help-block').insertBefore(input);
 		});
 
-		// Validation?
-
-	})
+		// If there is an error in the form, scroll to it
+		setTimeout( () => {
+			if ($('.error').length) {
+				console.log("Scrolling to error");
+				const y = $('.error').first().offset().top - 100;
+				window.scroll({
+					top: y,
+					behaviour: 'smooth',
+				});
+			}
+		}, 500)
+	});
 
 	// Handle apology field from GET param
 	const queryString = window.location.search;

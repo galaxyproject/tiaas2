@@ -70,7 +70,7 @@ class TrainingForm(forms.ModelForm):
         }
         help_texts = {
             "use_gtn": (
-                'Those available on the <a href="'
+                'These are available on the <a href="'
                 'https://training.galaxyproject.org/training-material/'
                 '" target="_blank"> Galaxy Training Network</a>.'),
             "advertise": (
@@ -128,13 +128,16 @@ class TrainingForm(forms.ModelForm):
         now = timezone.now().date()
         validate_start_date(start)
 
-        if 'apology' in self.data and self.data['apology'] == "I am very sorry":
+        if (
+                'apology' in self.data
+                and self.data['apology'] == "I am very sorry"):
             # They're allowed to submit it.
             return start
         else:
             if (start - now).days < settings.TIAAS_LATE_REQUEST_PREVENTION:
                 raise ValidationError(
-                    "You are too late to submit this, unfortunately.")
+                    "Unfortunately you are too late to submit this"
+                    " start date.")
 
         return start
 

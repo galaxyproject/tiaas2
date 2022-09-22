@@ -45,3 +45,12 @@ input[type="checkbox"] {
 	margin-top: .4rem;
 	margin-right: 1rem;
 }
+
+/* Form validation */
+div.error {
+	color: var(--danger);
+	background: #f8d7da;
+	border: 1px solid var(--danger);
+	border-radius: 1rem;
+	padding: .5rem;
+}

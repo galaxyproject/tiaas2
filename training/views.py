@@ -1,3 +1,5 @@
+import pprint
+import logging
 import collections
 from datetime import date
 from django_countries import countries
@@ -23,10 +25,7 @@ from .galaxy import (
 
 from .models import Training
 
-
-def test(request):
-    """Show the specified html page."""
-    return render(request, f'training/{request.GET.get("filename")}')
+logger = logging.getLogger(__name__)
 
 
 def register(request):
@@ -52,7 +51,7 @@ def register(request):
                     ),
                     settings.TIAAS_SEND_EMAIL_FROM,
                     [settings.TIAAS_SEND_EMAIL_TO],
-                    fail_silently=True,  # TODO should handle and log appropriately
+                    fail_silently=True,  # TODO should handle and log
                 )
             if settings.TIAAS_SEND_EMAIL_TO_REQUESTER:
                 send_mail(
@@ -66,10 +65,13 @@ def register(request):
                     ),
                     settings.TIAAS_SEND_EMAIL_FROM,
                     [form.cleaned_data['email']],
-                    fail_silently=True,  # TODO should handle and log appropriately
+                    fail_silently=True,  # TODO should handle and log
                 )
 
             return HttpResponseRedirect(reverse("thanks"))
+
+        # Form was invalid
+        logger.warning(f"Location: {form.data['location']}")
 
     # if a GET (or any other method) we'll create a blank form
     else:
