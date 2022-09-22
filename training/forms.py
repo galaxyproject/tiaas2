@@ -134,7 +134,7 @@ class TrainingForm(forms.ModelForm):
             # They're allowed to submit it.
             return start
         else:
-            if (start - now).days < settings.TIAAS_LATE_REQUEST_PREVENTION:
+            if (start - now).days < settings.TIAAS_LATE_REQUEST_PREVENTION_DAYS:
                 raise ValidationError(
                     "Unfortunately you are too late to submit this"
                     " start date.")

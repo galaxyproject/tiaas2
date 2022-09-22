@@ -111,7 +111,7 @@ TIAAS_EXPOSE_USERNAME = False
 # Default period to retain contact information (months)
 TIAAS_SHOW_ADVERTISING = True
 TIAAS_GDPR_RETAIN_EXTRA_MONTHS = 12
-TIAAS_LATE_REQUEST_PREVENTION = 10   # calendar days
+TIAAS_LATE_REQUEST_PREVENTION_DAYS = 10   # calendar days
 
 # EMAIL_HOST
 # EMAIL_PORT
