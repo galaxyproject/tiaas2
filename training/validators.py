@@ -19,7 +19,7 @@ def validate_start_date(start_date):
 
 
 validate_identifier = RegexValidator(
-    regex=re.compile(r'^[-a-z0-9_]+$'),
+    regex=re.compile(r'^[-a-z0-9]+$'),
     message='Training identifier contains illegal characters',
     code='invalid_identifier'
 )

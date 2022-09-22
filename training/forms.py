@@ -1,4 +1,3 @@
-import string
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -7,12 +6,6 @@ from . import models
 from .validators import validate_start_date
 
 from django.utils import timezone
-
-IDENTIFIER_ALLOWED_CHARS = (
-    string.ascii_lowercase
-    + string.digits
-    + '-'
-)
 
 
 class TrainingForm(forms.ModelForm):
@@ -147,19 +140,3 @@ class TrainingForm(forms.ModelForm):
         if data < now:
             raise ValidationError("This event would have already ended")
         return data
-
-    def clean_training_identifier(self):
-        """Validate that identifier complies with requirements."""
-        identifier = self.cleaned_data['training_identifier'].lower()
-        allowed = set(IDENTIFIER_ALLOWED_CHARS)
-        submitted = set(identifier)
-        if submitted - allowed:
-            for i, char in enumerate(identifier):
-                if char not in IDENTIFIER_ALLOWED_CHARS:
-                    raise ValidationError(
-                        f'Invalid character "{char}" at position {i + 1}.'
-                    )
-            # Should never get to this point, but let's catch anyway
-            raise ValidationError(
-                "Invalid character(s) in submitted identifier.")
-        return identifier
