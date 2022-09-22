@@ -17,7 +17,7 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 -->
 
 <div class="container">
-	<h2>Apply for a new allocation</h2>
+	<h2>Apply for a new training allocation</h2>
 
 	<div class="my-5">
 		{% include 'snippets/register/1_intro.html' %}
@@ -171,15 +171,17 @@ https://django-bootstrap3.readthedocs.io/en/latest/templatetags.html
 				});
 			}
 		}, 500)
-	});
 
-	// Handle apology field from GET param
-	const queryString = window.location.search;
-	const urlParams = new URLSearchParams(queryString);
-	if(urlParams.get("apology") !== null) {
-		document.getElementById("apology").value = "I am very sorry"
-		// Add it to the form, in case they get other validation errors.
-		document.getElementsByTagName("form")[0].action = document.getElementsByTagName("form")[0].action + "?" + urlParams.get("apology")
-	}
+		// Handle apology field from GET param
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		if(urlParams.get("apology") !== null) {
+			document.getElementById("apology").value = "I am very sorry";
+			// Add it to the form, in case they get other validation errors.
+			document.getElementsByTagName("form")[0]
+				.action = document.getElementsByTagName("form")[0]
+					.action + "?" + urlParams.get("apology");
+		}
+	});
 </script>
 {% endblock %}
