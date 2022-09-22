@@ -86,7 +86,7 @@ var data = d3.map();
 
 // Load external data and boot
 d3.queue()
-  .defer(d3.json, "{% static "training/world.geojson" %}")
+  .defer(d3.json, "{% static "vendor/d3-geo/world.geojson" %}")
   .defer(d3.csv, "{% url 'stats_csv' %}", function(d) { data.set(d.code, +d.pop); })
   .await(ready);
 
