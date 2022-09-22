@@ -3,7 +3,6 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="maximum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
@@ -13,9 +12,12 @@
 	<link rel="stylesheet" href="{% static 'vendor/fontawesome-5.15.4/css/all.min.css' %}"/>
 	<link rel="stylesheet" href="{% static 'vendor/material-icons.css' %}">
 
-	{% block head %}{% endblock %}
-
+	<!-- Use local Galaxy's stylesheet -->
+	<link rel="stylesheet" href="/static/dist/base.css">
+	<!-- And override/add some bits to make it work -->
 	<link rel="stylesheet" href="{% static 'training/css/main.css' %}">
+
+	{% block head %}{% endblock %}
 
 	{% if refresh %}
 	<meta http-equiv="refresh" content="5">
@@ -23,41 +25,52 @@
 </head>
 
 <body>
-	<nav class="navbar fixed-top navbar-dark bg-dark navbar-expand-sm">
-		<a class="navbar-brand mr-5" href="/">
+	<nav class="navbar fixed-top justify-content-center navbar-dark navbar-expand" id="masthead">
+	<!-- <nav class="navbar fixed-top navbar-dark navbar-expand-sm" id="masthead"> -->
+		<a class="navbar-brand mr-5" href="/tiaas">
 			<span class="navbar-brand-title">{{ settings.TIAAS_OWNER }} - Training Infrastructure as a Service</span>
 		</a>
 
-		<div class="collapse navbar-collapse">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item">
-					<a class="nav-link" href="/tiaas" id="nav-link-home">Home</a>
-				</li>
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a
+					class="nav-link nav-icon"
+					href="/"
+					data-toggle="tooltip"
+					data-placement="bottom"
+					data-title="Back to {{ settings.TIAAS_OWNER }}"
+				>
+					<i class="fa fa-fw fa-home"></i>
+				</a>
+			</li>
 
-				<li class="nav-item">
-					<a class="nav-link" href="/tiaas/calendar" id="nav-link-calendar">Calendar</a>
-				</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/tiaas" id="nav-link-about">Home</a>
+			</li>
 
-				<li class="nav-item">
-					<a class="nav-link" href="/tiaas/stats" id="nav-link-stats">Stats</a>
-				</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/tiaas/calendar" id="nav-link-calendar">Calendar</a>
+			</li>
 
-				<li class="nav-item">
-					<a class="nav-link" href="/tiaas/new" id="nav-link-request">Request</a>
-				</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/tiaas/stats" id="nav-link-stats">Stats</a>
+			</li>
 
-				{% if user.is_authenticated %}
-				<li class="nav-item">
-					<a class="nav-link" href="/tiaas/admin">Admin</a>
-				</li>
-				{% endif %}
-			</ul>
+			<li class="nav-item">
+				<a class="nav-link" href="/tiaas/new" id="nav-link-request">Request</a>
+			</li>
 
-			<div>
-				{% if user.is_authenticated %}
-				<a class="navbar-brand" href="/tiaas/admin/logout/">Logout</a>
-				{% endif %}
-			</div>
+			{% if user.is_authenticated %}
+			<li class="nav-item">
+				<a class="nav-link" href="/tiaas/admin">Admin</a>
+			</li>
+			{% endif %}
+		</ul>
+
+		<div>
+			{% if user.is_authenticated %}
+			<a class="navbar-brand" href="/tiaas/admin/logout/">Logout</a>
+			{% endif %}
 		</div>
 	</nav>
 
@@ -87,10 +100,12 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 	<script type="text/javascript">
+		// Set the navbar active link based on the current URL
 		const LOCATIONS = {
-			'tiaas': 'home',
+			'tiaas': 'about',
 			'tiaas/new': 'request',
 			'tiaas/calendar': 'calendar',
+			'tiaas/stats': 'stats',
 		}
 		$(document).ready( () => {
 			// Set current page nav link to 'active'
@@ -99,6 +114,10 @@
 				$('.nav-link').removeClass('active');
 				$(`#nav-link-${LOCATIONS[loc]}`).addClass('active');
 			}
+		})
+		// Enable bootstrap tooltips
+		$(function () {
+		  $('[data-toggle="tooltip"]').tooltip()
 		})
 	</script>
 
