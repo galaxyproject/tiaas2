@@ -12,8 +12,8 @@
 	<link rel="stylesheet" href="{% static 'vendor/fontawesome-5.15.4/css/all.min.css' %}"/>
 	<link rel="stylesheet" href="{% static 'vendor/material-icons.css' %}">
 
-	<!-- Use local Galaxy's stylesheet -->
-	<link rel="stylesheet" href="/static/dist/base.css">
+	<!-- Use Galaxy's stylesheet (copied during deployment) -->
+	<link rel="stylesheet" href="{% static 'training/style/galaxy.css' %}">
 	<!-- And override/add some bits to make it work -->
 	<link rel="stylesheet" href="{% static 'training/css/main.css' %}">
 
