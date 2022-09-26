@@ -177,10 +177,8 @@ def stats(request):
     )  # Exclude the 'test' group from showing up in calendar
 
     approved = trainings.filter(processed="AP")
-    # approved = len([x for x in trainings if x.processed == "AP"])
 
     waiting = trainings.filter(processed="UN")
-    # waiting = len([x for x in trainings if x.processed == "UN"])
 
     if approved:
         days = sum(
@@ -188,21 +186,10 @@ def stats(request):
             for end, start in
             approved.values_list('end', 'start')
         )
-        # days = sum([(x.end - x.start).days for x in trainings])
-
         students = sum(approved.values_list('attendance', flat=True))
-        # students = sum([x.attendance for x in trainings])
-
         today = date.today()
         current = approved.filter(start__lte=today, end__gte=today)
-        # current_trainings = len([
-        #     x for x in trainings
-        #     if x.start <= date.today() <= x.end
-        # ])
-
         earliest = min(approved.values_list('start', flat=True))
-        # earliest = min([x.start for x in trainings])
-
         countries_lookup = dict(countries)
         locations = collections.Counter()
         for locs in approved.values_list('location', flat=True):
