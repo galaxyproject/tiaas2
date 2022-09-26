@@ -38,7 +38,7 @@ class TrainingForm(forms.ModelForm):
         )
 
         labels = {
-            "name": "Full name",
+            "name": "Preferred name",
             "title": "Title of your training event",
             "email": "Contact email",
             "retain_contact": (
@@ -62,6 +62,11 @@ class TrainingForm(forms.ModelForm):
             "blogpost": "I will consider writing a blog post",
         }
         help_texts = {
+            "email": (
+                'Your name and email will be used for contacting you in'
+                ' relation to your training request. We will not use this'
+                ' information for any other purpose without your consent.'
+            ),
             "use_gtn": (
                 'These are available on the <a href="'
                 'https://training.galaxyproject.org/training-material/'
@@ -122,8 +127,9 @@ class TrainingForm(forms.ModelForm):
         validate_start_date(start)
 
         if (
-                'apology' in self.data
-                and self.data['apology'] == "I am very sorry"):
+            'apology' in self.data
+            and self.data['apology'] == "I am very sorry"
+        ):
             # They're allowed to submit it.
             return start
         else:
