@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 import os
 from tiaas import git
+from tiaas.logging import LOGGING
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -97,7 +98,6 @@ STATIC_ROOT = "./static"
 
 # Installation-specific settings
 
-TIAAS_LOG_FILE = None         # Add path in local conf to enable
 GALAXY_SECRET = "USING THE DEFAULT IS NOT SECURE!"
 TIAAS_OWNER = "Galaxy Antartica" # A human-readable name
 TIAAS_EMAIL = "admin@example.org"
@@ -154,10 +154,6 @@ try:
 except Exception as e:
     import sys
     sys.exit('Local settings file not found: %s' % e)
-
-if TIAAS_LOG_FILE:
-    from tiaas.logging import LOGGING
-    LOGGING['handlers']['file']['filename'] = TIAAS_LOG_FILE
 
 GIT_COMMIT_ID = git.get_commit_id(BASE_DIR)
 GIT_REMOTE_URL = git.get_remote_url(BASE_DIR)

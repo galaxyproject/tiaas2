@@ -47,8 +47,6 @@ TIAAS_EMAIL = "admin@example.org"
 TIAAS_OWNER_SITE = "https://example.org"    # Your website, if you have one
 TIAAS_DOMAIN = "https://galaxy.example.org" # Your Galaxy instance URL
 
-TIAAS_LOG_FILE = os.path.join(BASE_DIR, 'tiaas.log')
-
 # Offer to advertise training event
 TIAAS_SHOW_ADVERTISING = True
 

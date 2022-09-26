@@ -10,23 +10,15 @@ LOGGING = {
         },
     },
     'handlers': {
-        'console': {
+        'stdout': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-        },
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '/tmp/tiaas.log',
-            'backupCount': 5,
-            'maxBytes': 1000000,  # 1MB ~ 20k rows
             'formatter': 'verbose',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],
+            'handlers': ['stdout'],
             'level': 'DEBUG',
             'propagate': True,
         },
