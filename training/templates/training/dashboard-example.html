@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+	<h1> The TIaaS training Dashboard </h1>
+
+	<br>
+
+	<p>
+		When you run training on TIaaS, we'll give you access to a dashboard to
+		monitor your participants' progress. This can be really handy for keeping
+		pace!
+	</p>
+
+	<p>
+		This screenshot gives you an example of what features are available in the
+		dashboard:
+	</p>
+
+	<br>
+
+	<img
+		src="{% static 'training/img/dashboard-screenshot.png' %}"
+		alt="Training dashboard screenshot"
+	>
+</div>
+
+{% endblock %}

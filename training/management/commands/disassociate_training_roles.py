@@ -19,6 +19,8 @@ class Command(BaseCommand):
                 event._redact()
 
             try:
-                print(disassociate_role(event.training_identifier.lower(), commit=commit))
+                print(
+                    disassociate_role(event.training_identifier.lower(), commit=commit)
+                )
             except ProgrammingError as pe:
                 print(pe)

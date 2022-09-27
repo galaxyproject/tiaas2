@@ -1,0 +1,20 @@
+main {
+  max-width: 1200px;
+}
+#header-img {
+  height: 100px;
+  width: auto;
+}
+.card {
+  border: none;
+  max-width: 275px;
+}
+.card h1 span.material-icons {
+  font-size: 3rem;
+}
+.card-title {
+  text-align: center;
+}
+.card-body {
+  text-align: center;
+}

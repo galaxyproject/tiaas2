@@ -2,10 +2,25 @@
 {% load humanize %}
 {% load static %}
 
+
+{% block head %}
+<style media="all">
+  .card-title {
+    text-align: center;
+    font-size: 4rem;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<h2>Overview</h2>
-<div class="row">
-  <div class="col-sm-3">
+
+<div class="container">
+  <h2>Overview</h2>
+  <p>Data is cumulative since {{ earliest }}</p>
+
+  <br><br>
+
+  <div class="card-group">
     <div class="card">
       <h5 class="card-header">Today</h5>
       <div class="card-body">
@@ -13,17 +28,13 @@
         <p class="card-text">Training events happening today</p>
       </div>
     </div>
-  </div>
-  <div class="col-sm-3">
     <div class="card">
       <h5 class="card-header">Overall</h5>
       <div class="card-body">
-        <h1 class="card-title">{{ approved }} <i class="fas fa-calendar-alt"></i> </i></h1>
+        <h1 class="card-title">{{ approved }} <i class="fas fa-calendar-alt"></i> </h1>
         <p class="card-text">Events since {{ earliest }}, with {{ waiting }} new training requests waiting</p>
       </div>
     </div>
-  </div>
-  <div class="col-sm-3">
     <div class="card">
       <h5 class="card-header">Overall</h5>
       <div class="card-body">
@@ -31,52 +42,47 @@
         <p class="card-text">students taught over the lifetime of the TIaaS service</p>
       </div>
     </div>
-  </div>
-  <div class="col-sm-3">
     <div class="card">
       <h5 class="card-header">Overall</h5>
       <div class="card-body">
-		  <h1 class="card-title">{{ days }} <i class="fas fa-laptop"></i></h1>
-		  <p class="card-text">Days of compute resources provided various training events.</p>
+        <h1 class="card-title">{{ days }} <i class="fas fa-laptop"></i></h1>
+  		  <p class="card-text">Days of compute resources provided various training events.</p>
       </div>
     </div>
   </div>
-</div>
 
-<style type="text/css" media="all">
-.card-title {
-    text-align: center;
-    font-size: 4rem;
-}
-</style>
+  <div class="text-center">
+    <svg id="my_dataviz" width="1000" height="600"></svg>
+  </div>
 
-<script src="{% static "training/d3.v4.js" %}"></script>
-<script src="{% static "training/d3-scale-chromatic.v1.min.js" %}"></script>
-<script src="{% static "training/d3-geo-projection.v2.min.js" %}"></script>
-<div class="text-center">
-<svg id="my_dataviz" width="1000" height="600"></svg>
-</div>
-
-<table class="table table-striped">
+  {% if approved %}
+  <table class="table table-striped">
     <thead>
-        <tr>
-            <th>Country</th>
-            <th>Training events</th>
-        </tr>
+      <tr>
+        <th>Country</th>
+        <th>Training events</th>
+      </tr>
     </thead>
     <tbody>
-        {% for k, v in locations.items  %}
-        <tr>
-            <td>{{ k }}</td>
-            <td>{{ v}}</td>
-        </tr>
-        {% endfor %}
+      {% for k, v in locations.items  %}
+      <tr>
+        <td>{{ k }}</td>
+        <td>{{ v}}</td>
+      </tr>
+      {% endfor %}
     </tbody>
-</table>
+  </table>
+  {% endif %}
+</div>
+{% endblock %}
 
+
+{% block script %}
+<script src="{% static 'vendor/d3-geo/d3.v4.js' %}"></script>
+<script src="{% static 'vendor/d3-geo/d3-scale-chromatic.v1.min.js' %}"></script>
+<script src="{% static 'vendor/d3-geo/d3-geo-projection.v2.min.js' %}"></script>
 
 <script>
-
 // The svg
 var svg = d3.select("svg"),
   width = +svg.attr("width"),
@@ -94,7 +100,7 @@ var data = d3.map();
 
 // Load external data and boot
 d3.queue()
-  .defer(d3.json, "{% static "training/world.geojson" %}")
+  .defer(d3.json, "{% static "vendor/d3-geo/world.geojson" %}")
   .defer(d3.csv, "{% url 'stats_csv' %}", function(d) { data.set(d.code, +d.pop); })
   .await(ready);
 
@@ -123,5 +129,4 @@ function ready(error, topo) {
     }
 
 </script>
-
 {% endblock %}

@@ -2,11 +2,20 @@
 
 {% block content %}
 
-<div class="errormessage">
-    Error {{ message }}	
-    <br />
-    <a href="https://{{ host }}">Return to Galaxy</a>
-</div>
+<div class="container">
+	<div class="errormessage">
+		<p class="alert alert-danger">
+			Sorry, the site encountered an error
+		</p>
 
+		<br>
+
+		{{ message }}
+
+		<br>
+
+		<a href="{{ TIAAS_DOMAIN }}">Return to Galaxy</a>
+	</div>
+</div>
 
 {% endblock %}

@@ -1,40 +1,114 @@
 {% load static %}
-<!DOCTYPE HTML>
-<html>
-<head>
 
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="maximum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-	<title>Galaxy TIaaS {% block title %}{% endblock %}</title>
-	<link href="{{ settings.TIAAS_DOMAIN }}/static/style/base.css" media="screen" rel="stylesheet" type="text/css" />
-	<link href="{{ settings.TIAAS_DOMAIN }}/static/dist/base.css" media="screen" rel="stylesheet" type="text/css" />
+	<title>{{ settings.TIAAS_OWNER }} TIaaS {% block title %}{% endblock %}</title>
 
-	<style type="text/css" media="all">
-		#center{ padding-right: 10em; padding-left: 10em; overflow-y: auto; }
-	</style>
-	 <link  href="{% static 'training/style/tiaas.css' %}" media="screen" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="{% static 'vendor/fontawesome-5.15.4/css/all.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'vendor/material-icons.css' %}">
+
+	<!-- Use Galaxy's stylesheet (copied during deployment) -->
+	<link rel="stylesheet" href="{% static 'training/style/galaxy.css' %}">
+	<!-- And override/add some bits to make it work -->
+	<link rel="stylesheet" href="{% static 'training/css/main.css' %}">
+
+	{% block head %}{% endblock %}
+
 	{% if refresh %}
 	<meta http-equiv="refresh" content="5">
 	{% endif %}
 </head>
-<body scroll="no" class="full-content ">
-    <div id="everything">
-        <nav id="masthead" class="navbar navbar-expand justify-content-center navbar-dark">
-            <a class="navbar-brand" href="/">
-            	<span class="navbar-brand-title">Galaxy Training Infrastructure as a Service</span>
-            </a>
-        </nav>
-        <div id="columns">
-            <div id="center" class="inbound">
-                {% block content %}
-                {% endblock %}
-                <div class="text-center"> 
-                    <b>Training Infrastructure as a Service (TIaaS)</b> licensed under the AGPLv3, running commit
-                    <a href="https://github.com/usegalaxy-eu/tiaas2/commit/{{ settings.GIT_COMMIT_ID }}" target="_blank">{{ settings.GIT_COMMIT_ID }}</a>
-                </div>
-            </div><!--end center-->
-        </div><!--end columns-->
-    </div><!--end everything-->
+
+<body>
+	<nav class="navbar fixed-top justify-content-center navbar-dark navbar-expand" id="masthead">
+	<!-- <nav class="navbar fixed-top navbar-dark navbar-expand-sm" id="masthead"> -->
+		<a class="navbar-brand mr-5" href="/tiaas">
+			<span class="navbar-brand-title">{{ settings.TIAAS_OWNER }} - Training Infrastructure as a Service</span>
+		</a>
+
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a
+					class="nav-link nav-icon"
+					href="{{ TIAAS_DOMAIN }}"
+					data-toggle="tooltip"
+					data-placement="bottom"
+					data-title="Back to {{ settings.TIAAS_OWNER }}"
+				>
+					<i class="fa fa-fw fa-home"></i>
+				</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link{% if request.path == '/tiaas/' %} active{% endif %}" href="/tiaas" id="nav-link-about">Home</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link{% if request.path == '/tiaas/calendar/' %} active{% endif %}" href="/tiaas/calendar" id="nav-link-calendar">Calendar</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link{% if request.path == '/tiaas/stats/' %} active{% endif %}" href="/tiaas/stats" id="nav-link-stats">Stats</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link{% if request.path == '/tiaas/new/' %} active{% endif %}" href="/tiaas/new" id="nav-link-request">Request</a>
+			</li>
+
+			{% if user.is_authenticated %}
+			<li class="nav-item">
+				<a class="nav-link" href="/tiaas/admin">Admin</a>
+			</li>
+			{% endif %}
+		</ul>
+
+		<div>
+			{% if user.is_authenticated %}
+			<a class="navbar-brand" href="/tiaas/admin/logout/">Logout</a>
+			{% endif %}
+		</div>
+	</nav>
+
+	<main>
+
+		{% block content %}
+		{% endblock %}
+
+	</main>
+
+	<footer>
+
+		{% include 'snippets/footer.html' %}
+
+		<div class="version">
+			<b>Training Infrastructure as a Service (TIaaS)</b>
+			licensed under the AGPLv3, running commit
+			<a
+				href="{{ settings.GIT_REMOTE_URL }}/tree/{{ settings.GIT_COMMIT_ID }}"
+				target="_blank"
+			>{{ settings.GIT_COMMIT_ID }}</a>
+		</div>
+	</footer>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		$(document).ready( () => {
+			$(function () {
+			  $('[data-toggle="tooltip"]').tooltip()
+			})
+		});
+	</script>
+
+	{% block script %}
+	{% endblock %}
+
 </body>
 </html>
