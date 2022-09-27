@@ -37,15 +37,15 @@ def register(request):
             form.save()
 
             # TODO: refactor this into forms:
-            identifier = form.cleaned_data['training_identifier']
+            identifier = form.cleaned_data["training_identifier"]
             if settings.TIAAS_SEND_EMAIL_TO:
                 send_mail(
                     f"New TIaaS Request ({identifier})",
                     (
-                        'A new TIaaS request has been received. View it in the'
+                        "A new TIaaS request has been received. View it in the"
                         ' <a href="'
-                        f'https://{host}/tiaas/admin/training/training/'
-                        '?processed__exact=UN'
+                        f"https://{host}/tiaas/admin/training/training/"
+                        "?processed__exact=UN"
                         '">admin dashboard</a>'
                     ),
                     settings.TIAAS_SEND_EMAIL_FROM,
@@ -57,13 +57,13 @@ def register(request):
                     f"TIaaS Request confirmation: ({identifier})",
                     (
                         f'Dear {form.cleaned_data["name"]},\n\n'
-                        'Thanks for requesting a new TIaaS allocation.\n'
-                        'We will contact you to let you know when your request'
-                        ' has been reviewed.\n\n'
-                        f'Regards,\nThe {settings.TIAAS_OWNER} team'
+                        "Thanks for requesting a new TIaaS allocation.\n"
+                        "We will contact you to let you know when your request"
+                        " has been reviewed.\n\n"
+                        f"Regards,\nThe {settings.TIAAS_OWNER} team"
                     ),
                     settings.TIAAS_SEND_EMAIL_FROM,
-                    [form.cleaned_data['email']],
+                    [form.cleaned_data["email"]],
                     fail_silently=True,  # TODO should handle and log
                 )
 
@@ -89,14 +89,13 @@ def thanks(request):
 
 def dashboard_example(request):
     """Show the example training dashboard page."""
-    return render(request, 'training/dashboard-example.html')
+    return render(request, "training/dashboard-example.html")
 
 
 def stats_csv(request):
     data = "name,code,pop\n"
-    trainings = (
-        Training.objects.exclude(training_identifier="test")
-        .filter(processed="AP")
+    trainings = Training.objects.exclude(training_identifier="test").filter(
+        processed="AP"
     )
     locations = collections.Counter()
     codes = {}
@@ -115,20 +114,24 @@ def stats_csv(request):
 def numbers_csv(request):
     data = "id,start,end,location,use_gtn,attendance\n"
 
-    trainings = (
-        Training.objects.exclude(training_identifier="test")
-        .filter(processed="AP")
+    trainings = Training.objects.exclude(training_identifier="test").filter(
+        processed="AP"
     )
     for t in trainings:
         countries = [x.code for x in t.location]
-        data += ','.join([
-            t.id,
-            t.start,
-            t.end,
-            '|'.join(countries),
-            t.use_gtn,
-            t.attendance,
-        ]) + '\n'
+        data += (
+            ",".join(
+                [
+                    t.id,
+                    t.start,
+                    t.end,
+                    "|".join(countries),
+                    t.use_gtn,
+                    t.attendance,
+                ]
+            )
+            + "\n"
+        )
 
     return HttpResponse(data, content_type="text/csv")
 
@@ -138,18 +141,9 @@ def trainings_for(trainings, year, month, day):
     if day == 0:
         return 0
     if year == 2020 and month == 1:
-        print(
-            day,
-            [
-                x for x in trainings
-                if x.start <= date(year, month, day) <= x.end
-            ]
-        )
+        print(day, [x for x in trainings if x.start <= date(year, month, day) <= x.end])
 
-    return len([
-        x for x in trainings
-        if x.start <= date(year, month, day) <= x.end
-    ])
+    return len([x for x in trainings if x.start <= date(year, month, day) <= x.end])
 
 
 def calendar_view(request):
@@ -158,7 +152,7 @@ def calendar_view(request):
         Training.objects.all()
         .exclude(training_identifier="test")
         .filter(processed="AP")
-        .order_by('start')
+        .order_by("start")
     )
     return render(
         request,
@@ -166,7 +160,7 @@ def calendar_view(request):
         {
             "events": approved_trainings,
             "admin_user": request.user.is_staff,
-            "n_events": approved_trainings.count()
+            "n_events": approved_trainings.count(),
         },
     )
 
@@ -182,18 +176,16 @@ def stats(request):
 
     if approved:
         days = sum(
-            (end - start).days
-            for end, start in
-            approved.values_list('end', 'start')
+            (end - start).days for end, start in approved.values_list("end", "start")
         )
-        students = sum(approved.values_list('attendance', flat=True))
+        students = sum(approved.values_list("attendance", flat=True))
         today = date.today()
         current = approved.filter(start__lte=today, end__gte=today)
-        earliest = min(approved.values_list('start', flat=True))
+        earliest = min(approved.values_list("start", flat=True))
         countries_lookup = dict(countries)
         locations = collections.Counter()
-        for locs in approved.values_list('location', flat=True):
-            for loc in locs.split(','):
+        for locs in approved.values_list("location", flat=True):
+            for loc in locs.split(","):
                 locations[countries_lookup[loc]] += 1
 
         data = {
@@ -225,7 +217,7 @@ def join(request, training_id):
     training_id = training_id.lower()
     trainings = Training.objects.filter(
         training_identifier__iexact=training_id,
-        processed='AP',
+        processed="AP",
     )
 
     # If we don't know this training, reject
@@ -281,24 +273,17 @@ def join(request, training_id):
     if not role_exists:
         role_id = create_role(training_role_name)
     else:
-        role_id = [
-            x for x in current_roles
-            if training_role_name == x["name"]
-        ][0]["id"]
+        role_id = [x for x in current_roles if training_role_name == x["name"]][0]["id"]
 
     # Create group if need to
     current_groups = list(get_groups())
-    group_exists = any([
-        training_role_name == x["name"]
-        for x in current_groups
-    ])
+    group_exists = any([training_role_name == x["name"] for x in current_groups])
     if not group_exists:
         group_id = create_group(training_role_name, role_id)
     else:
-        group_id = [
-            x for x in current_groups
-            if training_role_name == x["name"]
-        ][0]["id"]
+        group_id = [x for x in current_groups if training_role_name == x["name"]][0][
+            "id"
+        ]
 
     ################
     #  END UNSAFE  #
@@ -333,8 +318,7 @@ def _summarize(d):
 def status(request, training_id):
     training_id = training_id.lower()
 
-    trainings = Training.objects.all().filter(
-        training_identifier__iexact=training_id)
+    trainings = Training.objects.all().filter(training_identifier__iexact=training_id)
     any_approved = any([t.processed == "AP" for t in trainings])
 
     if len(trainings) == 0 or not any_approved:

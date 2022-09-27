@@ -8,8 +8,8 @@ from django_countries.fields import CountryField
 from .validators import validate_date_precedence, validate_identifier
 
 
-REDACTION_CODE = 'redacted'
-REDACTED_EMAIL = REDACTION_CODE + '@example.com'
+REDACTION_CODE = "redacted"
+REDACTED_EMAIL = REDACTION_CODE + "@example.com"
 
 
 class Training(models.Model):
@@ -29,7 +29,8 @@ class Training(models.Model):
     non_gtn_links = models.TextField(blank=True)
     attendance = models.IntegerField(validators=[MinValueValidator(1)])
     training_identifier = models.CharField(
-        max_length=20, unique=True, validators=[validate_identifier])
+        max_length=20, unique=True, validators=[validate_identifier]
+    )
     advertise = models.CharField(
         max_length=1, choices=(("Y", "Yes"), ("N", "No")), default="N"
     )
@@ -81,13 +82,10 @@ class Training(models.Model):
     @property
     def str_locations(self):
         """Return locations as comma-delimited string."""
-        return ', '.join([
-            x.name
-            for x in self.location
-        ])
+        return ", ".join([x.name for x in self.location])
 
     def __str__(self):
         return self.training_identifier
 
     def clean(self):
-        validate_date_precedence(self.start, self.end, 'end')
+        validate_date_precedence(self.start, self.end, "end")

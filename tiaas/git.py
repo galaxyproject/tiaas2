@@ -13,7 +13,7 @@ def get_commit_id(base_dir):
         git_head_data = str(git_head_file.read()).strip()
 
     # Open the correct file in .git\ref\heads\[branch]
-    if ' ' in git_head_data:
+    if " " in git_head_data:
         git_head_ref = os.path.join(
             base_dir,
             ".git",
@@ -33,10 +33,5 @@ def get_remote_url(base_dir):
     git_conf = os.path.join(base_dir, ".git", "config")
     with open(git_conf, "r") as f:
         for line in f:
-            if line.strip(" \t").split('=')[0].strip() == 'url':
-                return (
-                    line.strip(" \t")
-                    .split('=')[1]
-                    .strip()
-                    .replace('.git', '')
-                )
+            if line.strip(" \t").split("=")[0].strip() == "url":
+                return line.strip(" \t").split("=")[1].strip().replace(".git", "")

@@ -54,7 +54,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, "templates"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -79,7 +79,9 @@ WSGI_APPLICATION = "tiaas.wsgi.application"
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -99,12 +101,12 @@ STATIC_ROOT = "./static"
 # Installation-specific settings
 
 GALAXY_SECRET = "USING THE DEFAULT IS NOT SECURE!"
-TIAAS_OWNER = "Galaxy Antartica" # A human-readable name
+TIAAS_OWNER = "Galaxy Antartica"  # A human-readable name
 TIAAS_EMAIL = "admin@example.org"
-TIAAS_OWNER_SITE = "https://example.org" # Your website, if you have one.
-TIAAS_DOMAIN = "https://galaxy.example.org" # Your Galaxy instance
+TIAAS_OWNER_SITE = "https://example.org"  # Your website, if you have one.
+TIAAS_DOMAIN = "https://galaxy.example.org"  # Your Galaxy instance
 
-LOGOUT_REDIRECT_URL = '/tiaas/'
+LOGOUT_REDIRECT_URL = "/tiaas/"
 
 # Expose the username publicly in the status page, rather than an encoded ID.
 TIAAS_EXPOSE_USERNAME = False
@@ -112,7 +114,7 @@ TIAAS_EXPOSE_USERNAME = False
 # Default period to retain contact information (months)
 TIAAS_SHOW_ADVERTISING = True
 TIAAS_GDPR_RETAIN_EXTRA_MONTHS = 12
-TIAAS_LATE_REQUEST_PREVENTION_DAYS = 10   # calendar days
+TIAAS_LATE_REQUEST_PREVENTION_DAYS = 10  # calendar days
 
 # EMAIL_HOST
 # EMAIL_PORT
@@ -122,9 +124,13 @@ TIAAS_LATE_REQUEST_PREVENTION_DAYS = 10   # calendar days
 # EMAIL_USE_SSL
 
 # Default "from" address for automated email
-TIAAS_SEND_EMAIL_TO = "admin@example.org" # Your admin email
-TIAAS_SEND_EMAIL_FROM = None # "tiaas+noreply@example.org", setting to None leaves this feature disabled.
-TIAAS_SEND_EMAIL_TO_REQUESTER = False # If you'd like to inform them of a successful request.
+TIAAS_SEND_EMAIL_TO = "admin@example.org"  # Your admin email
+TIAAS_SEND_EMAIL_FROM = (
+    None  # "tiaas+noreply@example.org", setting to None leaves this feature disabled.
+)
+TIAAS_SEND_EMAIL_TO_REQUESTER = (
+    False  # If you'd like to inform them of a successful request.
+)
 
 
 DOCUMENTATION = """
@@ -153,7 +159,8 @@ try:
     from config.local_settings import *  # noqa: F401,F403  ignore these flake8 errors
 except Exception as e:
     import sys
-    sys.exit('Local settings file not found: %s' % e)
+
+    sys.exit("Local settings file not found: %s" % e)
 
 GIT_COMMIT_ID = git.get_commit_id(BASE_DIR)
 GIT_REMOTE_URL = git.get_remote_url(BASE_DIR)

@@ -6,5 +6,5 @@ from django.conf import settings as app_settings
 def settings(request):
     """Inject TIaaS settings."""
     return {
-        'settings': app_settings,
+        "settings": app_settings,
     }
