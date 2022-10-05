@@ -103,8 +103,8 @@ STATIC_ROOT = "./static"
 GALAXY_SECRET = "USING THE DEFAULT IS NOT SECURE!"
 TIAAS_OWNER = "Galaxy Antartica"  # A human-readable name
 TIAAS_EMAIL = "admin@example.org"
-TIAAS_OWNER_SITE = "https://example.org"  # Your website, if you have one.
-TIAAS_DOMAIN = "https://galaxy.example.org"  # Your Galaxy instance
+TIAAS_OWNER_SITE = "https://website.example.org"  # Your website, if you have one
+GALAXY_DOMAIN = "galaxy.example.org"  # Your Galaxy hostname
 
 LOGOUT_REDIRECT_URL = "/tiaas/"
 
@@ -161,6 +161,8 @@ except Exception as e:
     import sys
 
     sys.exit("Local settings file not found: %s" % e)
+
+GALAXY_URL = f"http://{GALAXY_DOMAIN}"
 
 GIT_COMMIT_ID = git.get_commit_id(BASE_DIR)
 GIT_REMOTE_URL = git.get_remote_url(BASE_DIR)

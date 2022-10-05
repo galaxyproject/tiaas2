@@ -7,7 +7,8 @@ def settings(request):
     """Inject TIaaS settings."""
     return {
         "settings": {
-            'TIAAS_DOMAIN': app_settings.TIAAS_DOMAIN,
+            'GALAXY_URL': app_settings.GALAXY_URL,
+            'GALAXY_DOMAIN': app_settings.GALAXY_DOMAIN,
             'TIAAS_OWNER_SITE': app_settings.TIAAS_OWNER_SITE,
             'TIAAS_OWNER': app_settings.TIAAS_OWNER,
             'TIAAS_EMAIL': app_settings.TIAAS_EMAIL,

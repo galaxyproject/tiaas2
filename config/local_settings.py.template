@@ -44,8 +44,8 @@ GALAXY_SECRET = "USING THE DEFAULT IS NOT SECURE!"
 # The following values are displayed as text (values are examples)
 TIAAS_OWNER = "Galaxy Antartica"            # A human-readable name
 TIAAS_EMAIL = "admin@example.org"
-TIAAS_OWNER_SITE = "https://example.org"    # Your website, if you have one
-TIAAS_DOMAIN = "https://galaxy.example.org" # Your Galaxy instance URL
+TIAAS_OWNER_SITE = "https://website.example.org"  # Your website, if you have one
+GALAXY_DOMAIN = "galaxy.example.org"  # Your Galaxy hostname
 
 # Offer to advertise training event
 TIAAS_SHOW_ADVERTISING = True
