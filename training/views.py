@@ -43,10 +43,9 @@ def register(request):
                     f"New TIaaS Request ({identifier})",
                     (
                         "A new TIaaS request has been received. View it in the"
-                        ' <a href="'
-                        f"https://{host}/tiaas/admin/training/training/"
+                        ' admin dashboard: '
+                        f"{settings.GALAXY_URL}/tiaas/admin/training/training/"
                         "?processed__exact=UN"
-                        '">admin dashboard</a>'
                     ),
                     settings.TIAAS_SEND_EMAIL_FROM,
                     [settings.TIAAS_SEND_EMAIL_TO],
