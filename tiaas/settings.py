@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 """
 
 import os
+from tiaas import git
+from tiaas.logging import LOGGING
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +25,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
-    "training.apps.TrainingConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -33,7 +34,7 @@ INSTALLED_APPS = [
     "django_countries",
     "django.contrib.humanize",
     "bootstrap3",
-    "markdownify",
+    "training",
 ]
 
 MIDDLEWARE = [
@@ -52,7 +53,9 @@ ROOT_URLCONF = "tiaas.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            os.path.join(BASE_DIR, "templates"),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -60,6 +63,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "training.context_processors.settings",
             ]
         },
     }
@@ -67,9 +71,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "tiaas.wsgi.application"
 
+
+# Database
+# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+# --> Defined in config.local_settings
+
+
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -86,23 +98,23 @@ USE_TZ = True
 STATIC_URL = "/tiaas/static/"
 STATIC_ROOT = "./static"
 
+# Installation-specific settings
+
 GALAXY_SECRET = "USING THE DEFAULT IS NOT SECURE!"
-TIAAS_OWNER = "Galaxy Antartica" # A human-readable name 
+TIAAS_OWNER = "Galaxy Antartica"  # A human-readable name
 TIAAS_EMAIL = "admin@example.org"
-TIAAS_OWNER_SITE = "https://example.org" # Your website, if you have one.
-TIAAS_DOMAIN = "https://galaxy.example.org" # Your Galaxy instance
+TIAAS_OWNER_SITE = "https://website.example.org"  # Your website, if you have one
+GALAXY_DOMAIN = "galaxy.example.org"  # Your Galaxy hostname
 
-# TIaaS-specific settings
-
-# Default period to retain contact information (months)
-TIAAS_GDPR_RETAIN_EXTRA = 12
-TIAAS_SHOW_ADVERTISING = True
+LOGOUT_REDIRECT_URL = "/tiaas/"
 
 # Expose the username publicly in the status page, rather than an encoded ID.
 TIAAS_EXPOSE_USERNAME = False
 
-TIAAS_LATE_REQUEST_PREVENTION = 10 # calendar days
-TIAAS_GDPR_RETAIN_EXTRA = 12  # months
+# Default period to retain contact information (months)
+TIAAS_SHOW_ADVERTISING = True
+TIAAS_GDPR_RETAIN_EXTRA_MONTHS = 12
+TIAAS_LATE_REQUEST_PREVENTION_DAYS = 10  # calendar days
 
 # EMAIL_HOST
 # EMAIL_PORT
@@ -110,10 +122,15 @@ TIAAS_GDPR_RETAIN_EXTRA = 12  # months
 # EMAIL_HOST_PASSWORD
 # EMAIL_USE_TLS
 # EMAIL_USE_SSL
+
 # Default "from" address for automated email
-TIAAS_SEND_EMAIL_TO = "admin@example.org" # Your admin email
-TIAAS_SEND_EMAIL_FROM = None # "tiaas+noreply@example.org", setting to None leaves this feature disabled.
-TIAAS_SEND_EMAIL_TO_REQUESTER = False # If you'd like to inform them of a successful request.
+TIAAS_SEND_EMAIL_TO = "admin@example.org"  # Your admin email
+TIAAS_SEND_EMAIL_FROM = (
+    None  # "tiaas+noreply@example.org", setting to None leaves this feature disabled.
+)
+TIAAS_SEND_EMAIL_TO_REQUESTER = (
+    False  # If you'd like to inform them of a successful request.
+)
 
 
 DOCUMENTATION = """
@@ -137,27 +154,15 @@ on it's info page](https://galaxyproject.eu/tiaas)
 # END TIAAS #
 #############
 
+
 try:
     from config.local_settings import *  # noqa: F401,F403  ignore these flake8 errors
 except Exception as e:
     import sys
-    sys.exit('Local settings file not found: %s' % e)
 
+    sys.exit("Local settings file not found: %s" % e)
 
-git_head = os.path.join(BASE_DIR, ".git", "HEAD")
-# https://stackoverflow.com/questions/14989858/get-the-current-git-hash-in-a-python-script#21901260
-# Open .git\HEAD file:
-with open(git_head, "r") as git_head_file:
-    # Contains e.g. ref: ref/heads/master if on "master"
-    git_head_data = str(git_head_file.read()).strip()
+GALAXY_URL = f"http://{GALAXY_DOMAIN}"
 
-# Open the correct file in .git\ref\heads\[branch]
-if ' ' in git_head_data:
-    git_head_ref = os.path.join(BASE_DIR, ".git", git_head_data.split(" ")[1])
-else:
-    # When pinned to a specific commit
-    git_head_ref = os.path.join(BASE_DIR, ".git", git_head_data)
-# Get the commit hash ([:7] used to get "--short")
-
-with open(git_head_ref, "r") as git_head_ref_file:
-    GIT_COMMIT_ID = git_head_ref_file.read().strip()
+GIT_COMMIT_ID = git.get_commit_id(BASE_DIR)
+GIT_REMOTE_URL = git.get_remote_url(BASE_DIR)

@@ -8,8 +8,8 @@ from django_countries.fields import CountryField
 from .validators import validate_date_precedence, validate_identifier
 
 
-REDACTION_CODE = 'redacted'
-REDACTED_EMAIL = REDACTION_CODE + '@example.com'
+REDACTION_CODE = "redacted"
+REDACTED_EMAIL = REDACTION_CODE + "@example.com"
 
 
 class Training(models.Model):
@@ -21,7 +21,7 @@ class Training(models.Model):
     start = models.DateField()
     end = models.DateField()
     website = models.URLField(blank=True)
-    location = CountryField(multiple=True, blank_label="(select country)")
+    location = CountryField(multiple=True, blank_label="Select country")
     use_gtn = models.CharField(
         max_length=1, choices=(("Y", "Yes"), ("N", "No")), default="N"
     )
@@ -29,8 +29,9 @@ class Training(models.Model):
     non_gtn_links = models.TextField(blank=True)
     attendance = models.IntegerField(validators=[MinValueValidator(1)])
     training_identifier = models.CharField(
-        max_length=20, unique=True, validators=[validate_identifier])
-    advertise_eu = models.CharField(
+        max_length=20, unique=True, validators=[validate_identifier]
+    )
+    advertise = models.CharField(
         max_length=1, choices=(("Y", "Yes"), ("N", "No")), default="N"
     )
     retain_contact = models.BooleanField(default=False)
@@ -57,7 +58,7 @@ class Training(models.Model):
     def gdpr_clean(self):
         days = 60
         if self.retain_contact:
-            days = int(settings.TIAAS_GDPR_RETAIN_EXTRA) * 30
+            days = int(settings.TIAAS_GDPR_RETAIN_EXTRA_MONTHS) * 30
 
         return (date.today() - self.end).days > days
 
@@ -78,8 +79,13 @@ class Training(models.Model):
         self.email = REDACTED_EMAIL
         self.save()
 
+    @property
+    def str_locations(self):
+        """Return locations as comma-delimited string."""
+        return ", ".join([x.name for x in self.location])
+
     def __str__(self):
         return self.training_identifier
 
     def clean(self):
-        validate_date_precedence(self.start, self.end, 'end')
+        validate_date_precedence(self.start, self.end, "end")

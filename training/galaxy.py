@@ -4,7 +4,7 @@ from Crypto.Cipher import Blowfish
 from django.conf import settings
 from django.db import connections, transaction
 
-cipher = Blowfish.new(settings.GALAXY_SECRET.encode('utf-8'), mode=Blowfish.MODE_ECB)
+cipher = Blowfish.new(settings.GALAXY_SECRET.encode("utf-8"), mode=Blowfish.MODE_ECB)
 
 
 class IntentionalRollback(Exception):
@@ -23,7 +23,7 @@ HIDDEN_USERNAME = """
     substring(md5(COALESCE(galaxy_user.username, 'Anonymous') || now()::date), 0, 7)
 """
 
-EXPOSED_USERNAME= """galaxy_user.username"""
+EXPOSED_USERNAME = """galaxy_user.username"""
 
 if settings.TIAAS_EXPOSE_USERNAME:
     USERNAME = EXPOSED_USERNAME
@@ -187,8 +187,8 @@ def get_groups():
 def create_group(training_id, role_id):
     execute(
         "insert into galaxy_group (name, create_time, update_time, deleted) "
-        "values (%s, now(), now(), false)", (training_id,)
-
+        "values (%s, now(), now(), false)",
+        (training_id,),
     )
     # get the role back
     groups = fetch_all("select id from galaxy_group where name = %s", (training_id,))
@@ -197,8 +197,7 @@ def create_group(training_id, role_id):
         group_id = group[0]
     execute(
         "insert into group_role_association (group_id, role_id, create_time, update_time) "
-        "values (%s, %s, now(), now())"
-        % (group_id, role_id)
+        "values (%s, %s, now(), now())" % (group_id, role_id)
     )
     return group_id
 
@@ -206,8 +205,7 @@ def create_group(training_id, role_id):
 def add_group_user(group_id, user_id):
     execute(
         "insert into user_group_association (user_id, group_id, create_time, update_time) "
-        "values (%s, %s, now(), now())"
-        % (user_id, group_id)
+        "values (%s, %s, now(), now())" % (user_id, group_id)
     )
 
 

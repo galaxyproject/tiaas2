@@ -1,7 +1,7 @@
-import calendar
+import logging
 import collections
-import re
 from datetime import date
+from django_countries import countries
 
 from django.conf import settings
 from django.core.mail import send_mail
@@ -24,58 +24,78 @@ from .galaxy import (
 
 from .models import Training
 
+logger = logging.getLogger(__name__)
+
 
 def register(request):
-    if request.method != "POST":
-        # if a GET (or any other method) we'll create a blank form
-        form = TrainingForm(initial=request.GET.dict())
-        return render(
-            request, "training/register.html", {"form": form, "settings": settings}
-        )
+    host = request.META.get("HTTP_HOST", "localhost")
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+        form = TrainingForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            form.save()
 
-    # create a form instance and populate it with data from the request:
-    form = TrainingForm(request.POST)
-    # check whether it's valid:
-    if form.is_valid():
-        form.save()
-        if settings.TIAAS_SEND_EMAIL_FROM:
+            # TODO: refactor this into forms:
             identifier = form.cleaned_data["training_identifier"]
-            host = request.META.get("HTTP_HOST", "localhost")
-            send_mail(
-                "New TIaaS Request (%s)" % identifier,
-                "We received a new tiaas request. View it in the"
-                '<a href="https://%s/tiaas/admin/training/training/?processed__exact=UN">admin dashboard</a>'  # noqa: E501
-                % host,
-                settings.TIAAS_SEND_EMAIL_FROM,
-                [settings.TIAAS_SEND_EMAIL_TO],
-                fail_silently=True,  # on the fence about this one. (Same. TODO)
-            )
+            if settings.TIAAS_SEND_EMAIL_TO:
+                send_mail(
+                    f"New TIaaS Request ({identifier})",
+                    (
+                        "A new TIaaS request has been received. View it in the"
+                        ' admin dashboard: '
+                        f"{settings.GALAXY_URL}/tiaas/admin/training/training/"
+                        "?processed__exact=UN"
+                    ),
+                    settings.TIAAS_SEND_EMAIL_FROM,
+                    [settings.TIAAS_SEND_EMAIL_TO],
+                    fail_silently=True,  # TODO should handle and log
+                )
+            if settings.TIAAS_SEND_EMAIL_TO_REQUESTER:
+                send_mail(
+                    f"TIaaS Request confirmation: ({identifier})",
+                    (
+                        f'Dear {form.cleaned_data["name"]},\n\n'
+                        "Thanks for requesting a new TIaaS allocation.\n"
+                        "We will contact you to let you know when your request"
+                        " has been reviewed.\n\n"
+                        f"Regards,\nThe {settings.TIAAS_OWNER} team"
+                    ),
+                    settings.TIAAS_SEND_EMAIL_FROM,
+                    [form.cleaned_data["email"]],
+                    fail_silently=True,  # TODO should handle and log
+                )
 
-            send_mail(
-                "TIaaS Request Submitted (%s)" % identifier,
-                "We received a new tiaas request and will process it as quickly as possible, considering weekends and public holidays.",
-                settings.TIAAS_SEND_EMAIL_FROM,
-                [form.cleaned_data['email']],
-                fail_silently=True,
-            )
-        return HttpResponseRedirect(reverse("thanks"))
+            return HttpResponseRedirect(reverse("thanks"))
+
+        # Form was invalid
+        logger.warning(f"Location: {form.data['location']}")
+
+    # if a GET (or any other method) we'll create a blank form
     else:
-        return render(
-            request, "training/register.html", {"form": form, "settings": settings}
-        )
+        form = TrainingForm(initial=request.GET.dict())
+
+    return render(request, "training/register.html", {"form": form})
+
 
 def about(request):
-    return render(request, "training/about.html", {"settings": settings})
+    return render(request, "training/about.html")
 
 
 def thanks(request):
-    return render(request, "training/thanks.html", {"settings": settings})
+    return render(request, "training/thanks.html")
+
+
+def dashboard_example(request):
+    """Show the example training dashboard page."""
+    return render(request, "training/dashboard-example.html")
 
 
 def stats_csv(request):
     data = "name,code,pop\n"
-
-    trainings = Training.objects.all().exclude(training_identifier="test").filter(processed="AP")
+    trainings = Training.objects.exclude(training_identifier="test").filter(
+        processed="AP"
+    )
     locations = collections.Counter()
     codes = {}
 
@@ -93,10 +113,24 @@ def stats_csv(request):
 def numbers_csv(request):
     data = "id,start,end,location,use_gtn,attendance\n"
 
-    trainings = Training.objects.all().exclude(training_identifier="test").filter(processed="AP")
+    trainings = Training.objects.exclude(training_identifier="test").filter(
+        processed="AP"
+    )
     for t in trainings:
         countries = [x.code for x in t.location]
-        data += f"{t.id},{t.start},{t.end},{'|'.join(countries)},{t.use_gtn},{t.attendance}\n"
+        data += (
+            ",".join(
+                [
+                    t.id,
+                    t.start,
+                    t.end,
+                    "|".join(countries),
+                    t.use_gtn,
+                    t.attendance,
+                ]
+            )
+            + "\n"
+        )
 
     return HttpResponse(data, content_type="text/csv")
 
@@ -112,125 +146,104 @@ def trainings_for(trainings, year, month, day):
 
 
 def calendar_view(request):
-    trainings = Training.objects.all().exclude(
-        training_identifier="test"
-    )  # Exclude the 'test' group from showing up in calendar
-    approved_trainings = [x for x in trainings if x.processed == "AP"]
-    approved = len(approved_trainings)
-    if len(approved_trainings) > 0:
-        start = min([x.start for x in approved_trainings])
-        end = max([x.end for x in approved_trainings])
-    else:
-        start = date.today()
-        end = date.today()
-
-    years = list(range(start.year, end.year + 1))[::-1]
-
-    months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    ]
-
-    max_value = 0
-
-    days = {}
-    for year in years:
-        for idx, month in enumerate(months):
-            if year not in days:
-                days[year] = {}
-
-            days_au = calendar.monthcalendar(year, idx + 1)
-            days_fix = []
-            for row in days_au:
-                new_row = [
-                    (x, trainings_for(approved_trainings, year, idx + 1, x))
-                    for x in row
-                ]
-                m = max([x[1] for x in new_row])
-                if m > max_value:
-                    max_value = m
-                days_fix.append(new_row)
-
-            days[year][month] = days_fix
-
+    """Display scheduled events in an interactive calendar view."""
+    approved_trainings = (
+        Training.objects.all()
+        .exclude(training_identifier="test")
+        .filter(processed="AP")
+        .order_by("start")
+    )
     return render(
         request,
         "training/calendar.html",
         {
-            "trainings": approved,
-            "start": start,
-            "end": end,
-            "years": years,
-            "months": months,
-            "days": days,
-            "max_value": max_value,
-            "settings": settings,
+            "events": approved_trainings,
+            "admin_user": request.user.is_staff,
+            "n_events": approved_trainings.count(),
         },
     )
 
 
 def stats(request):
-    # Exclude the 'test' group from showing up in calendar
-    trainings = Training.objects.all().exclude(training_identifier="test")
-    approved = len([x for x in trainings if x.processed == "AP"])
-    waiting = len([x for x in trainings if x.processed == "UN"])
-    days = sum([(x.end - x.start).days for x in trainings])
-    students = sum([x.attendance for x in trainings])
+    trainings = Training.objects.exclude(
+        training_identifier="test"
+    )  # Exclude the 'test' group from showing up in calendar
 
-    if len(trainings) > 0:
-        current_trainings = len([x for x in trainings if x.start <= date.today() <= x.end])
-        earliest = min([x.start for x in trainings])
-    else:
-        current_trainings = 0
-        earliest = date.today()
+    approved = trainings.filter(processed="AP")
 
-    locations = collections.Counter()
-    for t in trainings:
-        for loc in t.location:
-            locations[loc.name] += 1
+    waiting = trainings.filter(processed="UN")
 
-    return render(
-        request,
-        "training/stats.html",
-        {
+    if approved:
+        days = sum(
+            (end - start).days for end, start in approved.values_list("end", "start")
+        )
+        students = sum(approved.values_list("attendance", flat=True))
+        today = date.today()
+        current = approved.filter(start__lte=today, end__gte=today)
+        earliest = min(approved.values_list("start", flat=True))
+        countries_lookup = dict(countries)
+        locations = collections.Counter()
+        for locs in approved.values_list("location", flat=True):
+            for loc in locs.split(","):
+                locations[countries_lookup[loc]] += 1
+
+        data = {
             "trainings": trainings,
-            "waiting": waiting,
-            "approved": approved,
+            "waiting": waiting.count(),
+            "approved": approved.count(),
             "days": days,
             "students": students,
             "locations": dict(locations.items()),
-            "current_trainings": current_trainings,
+            "current_trainings": current.count(),
             "earliest": earliest,
-            "settings": settings,
-        },
-    )
+        }
+    else:
+        data = {
+            "trainings": trainings,
+            "waiting": waiting.count(),
+            "approved": 0,
+            "days": 0,
+            "students": 0,
+            "locations": {},
+            "current_trainings": 0,
+            "earliest": None,
+        }
+
+    return render(request, "training/stats.html", data)
 
 
 def join(request, training_id):
     training_id = training_id.lower()
-
-    trainings = Training.objects.all().filter(training_identifier__iexact=training_id)
-    any_approved = any([t.processed == "AP" for t in trainings])
+    trainings = Training.objects.filter(
+        training_identifier__iexact=training_id,
+        processed="AP",
+    )
 
     # If we don't know this training, reject
-    if len(trainings) == 0 or not any_approved:
+    if not trainings.count():
         return render(
             request,
             "training/error.html",
             {
-                "message": "Training does not exist",
+                "message": "Training event does not exist",
+            },
+        )
+
+    event = trainings.first()
+
+    # If the event has already finished, reject request
+    if event.end < date.today():
+        return render(
+            request,
+            "training/error.html",
+            {
+                "message": (
+                    "Sorry, this event finished on"
+                    f" {event.end.strftime('%Y-%m-%d')}."
+                    " If you think this is a mistake, please contact Galaxy"
+                    " support."
+                ),
                 "host": request.META.get("HTTP_HOST", None),
-                "settings": settings,
             },
         )
 
@@ -242,7 +255,6 @@ def join(request, training_id):
             {
                 "message": "Please login to Galaxy first!",
                 "host": request.META.get("HTTP_HOST", None),
-                "settings": settings,
             },
         )
 
@@ -262,7 +274,7 @@ def join(request, training_id):
     else:
         role_id = [x for x in current_roles if training_role_name == x["name"]][0]["id"]
 
-    # Create group if need to.
+    # Create group if need to
     current_groups = list(get_groups())
     group_exists = any([training_role_name == x["name"] for x in current_groups])
     if not group_exists:
@@ -282,9 +294,8 @@ def join(request, training_id):
         request,
         "training/join.html",
         {
-            "training": trainings[0],
+            "training": event,
             "host": request.META.get("HTTP_HOST", None),
-            "settings": settings,
         },
     )
 
@@ -316,7 +327,6 @@ def status(request, training_id):
             {
                 "message": "Training does not exist",
                 "host": request.META.get("HTTP_HOST", None),
-                "settings": settings,
             },
         )
 
@@ -371,6 +381,5 @@ def status(request, training_id):
             "state": state_summary,
             "wf_state": wf_state_summary,
             "refresh": refresh,
-            "settings": settings,
         },
     )

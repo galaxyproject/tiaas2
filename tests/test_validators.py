@@ -11,7 +11,6 @@ from training.validators import (
 
 
 class ValidatorsTestCase(unittest.TestCase):
-
     def test_validate_date_precedence_raise_error(self):
         # Expect error: end date < start date
         start_date = date(2100, 1, 2)
@@ -31,13 +30,13 @@ class ValidatorsTestCase(unittest.TestCase):
             validate_start_date(start_date)
 
     def test_validate_identifier(self):
-        validate_identifier('foo123')
+        validate_identifier("foo123")
 
         with self.assertRaises(ValidationError):
-            validate_identifier('foo 123')  # space
+            validate_identifier("foo 123")  # space
 
         with self.assertRaises(ValidationError):
-            validate_identifier('foo@123')  # special character
+            validate_identifier("foo@123")  # special character
 
         with self.assertRaises(ValidationError):
-            validate_identifier('Foo123')  # uppercase
+            validate_identifier("Foo123")  # uppercase
