@@ -1,43 +1,375 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load humanize %}
 
-{% block content %}
-<h2>Calendar</h2>
+{% block head %}
+<link rel="stylesheet" href="{% static 'training/css/calendar.css' %}">
+<link rel="stylesheet" href="https://unpkg.com/@mdi/font@6.x/css/materialdesignicons.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css">
+{% endblock %}
 
-{% for year, months in days.items %}
-<h3>{{ year }}</h3>
-<div class="row">
-    {% for month, days in months.items %}
-    <div class="col-sm-3 text-center calendar">
-        {{ month }}
-        
-        <div class="row">
-            <div class="col-sm-1 date">M</div>
-            <div class="col-sm-1 date">T</div>
-            <div class="col-sm-1 date">W</div>
-            <div class="col-sm-1 date">R</div>
-            <div class="col-sm-1 date">F</div>
-            <div class="col-sm-1 date">S</div>
-            <div class="col-sm-1 date">S</div>
-        </div>
-        
-        {% for row in days %}
-        <div class="row">
-            {% for d in row %}
-                {% if d.0 == 0 %}
-                <div class="col-sm-1 date"></div>
-                {% else %}
-                {% widthratio d.1 max_value 83 as width%}
-                <div class="col-sm-1 date" style="background-color:hsla(220, 100%, 30%, 0.{{ width|add:"0"|stringformat:"02d" }});">
-                    {{ d.1 }}
-                </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-        {% endfor %}
-    </div>
-    {% endfor %}
+
+<!--  -->
+
+
+{% block content %}
+<div class="container">
+  <h2>Scheduled events</h2>
+
+  <p class="alert alert-primary">{{ n_events }} events scheduled</p>
+
+  {% include 'snippets/calendar/intro.html' %}
+
+  <br>
+
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+  </noscript>
+
+  <div id="app">
+    <v-app v-cloak>
+      <v-row class="justify-content-center">
+        <v-flex sm8 px-5 {% if admin_user %}class="border-right"{% endif %}>
+          <v-sheet height="64">
+            <v-toolbar
+              flat
+            >
+              <v-btn
+                outlined
+                class="mr-4"
+                color="grey darken-2"
+                @click="setToday"
+              >
+                Today
+              </v-btn>
+              <v-btn
+                fab
+                text
+                small
+                color="grey darken-2"
+                @click="prev"
+              >
+                <v-icon small>
+                  mdi-chevron-left
+                </v-icon>
+              </v-btn>
+              <v-btn
+                fab
+                text
+                small
+                color="grey darken-2"
+                @click="next"
+              >
+                <v-icon small>
+                  mdi-chevron-right
+                </v-icon>
+              </v-btn>
+            </v-toolbar>
+          </v-sheet>
+
+          <v-row>
+            <v-flex md6>
+              <v-sheet>
+                <v-container>
+                  <h3 v-if="$refs.calendar1" style="text-align: center;">
+                    {% verbatim %}
+                    {{ $refs.calendar1.title }}
+                    {% endverbatim %}
+                  </h3>
+
+                  <v-calendar
+                    ref="calendar1"
+                    v-model="focus1"
+                    color="primary"
+                    :events="events"
+                    :event-color="getEventColor"
+                    :event-height="8"
+                    :type="type"
+                    @click:event="showEvent"
+                  ></v-calendar>
+                </v-container>
+              </v-sheet>
+            </v-flex>
+
+            <v-flex md6>
+              <v-sheet>
+                <v-container>
+                  <h3 v-if="$refs.calendar2" style="text-align: center;">
+                    {% verbatim %}
+                    {{ $refs.calendar2.title }}
+                    {% endverbatim %}
+                  </h3>
+
+                  <v-calendar
+                    ref="calendar2"
+                    v-model="focus2"
+                    color="primary"
+                    :events="events"
+                    :event-color="getEventColor"
+                    :event-height="8"
+                    :type="type"
+                    @click:event="showEvent"
+                  ></v-calendar>
+                </v-container>
+              </v-sheet>
+            </v-flex>
+
+            <v-flex md6>
+              <v-sheet>
+                <v-container>
+                  <h3 v-if="$refs.calendar3" style="text-align: center;">
+                    {% verbatim %}
+                    {{ $refs.calendar3.title }}
+                    {% endverbatim %}
+                  </h3>
+
+                  <v-calendar
+                    ref="calendar3"
+                    v-model="focus3"
+                    color="primary"
+                    :events="events"
+                    :event-color="getEventColor"
+                    :event-height="8"
+                    :type="type"
+                    @click:event="showEvent"
+                  ></v-calendar>
+                </v-container>
+              </v-sheet>
+            </v-flex>
+
+            <v-flex md6>
+              <v-sheet>
+                <v-container>
+                  <h3 v-if="$refs.calendar4" style="text-align: center;">
+                    {% verbatim %}
+                    {{ $refs.calendar4.title }}
+                    {% endverbatim %}
+                  </h3>
+
+                  <v-calendar
+                    ref="calendar4"
+                    v-model="focus4"
+                    color="primary"
+                    :events="events"
+                    :event-color="getEventColor"
+                    :event-height="8"
+                    :type="type"
+                    @click:event="showEvent"
+                  ></v-calendar>
+                </v-container>
+              </v-sheet>
+            </v-flex>
+          </v-row>
+        </v-flex>
+
+        {% if admin_user %}
+
+        <!-- Don't display event details publicly -->
+
+        <v-flex sm4>
+          <v-container px-5 py-15 style="height: 100%;">
+            <h3>Details</h3>
+
+            <v-container id="details-pane">
+              <div v-if="selectedEvent">
+                {% verbatim %}
+                <table class="details-table">
+                  <tr>
+                    <td>Organiser</td>
+                    <td> {{ selectedEvent.organiser }} </td>
+                  </tr>
+
+                  <tr>
+                    <td>Email</td>
+                    <td> <small>{{ selectedEvent.email }}</small> </td>
+                  </tr>
+
+                  <tr>
+                    <td>Event ID</td>
+                    <td> {{ selectedEvent.identifier }} </td>
+                  </tr>
+
+                  <tr>
+                    <td>Event title</td>
+                    <td> {{ selectedEvent.title }} </td>
+                  </tr>
+
+                  <tr>
+                    <td>Location</td>
+                    <td> {{ selectedEvent.location }} </td>
+                  </tr>
+
+                  <tr>
+                    <td>Expected attendance</td>
+                    <td> {{ selectedEvent.attendance }} </td>
+                  </tr>
+
+                  <tr>
+                    <td>Description</td>
+                    <td> <small>{{ selectedEvent.description }}</small> </td>
+                  </tr>
+                </table>
+                {% endverbatim %}
+              </div>
+
+              <div v-else>
+                <h4 style="text-align: center; margin-top: 50px;">
+                  Click an event to see details
+                </h4>
+              </div>
+            </v-container>
+          </v-container>
+        </v-flex>
+        {% endif %}
+
+      </v-row>
+    </v-app>
+  </div>
 </div>
-{% endfor %}
+
+<style scoped>
+  [v-cloak] {
+    display: none;
+  }
+  .border-right {
+    border-right: 1px solid #ccc;
+  }
+  #details-pane {
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    min-height: 500px;
+    margin-top: 50px;
+  }
+  .details-table td {
+    padding: .5rem 1rem;
+    border-bottom: 1px solid #ccc;
+  }
+  .details-table td:first-child {
+    font-weight: bold;
+    background-color: #eee;
+  }
+  @media (max-width: 1400px) {
+    .details-table {
+      font-size: .85rem;
+    }
+  }
+</style>
+
+{% endblock %}
+
+
+{% block script %}
+
+<script src='https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js'></script>
+
+<script>
+  const COLORS = [
+    'blue',
+    {% if user.is_staff %}
+    'red',
+    'orange',
+    'pink',
+    'green',
+    'brown',
+    'purple',
+    'grey',
+    {% endif %}
+  ];
+
+  new Vue({
+    el: '#app',
+    vuetify: new Vuetify(),
+    data () {
+      const dateStr = new Date().toISOString().slice(0, 10)
+      const y = dateStr.split('-')[0]
+      const month = new Date().getMonth() + 1;
+      const zeroPad = (m) => m < 10 ? `0${m}` : `${m}`;
+      const addMonths = (n) => {
+        const m = zeroPad(month + n)
+        return `${y}-${m}-01`
+      }
+      const defaultDates = [
+        dateStr,
+        addMonths(1),
+        addMonths(2),
+        addMonths(3),
+      ]
+      let icolor = 0
+      const getColor = () => {
+        if (icolor >= COLORS.length) {
+          icolor = 0;
+        }
+        c = COLORS[icolor];
+        icolor += 1;
+        return c
+      }
+      return {
+        selectedEvent: null,
+        defaultDates: defaultDates,
+        focus1: defaultDates[0],
+        focus2: defaultDates[1],
+        focus3: defaultDates[2],
+        focus4: defaultDates[3],
+        type: 'month',
+        events: [
+          {% for event in events %}
+          {
+            name: "", // hide event name in calendar
+            start: "{{ event.start|date:'Y-m-d' }}",
+            end: "{{ event.end|date:'Y-m-d' }}",
+            color: getColor(),
+          {% if admin_user %}
+            // Only admins can see event details
+            title: "{{ event.title }}",
+            organiser: "{{ event.name }}",
+            email: "{{ event.email }}",
+            description: "{{ event.description }}",
+            website: "{{ event.website }}",
+            location: "{{ event.str_locations }}",
+            use_gtn: "{{ event.use_gtn|yesno:'Yes,No' }}",
+            attendance: {{ event.attendance }},
+            identifier: "{{ event.training_identifier }}",
+            other_requests: "{{ event.other_requests }}",
+          {% endif %}
+          },
+          {% endfor %}
+        ],
+      }
+    },
+    mounted () {
+      this.$refs.calendar1.checkChange();
+      this.$refs.calendar2.checkChange();
+      this.next();
+      setTimeout( this.prev, 50 );
+    },
+    methods: {
+      showEvent ({ nativeEvent, event }) {
+        this.selectedEvent = event;
+      },
+      getEventColor (event) {
+        return event.color
+      },
+      setToday () {
+        this.focus1 = this.defaultDates[0];
+        this.focus2 = this.defaultDates[1];
+        this.focus3 = this.defaultDates[2];
+        this.focus4 = this.defaultDates[3];
+      },
+      prev () {
+        this.$refs.calendar1.prev(2);
+        this.$refs.calendar2.prev(2);
+        this.$refs.calendar3.prev(2);
+        this.$refs.calendar4.prev(2);
+      },
+      next () {
+        this.$refs.calendar1.next(2);
+        this.$refs.calendar2.next(2);
+        this.$refs.calendar3.next(2);
+        this.$refs.calendar4.next(2);
+      },
+    }
+  });
+</script>
 
 {% endblock %}

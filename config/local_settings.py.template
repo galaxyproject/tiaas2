@@ -3,13 +3,19 @@ This is a sample of site-specific settings for the TIaaS project.
 All settings are required, unless stated otherwise.
 The values are provided as examples.
 """
-import os
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Django settings
+import os
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "change-this-2-5r))q-sv-f(l9hbb^nfoqjxj#&+du0xv+vxxz)!$&q(wcp=j"
+
+ALLOWED_HOSTS =[
+    "127.0.0.1",
+    "localhost",
+    "my-tiaas-site.com",
+]
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # You need to specify both "default" and "galaxy" databases.
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -36,25 +42,42 @@ DATABASES = {
 GALAXY_SECRET = "USING THE DEFAULT IS NOT SECURE!"
 
 # The following values are displayed as text (values are examples)
-TIAAS_OWNER = "Galaxy Antartica" # A human-readable name 
+TIAAS_OWNER = "Galaxy Antartica"            # A human-readable name
 TIAAS_EMAIL = "admin@example.org"
-TIAAS_OWNER_SITE = "https://example.org" # Your website, if you have one.
-TIAAS_DOMAIN = "https://galaxy.example.org" # Your Galaxy instance
+TIAAS_OWNER_SITE = "https://website.example.org"  # Your website, if you have one
+GALAXY_DOMAIN = "galaxy.example.org"  # Your Galaxy hostname
 
-# Default period to retain contact information (months)
-TIAAS_GDPR_RETAIN_EXTRA = 12
-# Request users to write a blog post
+# Offer to advertise training event
 TIAAS_SHOW_ADVERTISING = True
-# Expose the username publicly in the status page, rather than an encoded ID.
+
+# Require consent in request form to retain contact information for extended
+# period (defined by TIAAS_GDPR_RETAIN_EXTRA_MONTHS)
+TIAAS_RETAIN_CONTACT_REQUIRE_CONSENT = True
+
+# How long you're allowed to retain their email address for follow up contact
+TIAAS_GDPR_RETAIN_EXTRA_MONTHS = 12
+
+# Expose the username publicly in the status page, rather than an encoded ID
 TIAAS_EXPOSE_USERNAME = False
-# Prevent people from submitting requests later than this date.
-# If you like them, tell them they can go to /tiaas/new/?apology=I'm so sorry
-# And then it will ignore this check
-TIAAS_LATE_REQUEST_PREVENTION = 10 # calendar days
-# How long you're allowed to retain their email address for follow up contact.
-TIAAS_GDPR_RETAIN_EXTRA = 12  # months
 
 # Recipient address for automated email notifications
 TIAAS_SEND_EMAIL_TO = "admin@example.org" # Your admin email
-TIAAS_SEND_EMAIL_FROM = None # "tiaas+noreply@example.org", setting to None leaves this feature disabled.
-TIAAS_SEND_EMAIL_TO_REQUESTER = False # If you'd like to inform them of a successful request.
+
+# "tiaas+noreply@example.org", setting to None leaves this feature disabled.
+TIAAS_SEND_EMAIL_FROM = None
+
+# If you'd like to inform them of a successful request
+TIAAS_SEND_EMAIL_TO_REQUESTER = False
+
+# Prevent people from submitting requests later than this date.
+# If you like them, tell them they can go to /tiaas/new/?apology=I'm so sorry
+# And then it will ignore this check
+TIAAS_LATE_REQUEST_PREVENTION_DAYS = 10
+
+# Mail settings
+# EMAIL_HOST
+# EMAIL_PORT
+# EMAIL_HOST_USER
+# EMAIL_HOST_PASSWORD
+# EMAIL_USE_TLS
+# EMAIL_USE_SSL
