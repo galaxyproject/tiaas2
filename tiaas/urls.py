@@ -20,4 +20,5 @@ from django.urls import path
 urlpatterns = [
     path("", include("training.urls")),
     path("tiaas/admin/", admin.site.urls),
+    path('tiaas/', include('django_prometheus.urls')),
 ]
