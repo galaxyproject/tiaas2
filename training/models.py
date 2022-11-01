@@ -56,6 +56,8 @@ class Training(models.Model):
 
     @property
     def gdpr_clean(self):
+        if not settings.TIAAS_GDPR_AUTO_REDACT:
+            return False
         days = 60
         if self.retain_contact:
             days = int(settings.TIAAS_GDPR_RETAIN_EXTRA_MONTHS) * 30
