@@ -206,7 +206,7 @@
 
                   <tr>
                     <td>Description</td>
-                    <td> <small>{{ selectedEvent.description }}</small> </td>
+                    <td> <small v-html="selectedEvent.description"></small> </td>
                   </tr>
                 </table>
                 {% endverbatim %}
@@ -260,7 +260,7 @@
 
 {% block script %}
 
-<script src='https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js'></script>
 
 <script>
@@ -282,11 +282,16 @@
     vuetify: new Vuetify(),
     data () {
       const dateStr = new Date().toISOString().slice(0, 10)
-      const y = dateStr.split('-')[0]
       const month = new Date().getMonth() + 1;
       const zeroPad = (m) => m < 10 ? `0${m}` : `${m}`;
+      const y = parseInt(dateStr.split('-')[0])
       const addMonths = (n) => {
-        const m = zeroPad(month + n)
+        let m = zeroPad(month + n)
+        let year = y
+        if (m > 12) {
+          m = m - 12
+          year += 1
+        }
         return `${y}-${m}-01`
       }
       const defaultDates = [
@@ -324,7 +329,9 @@
             title: "{{ event.title }}",
             organiser: "{{ event.name }}",
             email: "{{ event.email }}",
-            description: "{{ event.description }}",
+            {% spaceless %}
+            description: "{{ event.description|linebreaksbr }}",
+            {% endspaceless %}
             website: "{{ event.website }}",
             location: "{{ event.str_locations }}",
             use_gtn: "{{ event.use_gtn|yesno:'Yes,No' }}",
