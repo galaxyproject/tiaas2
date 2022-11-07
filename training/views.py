@@ -1,5 +1,4 @@
 import logging
-from django.http import JsonResponse
 import collections
 from datetime import date
 from django_countries import countries
@@ -7,6 +6,7 @@ from django_countries import countries
 from django.conf import settings
 from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 
