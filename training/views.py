@@ -120,14 +120,14 @@ def numbers_csv(request):
         countries = [x.code for x in t.location]
         data += (
             ",".join(
-                [
-                    str(t.id),
+                map(str, [
+                    t.id,
                     t.start,
                     t.end,
                     "|".join(countries),
                     t.use_gtn,
                     t.attendance,
-                ]
+                ])
             )
             + "\n"
         )
