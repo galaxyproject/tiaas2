@@ -1,4 +1,5 @@
 import logging
+from django.http import JsonResponse
 import collections
 from datetime import date
 from django_countries import countries
@@ -162,6 +163,44 @@ def calendar_view(request):
             "n_events": approved_trainings.count(),
         },
     )
+
+def calendar_api(request):
+    events = (
+        Training.objects.all()
+        .exclude(training_identifier="test")
+        .order_by("start")
+    )
+
+    results = {'events': []}
+    is_super = request.user.is_superuser
+
+    colors = [ 'red', 'orange', 'pink', 'green', 'blue', 'purple', 'grey', 'brown', 'black' ]
+
+    for i, event in enumerate(events):
+        event_data = {
+            'name': "",
+            'start': event.start.strftime('%Y-%m-%d'),
+            'end': event.end.strftime('%Y-%m-%d'),
+            'color': 'blue'
+        }
+
+        if is_super:
+            event_data.update({
+                'name': event.title,
+                'color': colors[i % len(colors)],
+                'organiser': event.name,
+                'email': event.email,
+                'description': event.description,
+                'website': event.website,
+                'location': event.str_locations,
+                'use_gtn': event.use_gtn,
+                'attendance': event.attendance,
+                'identifier': event.training_identifier,
+                'other_requests': event.other_requests,
+            })
+
+        results['events'].append(event_data)
+    return JsonResponse(results)
 
 
 def stats(request):
