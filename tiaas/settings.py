@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 """
 
 import os
+
 from tiaas import git
 from tiaas.logging import LOGGING
 

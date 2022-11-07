@@ -1,8 +1,9 @@
 """Create fake records for development."""
 
-import random
-import factory
 import datetime
+import random
+
+import factory
 from factory import lazy_attribute
 from factory.django import DjangoModelFactory
 

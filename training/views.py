@@ -1,28 +1,18 @@
-import logging
 import collections
+import logging
 from datetime import date
-from django_countries import countries
 
 from django.conf import settings
 from django.core.mail import send_mail
-from django.http import HttpResponse, HttpResponseRedirect
-from django.http import JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django_countries import countries
 
 from .forms import TrainingForm
-from .galaxy import (
-    add_group_user,
-    authenticate,
-    create_group,
-    create_role,
-    get_groups,
-    get_jobs,
-    get_roles,
-    get_users,
-    get_workflow_invocations,
-)
-
+from .galaxy import (add_group_user, authenticate, create_group, create_role,
+                     get_groups, get_jobs, get_roles, get_users,
+                     get_workflow_invocations)
 from .models import Training
 
 logger = logging.getLogger(__name__)
@@ -44,7 +34,7 @@ def register(request):
                     f"New TIaaS Request ({identifier})",
                     (
                         "A new TIaaS request has been received. View it in the"
-                        ' admin dashboard: '
+                        " admin dashboard: "
                         f"{settings.GALAXY_URL}/tiaas/admin/training/training/"
                         "?processed__exact=UN"
                     ),
@@ -121,14 +111,17 @@ def numbers_csv(request):
         countries = [x.code for x in t.location]
         data += (
             ",".join(
-                map(str, [
-                    t.id,
-                    t.start,
-                    t.end,
-                    "|".join(countries),
-                    t.use_gtn,
-                    t.attendance,
-                ])
+                map(
+                    str,
+                    [
+                        t.id,
+                        t.start,
+                        t.end,
+                        "|".join(countries),
+                        t.use_gtn,
+                        t.attendance,
+                    ],
+                )
             )
             + "\n"
         )
@@ -164,42 +157,53 @@ def calendar_view(request):
         },
     )
 
+
 def calendar_api(request):
     events = (
-        Training.objects.all()
-        .exclude(training_identifier="test")
-        .order_by("start")
+        Training.objects.all().exclude(training_identifier="test").order_by("start")
     )
 
-    results = {'events': []}
+    results = {"events": []}
     is_super = request.user.is_superuser
 
-    colors = [ 'red', 'orange', 'pink', 'green', 'blue', 'purple', 'grey', 'brown', 'black' ]
+    colors = [
+        "red",
+        "orange",
+        "pink",
+        "green",
+        "blue",
+        "purple",
+        "grey",
+        "brown",
+        "black",
+    ]
 
     for i, event in enumerate(events):
         event_data = {
-            'name': "",
-            'start': event.start.strftime('%Y-%m-%d'),
-            'end': event.end.strftime('%Y-%m-%d'),
-            'color': 'blue'
+            "name": "",
+            "start": event.start.strftime("%Y-%m-%d"),
+            "end": event.end.strftime("%Y-%m-%d"),
+            "color": "blue",
         }
 
         if is_super:
-            event_data.update({
-                'name': event.title,
-                'color': colors[i % len(colors)],
-                'organiser': event.name,
-                'email': event.email,
-                'description': event.description,
-                'website': event.website,
-                'location': event.str_locations,
-                'use_gtn': event.use_gtn,
-                'attendance': event.attendance,
-                'identifier': event.training_identifier,
-                'other_requests': event.other_requests,
-            })
+            event_data.update(
+                {
+                    "name": event.title,
+                    "color": colors[i % len(colors)],
+                    "organiser": event.name,
+                    "email": event.email,
+                    "description": event.description,
+                    "website": event.website,
+                    "location": event.str_locations,
+                    "use_gtn": event.use_gtn,
+                    "attendance": event.attendance,
+                    "identifier": event.training_identifier,
+                    "other_requests": event.other_requests,
+                }
+            )
 
-        results['events'].append(event_data)
+        results["events"].append(event_data)
     return JsonResponse(results)
 
 

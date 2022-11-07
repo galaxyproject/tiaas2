@@ -1,8 +1,8 @@
-from django.utils import timezone
 import re
 
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django.utils import timezone
 
 
 def validate_date_precedence(start_date, end_date, field_name=None):

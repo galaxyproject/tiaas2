@@ -7,7 +7,6 @@ from django_countries.fields import CountryField
 
 from .validators import validate_date_precedence, validate_identifier
 
-
 REDACTION_CODE = "redacted"
 REDACTED_EMAIL = REDACTION_CODE + "@example.com"
 
