@@ -121,7 +121,7 @@ def numbers_csv(request):
         data += (
             ",".join(
                 [
-                    t.id,
+                    str(t.id),
                     t.start,
                     t.end,
                     "|".join(countries),
