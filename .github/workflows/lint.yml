@@ -9,9 +9,21 @@ jobs:
     steps:
       - name: Check out source repository
         uses: actions/checkout@v3
+
       - name: Set up Python environment
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-      - name: flake8 Lint
-        uses: py-actions/flake8@v2
+
+      - uses: reviewdog/action-black@v2
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          level: warning
+
+      - uses: tsuyoshicho/action-mypy@v3
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          level: warning
+          workdir: training
