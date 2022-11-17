@@ -174,7 +174,7 @@ def calendar_api(request):
     results = {'events': []}
     is_super = request.user.is_superuser
 
-    colors = [ 'red', 'orange', 'pink', 'green', 'blue', 'purple', 'grey', 'brown', 'black' ]
+    colors = ['red', 'orange', 'pink', 'green', 'blue', 'purple', 'grey', 'brown', 'black']
 
     for i, event in enumerate(events):
         event_data = {
