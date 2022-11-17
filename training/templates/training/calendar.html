@@ -67,7 +67,11 @@
             </v-toolbar>
           </v-sheet>
 
-          <v-row>
+          <v-row class="justify-content-center" v-if="!events">
+            <img src="{% static 'training/img/loading.svg' %}" width="200" />
+          </v-row>
+
+          <v-row v-else>
             <v-flex md6>
               <v-sheet>
                 <v-container>
@@ -310,6 +314,7 @@
         return c
       }
       return {
+        events: [],
         selectedEvent: null,
         defaultDates: defaultDates,
         focus1: defaultDates[0],
@@ -317,40 +322,32 @@
         focus3: defaultDates[2],
         focus4: defaultDates[3],
         type: 'month',
-        events: [
-          {% for event in events %}
-          {
-            name: "", // hide event name in calendar
-            start: "{{ event.start|date:'Y-m-d' }}",
-            end: "{{ event.end|date:'Y-m-d' }}",
-            color: getColor(),
-          {% if admin_user %}
-            // Only admins can see event details
-            title: "{{ event.title }}",
-            organiser: "{{ event.name }}",
-            email: "{{ event.email }}",
-            {% spaceless %}
-            description: "{{ event.description|linebreaksbr }}",
-            {% endspaceless %}
-            website: "{{ event.website }}",
-            location: "{{ event.str_locations }}",
-            use_gtn: "{{ event.use_gtn|yesno:'Yes,No' }}",
-            attendance: {{ event.attendance }},
-            identifier: "{{ event.training_identifier }}",
-            other_requests: "{{ event.other_requests }}",
-          {% endif %}
-          },
-          {% endfor %}
-        ],
       }
     },
     mounted () {
-      this.$refs.calendar1.checkChange();
-      this.$refs.calendar2.checkChange();
-      this.next();
-      setTimeout( this.prev, 50 );
+      this.fetchEvents();
     },
     methods: {
+      fetchEvents () {
+        fetch('/tiaas/calendar/events.json')
+          .then( (r) => r.json() )
+          .then( (data) => {
+            console.log('Fetched events data:');
+            console.log(data);
+            this.events = data.events;
+
+            // Toggle calendar to make it render month names properly
+            setTimeout( () => {
+              this.$refs.calendar1.checkChange();
+              this.$refs.calendar2.checkChange();
+              this.next();
+            }, 25)
+            setTimeout( this.prev, 50 );
+          })
+          .catch( (err) => {
+            alert("Sorry, an error was encountered fetching event data");
+          })
+      },
       showEvent ({ nativeEvent, event }) {
         this.selectedEvent = event;
       },
