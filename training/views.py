@@ -186,7 +186,7 @@ def calendar_api(request):
 
         if is_super:
             event_data.update({
-                'name': event.title,
+                'title': event.title,
                 'color': colors[i % len(colors)],
                 'organiser': event.name,
                 'email': event.email,
