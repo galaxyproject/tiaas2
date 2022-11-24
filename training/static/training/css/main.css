@@ -11,7 +11,7 @@ nav {
   background: #2c3143;
 }
 nav.navbar {
-  padding: 2px 1rem;
+  padding: 0.8rem 1rem;
 }
 .nav-link.active {
   font-weight: bold;
