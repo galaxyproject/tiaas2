@@ -264,7 +264,10 @@ def join(request, training_id):
             request,
             "training/error.html",
             {
-                "message": "Training event does not exist",
+                "message": (
+                    "An approved Training event with ID"
+                    f'  "{training_id}" was not found.'
+                ),
             },
         )
 
