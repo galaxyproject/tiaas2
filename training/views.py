@@ -270,6 +270,18 @@ def join(request, training_id):
 
     event = trainings.first()
 
+    # If the event has not yet started, return "come back soon"
+    if event.start > date.today():
+        return render(
+            request,
+            "training/early.html",
+            {
+                "start_date": event.start.strftime('%d-%m-%Y'),
+                "timezone": settings.TIME_ZONE,
+                "host": request.META.get("HTTP_HOST", None),
+            },
+        )
+
     # If the event has already finished, reject request
     if event.end < date.today():
         return render(

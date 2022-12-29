@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+	<div class="errormessage">
+    <p>
+      Sorry, this training event does not start until {{ start_date }} ({{ timezone }}).
+      <br>
+      Please come back later!
+    </p>
+
+		<br>
+
+		<a href="{{ settings.GALAXY_URL }}">Return to Galaxy</a>
+	</div>
+</div>
+
+{% endblock %}
