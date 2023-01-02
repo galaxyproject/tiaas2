@@ -285,21 +285,13 @@
     el: '#app',
     vuetify: new Vuetify(),
     data () {
-      const dateStr = new Date().toISOString().slice(0, 10)
-      const month = new Date().getMonth() + 1;
-      const zeroPad = (m) => m < 10 ? `0${m}` : `${m}`;
-      const y = parseInt(dateStr.split('-')[0])
       const addMonths = (n) => {
-        let m = zeroPad(month + n)
-        let year = y
-        if (m > 12) {
-          m = m - 12
-          year += 1
-        }
-        return `${y}-${m}-01`
+        const d = new Date();
+        d.setMonth(d.getMonth() + n);
+        return d.toISOString().slice(0, 10)
       }
       const defaultDates = [
-        dateStr,
+        addMonths(0),
         addMonths(1),
         addMonths(2),
         addMonths(3),
