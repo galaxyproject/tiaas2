@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 """
 
 import os
+
 from tiaas import git
 from tiaas.logging import LOGGING
 
@@ -56,9 +57,7 @@ ROOT_URLCONF = "tiaas.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [
-            os.path.join(BASE_DIR, "templates"),
-        ],
+        "DIRS": [os.path.join(BASE_DIR, "templates"),],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

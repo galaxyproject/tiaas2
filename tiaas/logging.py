@@ -4,10 +4,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "verbose": {
-            "format": "{levelname} | {module}: {message}",
-            "style": "{",
-        },
+        "verbose": {"format": "{levelname} | {module}: {message}", "style": "{",},
     },
     "handlers": {
         "stdout": {
@@ -17,10 +14,6 @@ LOGGING = {
         },
     },
     "loggers": {
-        "django": {
-            "handlers": ["stdout"],
-            "level": "DEBUG",
-            "propagate": True,
-        },
+        "django": {"handlers": ["stdout"], "level": "DEBUG", "propagate": True,},
     },
 }

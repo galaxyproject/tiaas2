@@ -73,6 +73,5 @@ class Command(BaseCommand):
 
         for _ in range(n):
             TrainingFactory(
-                start_min_days=kwargs["s"],
-                start_max_days=kwargs["e"],
+                start_min_days=kwargs["s"], start_max_days=kwargs["e"],
             )
