@@ -20,7 +20,6 @@ JOIN_FLEX_HOURS = 12
 
 
 def register(request):
-    host = request.META.get("HTTP_HOST", "localhost")
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
         form = TrainingForm(request.POST)
