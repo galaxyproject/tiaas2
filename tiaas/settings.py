@@ -113,6 +113,9 @@ LOGOUT_REDIRECT_URL = "/tiaas/"
 # Expose the username publicly in the status page, rather than an encoded ID.
 TIAAS_EXPOSE_USERNAME = False
 
+# restrict joining to +/- N hours of event duration
+TIAAS_JOIN_TRAINING_FLEX_HOURS = 12
+
 # Default period to retain contact information (months)
 TIAAS_SHOW_ADVERTISING = True
 TIAAS_GDPR_AUTO_REDACT = True
