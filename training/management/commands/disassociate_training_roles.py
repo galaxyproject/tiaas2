@@ -1,8 +1,8 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.db.utils import ProgrammingError
 import datetime
 from training.models import Training
-from training.galaxy import disassociate_role, execute_txn
+from training.galaxy import disassociate_role
 
 
 class Command(BaseCommand):

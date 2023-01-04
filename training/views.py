@@ -350,7 +350,7 @@ def join(request, training_id):
     return render(
         request,
         "training/join.html",
-        {"training": event, "host": request.META.get("HTTP_HOST", None),},
+        {"training": event, "host": request.META.get("HTTP_HOST", None)},
     )
 
 
