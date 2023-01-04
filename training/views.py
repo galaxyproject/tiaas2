@@ -1,6 +1,6 @@
 import collections
 import logging
-from datetime import date
+from datetime import date, datetime, timedelta
 
 from django.conf import settings
 from django.core.mail import send_mail
@@ -16,6 +16,7 @@ from .galaxy import (add_group_user, authenticate, create_group, create_role,
 from .models import Training
 
 logger = logging.getLogger(__name__)
+JOIN_FLEX_HOURS = 12
 
 
 def register(request):
@@ -277,7 +278,8 @@ def join(request, training_id):
     event = trainings.first()
 
     # If the event has not yet started, return "come back soon"
-    if event.start > date.today():
+    tz_flexible_now = datetime.now() + timedelta(hours=JOIN_FLEX_HOURS)
+    if event.start > tz_flexible_now.date():
         return render(
             request,
             "training/early.html",
@@ -289,7 +291,8 @@ def join(request, training_id):
         )
 
     # If the event has already finished, reject request
-    if event.end < date.today():
+    tz_flexible_now = datetime.now() - timedelta(hours=JOIN_FLEX_HOURS)
+    if event.end < tz_flexible_now:
         return render(
             request,
             "training/error.html",
