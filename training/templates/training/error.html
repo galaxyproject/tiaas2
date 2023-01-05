@@ -2,20 +2,20 @@
 
 {% block content %}
 
-<div class="container">
-	<div class="errormessage">
-		<p class="alert alert-danger">
-			Sorry, the site encountered an error
-		</p>
+<div class="container" style="max-width: 800px; margin-top: calc(40vh - 100px);">
+	<p class="alert alert-danger">
+		Sorry, the site encountered an error
+	</p>
 
-		<br>
+	<br>
 
+	<p class="lead">
 		{{ message }}
+	</p>
 
-		<br>
+	<br>
 
-		<a href="{{ settings.GALAXY_URL }}">Return to Galaxy</a>
-	</div>
+	<a href="{{ settings.GALAXY_URL }}">Return to Galaxy</a>
 </div>
 
 {% endblock %}

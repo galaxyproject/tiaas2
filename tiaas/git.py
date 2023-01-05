@@ -14,11 +14,7 @@ def get_commit_id(base_dir):
 
     # Open the correct file in .git\ref\heads\[branch]
     if " " in git_head_data:
-        git_head_ref = os.path.join(
-            base_dir,
-            ".git",
-            git_head_data.split(" ")[1],
-        )
+        git_head_ref = os.path.join(base_dir, ".git", git_head_data.split(" ")[1],)
     else:
         # When pinned to a specific commit
         git_head_ref = os.path.join(base_dir, ".git", git_head_data)

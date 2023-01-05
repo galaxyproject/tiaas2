@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 """
 
 import os
+
 from tiaas import git
 from tiaas.logging import LOGGING
 
@@ -56,9 +57,7 @@ ROOT_URLCONF = "tiaas.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [
-            os.path.join(BASE_DIR, "templates"),
-        ],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -113,6 +112,9 @@ LOGOUT_REDIRECT_URL = "/tiaas/"
 
 # Expose the username publicly in the status page, rather than an encoded ID.
 TIAAS_EXPOSE_USERNAME = False
+
+# restrict joining to +/- N hours of event duration
+TIAAS_JOIN_TRAINING_FLEX_HOURS = 12
 
 # Default period to retain contact information (months)
 TIAAS_SHOW_ADVERTISING = True

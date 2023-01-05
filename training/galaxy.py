@@ -221,7 +221,7 @@ def execute_txn(query, params=None, commit=False):
                 with connections["galaxy"].cursor() as cursor:
                     cursor.execute(query, params)
                     result = cursor.fetchall()
-                if commit != True:
+                if not commit:
                     raise IntentionalRollback()
                 return result
         except IntentionalRollback:

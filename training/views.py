@@ -1,28 +1,18 @@
-import logging
-from django.http import JsonResponse
 import collections
-from datetime import date
-from django_countries import countries
+import logging
+from datetime import date, datetime, timedelta
 
 from django.conf import settings
 from django.core.mail import send_mail
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django_countries import countries
 
 from .forms import TrainingForm
-from .galaxy import (
-    add_group_user,
-    authenticate,
-    create_group,
-    create_role,
-    get_groups,
-    get_jobs,
-    get_roles,
-    get_users,
-    get_workflow_invocations,
-)
-
+from .galaxy import (add_group_user, authenticate, create_group, create_role,
+                     get_groups, get_jobs, get_roles, get_users,
+                     get_workflow_invocations)
 from .models import Training
 
 logger = logging.getLogger(__name__)
@@ -267,8 +257,7 @@ def stats(request):
 def join(request, training_id):
     training_id = training_id.lower()
     trainings = Training.objects.filter(
-        training_identifier__iexact=training_id,
-        processed="AP",
+        training_identifier__iexact=training_id, processed="AP",
     )
 
     # If we don't know this training, reject
@@ -277,14 +266,37 @@ def join(request, training_id):
             request,
             "training/error.html",
             {
-                "message": "Training event does not exist",
+                "message": (
+                    "An approved Training event with ID"
+                    f'  "{training_id}" was not found.'
+                ),
             },
         )
 
     event = trainings.first()
 
+    # If the event has not yet started, return "come back soon"
+    tz_flexible_now = (
+        datetime.now()
+        + timedelta(hours=settings.TIAAS_JOIN_TRAINING_FLEX_HOURS)
+    )
+    if event.start > tz_flexible_now.date():
+        return render(
+            request,
+            "training/early.html",
+            {
+                "start_date": event.start.strftime("%d-%m-%Y"),
+                "timezone": settings.TIME_ZONE,
+                "host": request.META.get("HTTP_HOST", None),
+            },
+        )
+
     # If the event has already finished, reject request
-    if event.end < date.today():
+    tz_flexible_now = (
+        datetime.now()
+        - timedelta(hours=settings.TIAAS_JOIN_TRAINING_FLEX_HOURS)
+    )
+    if event.end < tz_flexible_now:
         return render(
             request,
             "training/error.html",
@@ -345,10 +357,7 @@ def join(request, training_id):
     return render(
         request,
         "training/join.html",
-        {
-            "training": event,
-            "host": request.META.get("HTTP_HOST", None),
-        },
+        {"training": event, "host": request.META.get("HTTP_HOST", None)},
     )
 
 
