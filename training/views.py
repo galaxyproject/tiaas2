@@ -296,7 +296,7 @@ def join(request, training_id):
         datetime.now()
         - timedelta(hours=settings.TIAAS_JOIN_TRAINING_FLEX_HOURS)
     )
-    if event.end < tz_flexible_now:
+    if event.end < tz_flexible_now.date():
         return render(
             request,
             "training/error.html",
