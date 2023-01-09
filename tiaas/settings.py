@@ -15,7 +15,6 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 import os
 
 from tiaas import git
-from tiaas.logging import LOGGING
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
