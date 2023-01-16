@@ -17,8 +17,8 @@ class Training(models.Model):
     email = models.EmailField()
     title = models.TextField()
     description = models.TextField()
-    start = models.DateField()
-    end = models.DateField()
+    start = models.DateField(default=date.today)
+    end = models.DateField(default=date.today)
     website = models.URLField(blank=True)
     location = CountryField(multiple=True, blank_label="Select country")
     use_gtn = models.CharField(
