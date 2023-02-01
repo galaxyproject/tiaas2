@@ -22,4 +22,5 @@ urlpatterns = [
     path("tiaas/dashboard-example/", views.dashboard_example, name="dashboard_example"),
     path("join-training/<training_id>/", views.join, name="join"),
     path("join-training/<training_id>/status/", views.status, name="status"),
+    path("join-training/<training_id>/dashboard/", views.status, name="status"),
 ]
