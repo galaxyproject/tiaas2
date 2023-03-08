@@ -128,7 +128,7 @@ WHERE
             role
         WHERE
             type = 'system'
-            AND name = 'training-' || %s
+            AND name LIKE 'training-%' || %s
     )
 """
 
