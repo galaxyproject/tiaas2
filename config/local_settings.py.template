@@ -70,7 +70,7 @@ TIAAS_SEND_EMAIL_FROM = None
 TIAAS_SEND_EMAIL_TO_REQUESTER = False
 
 # Prevent people from submitting requests later than this date.
-# If you like them, tell them they can go to /tiaas/new/?apology=I'm so sorry
+# If you like them, tell them they can go to /tiaas/new/?apology=I%20am%20very%20sorry
 # And then it will ignore this check
 TIAAS_LATE_REQUEST_PREVENTION_DAYS = 10
 
