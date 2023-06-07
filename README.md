@@ -1,41 +1,50 @@
 ![Tiaas logo, galaxy three bars logo with human icons instead of bars, one bar is yellow and faster looking](./images/tiaas-logo.png)
 
-# Training Infrastructure as a Service 2 [![Gitter](https://badges.gitter.im/galaxyproject/training-material.svg)](https://gitter.im/galaxyproject/tiaas?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# Training Infrastructure as a Service (TIaaS)
 
-The latest and greatest TIaaS from Galaxy Europe, ready for the world!
+TIaaS provides a service which Galaxy administrators can deploy, enabling them to easily providing training infrastructure, as a service, to their user community.
+We built TIaaS to streamline the process of hosting courses and training events on the Galaxy platform.
 
-This should be easier than ever to setup and get started with at your own institution.
+It enables:
 
-This is a simple service which allows users visiting a specific URL like:
+- Administrators to control who is using their infrastructure for courses
+- Teachers to easily request resources
+- Teachers to monitor their classes and run efficient trainings
+- Administrators to dedicate resources to trainings, enabling them to run smoothly and efficiently.
 
-```
-https://usegalaxy.eu/join-training/denbi-summer-school
-```
+Once a training request is approved, teachers receive and share with students a URL like https://usegalaxy.eu/join-training/test (this is live, you can test it out!)
 
-to be automatically added to a group named `training-denbi-summer-school` (and
+Upon visiting, students are automatically added to a group named `training-test` (and
 a role automatically created.) It works on the basis of running underneath the
 path prefix of Galaxy and so having access to the Galaxy session cookie. This
 is decoded into a user id + the part after `/join-training/` decoded into a
 group name, and this change is made.
 
-## New! Status Page
+## Features
+
+### Status Page
 
 For teachers giving trainings, we now offer a "status" page where they can see
 the training queue of their class, both jobs and workflows.
 
-![](images/queue.png)
+![Status page showing a series of jobs in green and red (for failing) as well as an overview of how many of which tools have been executed and their current job state](images/queue.png)
 
-## New! Register
+### Register
 
 Point your users to this service to register their training
 
-![](images/register.png)
+![a registration form](images/register.png)
 
-## New! Admin Interface
+### Admin Interface
 
-Admins can now manage TIaaS courses completely in the one service.
+Admins can manage TIaaS courses in their view.
 
-![](images/admin.png)
+![Administrator View](images/admin.png)
+
+## Documentation
+
+- [Setup TIaaS for a Training Event](https://training.galaxyproject.org/training-material/topics/teaching/tutorials/setup-tiaas-for-training/tutorial.html)
+- [Install TIaaS with the ansible role (for admins)](https://training.galaxyproject.org/training-material/topics/admin/tutorials/tiaas/tutorial.html)
 
 ## License
 
