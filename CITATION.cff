@@ -1,0 +1,74 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Training Infrastructure as a Service (TIaaS)
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Helena
+    family-names: Rasche
+    email: hexylena@galaxians.org
+    affiliation: Erasmus Medical Center
+    orcid: 'https://orcid.org/0000-0001-9760-8992'
+identifiers:
+  - type: doi
+    value: 10.1093/gigascience/giad048
+    description: Primary Publication
+repository-code: 'https://github.com/galaxyproject/tiaas2'
+license: AGPL-3.0
+commit: 214c661d382f80f922d3ae997668e0c58a0da6e0
+version: 2.1.0
+date-released: '2023-01-27'
+preferred-citation:
+  doi: "10.1371/journal.pcbi.1010752"
+  journal: "GigaScience"
+  month: 7
+  title: " Training Infrastructure as a Service"
+  year: 2023
+  type: article
+  authors:
+    - family-names: Rasche
+      given-names: Helena
+      orcid: "https://orcid.org/0000-0001-9760-8992"
+    - family-names: Hyde
+      given-names: Cameron
+      orcid: "https://orcid.org/0000-0002-5913-9766"
+    - family-names: Davis
+      given-names: John
+      orcid: "https://orcid.org/0000-0002-1363-1245"
+    - family-names: Gladman
+      given-names: Simon
+      orcid: "https://orcid.org/0000-0002-6100-4385"
+    - family-names: Coraor
+      given-names: Nate
+      orcid: "https://orcid.org/0000-0001-8083-2963"
+    - family-names: Bretaudeau
+      given-names: Anthony
+      orcid: "https://orcid.org/0000-0003-0914-2470"
+    - family-names: Cuccuru
+      given-names: Gianmauro
+      orcid: "https://orcid.org/0000-0002-5335-545X"
+    - family-names: Bacon
+      given-names: Wendi
+      orcid: "https://orcid.org/0000-0002-8170-8806"
+    - family-names: Serrano-Solano
+      given-names: Beatriz
+      orcid: "https://orcid.org/0000-0002-5862-6132"
+    - family-names: Hillman-Jackson
+      given-names: Jennifer
+      orcid: "https://orcid.org/0000-0003-4012-8116"
+    - family-names: Hiltemann
+      given-names: Saskia
+      orcid: "https://orcid.org/0000-0003-3803-468X"
+    - family-names: Zhou
+      given-names: Miaomiao
+      orcid: "https://orcid.org/0000-0003-4426-1758"
+    - family-names: Grüning
+      given-names: Björn
+      orcid: "https://orcid.org/0000-0002-3079-6586"
+    - family-names: Stubbs
+      given-names: Andrew
+      orcid: "https://orcid.org/0000-0001-9817-9982"
