@@ -1,5 +1,5 @@
 dateparser==0.7.2
-Django==3.1.14
+Django==3.2.24
 django-bootstrap3==21.2
 django-countries==5.5
 django-prometheus==2.2.0
