@@ -1,7 +1,7 @@
 dateparser==0.7.2
 Django==3.2.24
 django-bootstrap3==21.2
-django-countries==5.5
+django-countries==7.5.1
 django-prometheus==2.2.0
 gunicorn==20.1.0
 psycopg2-binary==2.9.6
