@@ -159,7 +159,7 @@ def calendar_view(request):
 
 def calendar_api(request):
     events = (
-        Training.objects.all().exclude(training_identifier="test").order_by("start")
+        Training.objects.filter(processed="AP").exclude(training_identifier="test").order_by("start")
     )
 
     results = {"events": []}
