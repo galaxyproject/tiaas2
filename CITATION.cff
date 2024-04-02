@@ -23,7 +23,7 @@ commit: 214c661d382f80f922d3ae997668e0c58a0da6e0
 version: 2.1.0
 date-released: '2023-01-27'
 preferred-citation:
-  doi: "10.1371/journal.pcbi.1010752"
+  doi: "10.1093/gigascience/giad048"
   journal: "GigaScience"
   month: 7
   title: " Training Infrastructure as a Service"
