@@ -171,3 +171,16 @@ GALAXY_URL = f"http://{GALAXY_DOMAIN}"
 
 GIT_COMMIT_ID = git.get_commit_id(BASE_DIR)
 GIT_REMOTE_URL = git.get_remote_url(BASE_DIR)
+
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+if 'SENTRY_DSN' in os.environ:
+    sentry_sdk.init(
+        dsn=os.environ['SENTRY_DSN'],
+        integrations=[
+            DjangoIntegration(),
+        ],
+        traces_sample_rate=0.1,
+        send_default_pii=False  # requires use of django.contrib.auth which we do not use.
+    )
