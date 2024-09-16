@@ -8,3 +8,4 @@ psycopg2-binary==2.9.6
 pycryptodome==3.19.1
 factory_boy
 whitenoise==6.2.0
+sentry-sdk==2.14.0
