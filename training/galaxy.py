@@ -205,7 +205,8 @@ def create_group(training_id, role_id):
 def add_group_user(group_id, user_id):
     execute(
         "insert into user_group_association (user_id, group_id, create_time, update_time) "
-        "values (%s, %s, now(), now())" % (user_id, group_id)
+        "values (%s, %s, now(), now()) on conflict do nothing",
+        (user_id, group_id),
     )
 
 
